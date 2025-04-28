@@ -1,7 +1,7 @@
 import axios from "axios";
 import { CreateRoleDto, CreateSubtaskDto, CreateTaskDto, CreateUserDto, UpdateSubtaskDto, UpdateTaskDto } from "./interface";
 
-export const API_PATH = "http://192.168.52.170:3000";
+export const API_PATH = "http://172.16.1.249:3000";
 
 const api = axios.create({
     baseURL: API_PATH,
