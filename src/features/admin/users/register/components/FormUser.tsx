@@ -30,9 +30,14 @@ const RegisterSchema = z.object({
     roleId: z.string().nonempty("Campo requerido."),
 });
 
+interface Role {
+    id: string;
+    name: string;
+    userCount: number;
+}
+
 
 const FormUser = ({ roleData }: any) => {
-    console.log(roleData)
     const [visible, setVisible] = useState(false);
     const [uploading, setUploading] = useState(false);
     const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
@@ -195,15 +200,15 @@ const FormUser = ({ roleData }: any) => {
                                         <FormLabel>Rol</FormLabel>
                                         <FormControl>
                                             <Select
-                                                value={field.value}
+                                                value={field.value ?? ""}
                                                 onValueChange={field.onChange}
                                             >
                                                 <SelectTrigger className="w-full">
                                                     <SelectValue placeholder="Selecciona un rol" />
                                                 </SelectTrigger>
                                                 <SelectContent>
-                                                    {roleData && roleData.map((role: any) => (
-                                                        <SelectItem key={role.id} value={role.id}>
+                                                    {roleData && roleData.map((role: Role) => (
+                                                        <SelectItem key={role.id} value={String(role.id)}>
                                                             {role.name}
                                                         </SelectItem>
                                                     ))}
@@ -214,6 +219,7 @@ const FormUser = ({ roleData }: any) => {
                                     </FormItem>
                                 )}
                             />
+
 
                             {/* Imagen de perfil */}
                             <FormItem className="">
