@@ -1,0 +1,29 @@
+import { useEffect, useState } from 'react';
+import FormRole from './components/FormRole';
+import FormUser from './components/FormUser';
+import { API } from '../../../../shared/js/api';
+
+const RegisterUser = () => {
+    const [roleData, setRoleData] = useState();
+
+    useEffect(() => {
+        const getRoles = async () => {
+            const response = await API.getRole();
+            setRoleData(response.data)
+        }
+        getRoles()
+    }, [])
+    return (
+        <div>
+            <span className='text-sm text-gray-400'>Registro de Usuarios</span>
+            <br />
+            <br />
+            <FormRole setRoleData={setRoleData} />
+            <br />
+            <br />
+            <FormUser roleData={roleData} />
+        </div>
+    );
+};
+
+export default RegisterUser;
