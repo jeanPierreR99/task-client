@@ -55,17 +55,15 @@ const Login = () => {
     }
 
     return (
-        <div className="grid min-h-screen grid-cols-1 md:grid-cols-2 bg-gray-50">
-            {/* Left Illustration */}
+        <div className="grid min-h-screen bg-gray-50 grid-cols-1 md:grid-cols-2">
             <div className="hidden md:flex items-center justify-center bg-white">
                 <img src="portada.svg" alt="Login Illustration" className="w-3/4 animate-fade-in" />
             </div>
 
-            {/* Right Form */}
-            <div className="flex items-center justify-center p-8">
-                <div className="w-full max-w-md space-y-8 bg-white p-10 rounded-2xl shadow-2xl">
+            <div className="flex items-center justify-center p-8 sm:p-4 bg-white md:bg-transparent">
+                <div className="w-full max-w-lg space-y-8 bg-white p-8 sm:p-6 rounded-2xl shadow-2xl">
                     <div className="text-center">
-                        <h2 className="text-4xl font-bold text-gray-900">Bienvenido</h2>
+                        <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">Bienvenido</h2>
                         <p className="mt-2 text-sm text-gray-500">Inicia sesión para continuar</p>
                     </div>
 
@@ -85,7 +83,7 @@ const Login = () => {
                                         <FormItem>
                                             <FormLabel className="text-sm font-medium text-gray-700">Correo electrónico</FormLabel>
                                             <FormControl>
-                                                <Input className="bg-gray-100" placeholder="Email" {...field} />
+                                                <Input className="bg-gray-100 w-full rounded-md" placeholder="Email" {...field} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -98,7 +96,7 @@ const Login = () => {
                                         <FormItem>
                                             <FormLabel className="text-sm font-medium text-gray-700">Contraseña</FormLabel>
                                             <FormControl>
-                                                <Input type="password" className="bg-gray-100" placeholder="Contraseña" {...field} />
+                                                <Input type="password" className="bg-gray-100 w-full rounded-md" placeholder="Contraseña" {...field} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -107,12 +105,26 @@ const Login = () => {
                                 {message && <AlertMessage message={message} />}
                             </div>
 
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center">
+                                    <input type="checkbox" id="rememberMe" className="mr-2" />
+                                    <label htmlFor="rememberMe" className="text-sm text-gray-600">Recordar contraseña</label>
+                                </div>
+                                <a href="#" className="text-sm text-blue-600 hover:underline">¿Olvidaste tu contraseña?</a>
+                            </div>
+
+                            <div className="my-4 border-t border-gray-200"></div>
+
                             <Button
                                 type="submit"
                                 className="w-full bg-blue-700 hover:bg-blue-800 text-white text-lg font-semibold rounded-lg py-3 transition-all"
                             >
                                 Iniciar sesión
                             </Button>
+
+                            <div className="text-center">
+                                <p className="text-sm text-gray-500">¿No tienes cuenta? <a href="#" className="text-blue-600 hover:underline">Regístrate</a></p>
+                            </div>
                         </form>
                     </FormProvider>
                 </div>
