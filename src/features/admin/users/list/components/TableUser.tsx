@@ -6,6 +6,7 @@ import { Button } from '../../../../../shared/components/ui/button';
 import { AlertMessage } from '../../../../../components/AlertMessage';
 import { NavLink } from 'react-router-dom';
 import { Input } from '../../../../../shared/components/ui/input';
+import { TooltipWrapper } from '../../../../../components/TooltipWrapper';
 
 type UserRole = {
     id: string;
@@ -16,6 +17,7 @@ type User = {
     id: string;
     name: string;
     email: string;
+    telephone: number;
     passwordHash: string;
     imageUrl: string;
     active: boolean;
@@ -83,7 +85,7 @@ export default function TableUser() {
                                 />
                             </td>
                             <td className="px-6 py-4 text-sm text-gray-700">{user.name}</td>
-                            <td className="px-6 py-4 text-sm text-gray-700">944271227</td>
+                            <td className="px-6 py-4 text-sm text-gray-700">{user.telephone}</td>
                             <td className="px-6 py-4 text-sm text-blue-500 ">{user.email}</td>
                             <td className="px-6 py-4 text-sm text-gray-700">{user.role.name}</td>
                             <td className="px-6 py-4 text-sm text-gray-700">
@@ -98,11 +100,13 @@ export default function TableUser() {
                                 )}
                             </td>
                             <td className="px-6 py-4">
-                                <NavLink to={`/users/view/` + user.id} >
-                                    <Button variant="outline" size="sm">
-                                        <Eye />
-                                    </Button>
-                                </NavLink>
+                                <TooltipWrapper content='Inspeccionar'>
+                                    <NavLink to={`/users/view/` + user.id} >
+                                        <Button variant="outline" size="sm">
+                                            <Eye />
+                                        </Button>
+                                    </NavLink>
+                                </TooltipWrapper>
                             </td>
                         </tr>
                     ))}

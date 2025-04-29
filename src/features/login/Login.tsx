@@ -55,21 +55,23 @@ const Login = () => {
     }
 
     return (
-        <div className="grid min-h-screen bg-gray-50 grid-cols-1 md:grid-cols-2">
+        <div className="grid h-screen bg-gray-50 grid-cols-1 md:grid-cols-2">
             <div className="hidden md:flex items-center justify-center bg-white">
-                <img src="portada.svg" alt="Login Illustration" className="w-3/4 animate-fade-in" />
+                <img src="https://ablog.managemart.com/images/o_1dnpgpc711vd4r5d5e781f10vs8.png" alt="Login Illustration" className="object-contain w-full h-full animate-fade-in" />
             </div>
 
             <div className="flex items-center justify-center p-8 sm:p-4 bg-white md:bg-transparent">
-                <div className="w-full max-w-lg space-y-8 bg-white p-8 sm:p-6 rounded-2xl shadow-2xl">
+                <div className="w-full max-w-lg space-y-8 bg-white p-8 sm:p-6 rounded-2xl shadow-orange-300/20 shadow-2xl">
+                    <img src="logo.png" className="w-30 h-30 m-auto" alt="" />
                     <div className="text-center">
-                        <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">Bienvenido</h2>
-                        <p className="mt-2 text-sm text-gray-500">Inicia sesión para continuar</p>
+                        <h1 className="text-2xl sm:text-3xl font-bold text-orange-500 mb-2">ASANA OTI</h1>
+                        <p className="mt-2 text-sm text-gray-400">Inicia sesión para continuar</p>
                     </div>
+
 
                     {loading && (
                         <div className="absolute inset-0 bg-white/70 z-10 flex items-center justify-center rounded-2xl">
-                            <Loader2 className="animate-spin text-blue-500 w-10 h-10" />
+                            <Loader2 className="animate-spin text-orange-500 w-10 h-10" />
                         </div>
                     )}
 
@@ -105,25 +107,25 @@ const Login = () => {
                                 {message && <AlertMessage message={message} />}
                             </div>
 
-                            <div className="flex items-center justify-between">
+                            <div className="flex flex-col md:flex-row items-left gap-2 justify-between">
                                 <div className="flex items-center">
                                     <input type="checkbox" id="rememberMe" className="mr-2" />
                                     <label htmlFor="rememberMe" className="text-sm text-gray-600">Recordar contraseña</label>
                                 </div>
-                                <a href="#" className="text-sm text-blue-600 hover:underline">¿Olvidaste tu contraseña?</a>
+                                <a href="#" className="text-sm text-orange-500 hover:underline">¿Olvidaste tu contraseña?</a>
                             </div>
 
                             <div className="my-4 border-t border-gray-200"></div>
 
                             <Button
                                 type="submit"
-                                className="w-full bg-blue-700 hover:bg-blue-800 text-white text-lg font-semibold rounded-lg py-3 transition-all"
+                                className="w-full bg-orange-500 hover:bg-orange-400 text-white text-lg font-semibold rounded-lg py-3 transition-all"
                             >
                                 Iniciar sesión
                             </Button>
 
                             <div className="text-center">
-                                <p className="text-sm text-gray-500">¿No tienes cuenta? <a href="#" className="text-blue-600 hover:underline">Regístrate</a></p>
+                                <p className="text-sm text-gray-500">¿No tienes cuenta? <a href="#" className="text-orange-500 hover:underline">Regístrate</a></p>
                             </div>
                         </form>
                     </FormProvider>

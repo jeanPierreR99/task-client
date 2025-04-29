@@ -1,4 +1,4 @@
-import { ClipboardList, Folder, Home, ListTodo, MessageSquareMore, UserRoundPlus } from "lucide-react"
+import { ClipboardList, DatabaseBackupIcon, Folder, Home, ListTodo, MessageSquareMore, PackagePlus, Tag, UserRoundPlus } from "lucide-react"
 
 import {
   Sidebar,
@@ -56,6 +56,24 @@ const itemsUsers = [
   },
 ]
 
+const itemsInventory = [
+  {
+    title: "Registrar",
+    url: "/users/register",
+    icon: PackagePlus,
+  },
+  {
+    title: "Lista",
+    url: "/users/list",
+    icon: DatabaseBackupIcon,
+  },
+  {
+    title: "Categorias",
+    url: "/users/activities",
+    icon: Tag,
+  },
+]
+
 export function AppSidebar() {
   const { name, email, imageUrl, role } = useStoreLogin();
 
@@ -63,7 +81,7 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarContent >
         <div className="w-full text-center h-[180px] py-4 px-5 mb-4 flex flex-col items-center">
-          {!imageUrl ? <span className="font-black w-20 h-20 text-4xl flex items-center justify-center bg-blue-300 rounded-full">A</span> : <img className="w-30 h-30 rounded-full" src={API_PATH + imageUrl} alt="" />}
+          {!imageUrl ? <span className="font-black w-20 h-20 text-4xl flex items-center justify-center bg-orange-400 rounded-full">A</span> : <img className="w-30 h-30 rounded-full" src={API_PATH + imageUrl} alt="" />}
           <span className="text-sm font-black">{name}</span>
           <span className="text-sm text-gray-500">{email}</span>
         </div>
@@ -86,13 +104,32 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        {/* Solo mostrar esta sección si el rol es 'admin' */}
         {role === 'Administrador' && (
           <SidebarGroup>
             <SidebarGroupLabel>Usuarios y actividades</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 {itemsUsers.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild>
+                      <NavLink to={item.url}>
+                        <item.icon />
+                        {item.title}
+                      </NavLink>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
+
+        {role === 'Administrador' && (
+          <SidebarGroup>
+            <SidebarGroupLabel>Inventario</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {itemsInventory.map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
                       <NavLink to={item.url}>

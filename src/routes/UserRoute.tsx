@@ -7,10 +7,10 @@ import React from "react";
 const LoadingFallback = () => <div className="min-w-screen min-h-screen bg-gray-100/70  flex justify-center items-center">
     <Loader2 className="animate-spin text-blue-500" />
 </div>;
-const Home = React.lazy(() => import("../features/admin/home/Home"));
-const Tasks = React.lazy(() => import("../features/admin/tasks/Tasks"));
-const Notification = React.lazy(() => import("../features/admin/notification/Notification"));
-const Repository = React.lazy(() => import("../features/admin/repository/Repository"));
+const Home = React.lazy(() => import("../features/admin/apps/home/Home"));
+const Tasks = React.lazy(() => import("../features/admin/apps/tasks/Tasks"));
+const Notification = React.lazy(() => import("../features/admin/apps/notification/Notification"));
+const Repository = React.lazy(() => import("../features/admin/apps/repository/Repository"));
 
 const withSuspense = (Component: React.ReactNode) => (
     <Suspense fallback={<LoadingFallback />}>{Component}</Suspense>

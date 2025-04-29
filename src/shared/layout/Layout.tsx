@@ -50,7 +50,7 @@ export default function Layout() {
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <div className="flex items-center cursor-pointer">
-                                    {!imageUrl ? <span className="font-black w-10 h-10 flex items-center justify-center bg-blue-300 rounded-full">A</span>
+                                    {!imageUrl ? <span className="font-black w-10 h-10 flex items-center justify-center bg-orange-400 rounded-full">A</span>
                                         : <img className="w-10 h-10 rounded-full" src={API_PATH + imageUrl} alt="" />
                                     }
                                     <ChevronDown size={18}></ChevronDown>

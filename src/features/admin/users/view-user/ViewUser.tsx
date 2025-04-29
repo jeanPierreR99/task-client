@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { API, API_PATH } from '../../../../shared/js/api';
 import { useParams } from 'react-router-dom';
-import { User } from '../../tasks/store/useStoreTask';
+import { User } from '../../apps/tasks/store/useStoreTask';
 import { Loader2 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '../../../../shared/components/ui/avatar';
 import { TabUserView } from './components/TabUserView';

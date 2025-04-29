@@ -1,8 +1,8 @@
 
 import { Folder, ListTodo, MonitorCheck, Settings2 } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../../../shared/components/ui/tabs"
-import Tasks from "../../../tasks/Tasks"
-import Repository from "../../../repository/Repository"
+import Tasks from "../../../apps/tasks/Tasks"
+import Repository from "../../../apps/repository/Repository"
 import ConfigUser from "./ConfigUser"
 import { Button } from "../../../../../shared/components/ui/button"
 import { useState } from "react"

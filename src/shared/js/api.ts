@@ -1,11 +1,14 @@
 import axios from "axios";
 import { CreateRoleDto, CreateSubtaskDto, CreateTaskDto, CreateUserDto, UpdateSubtaskDto, UpdateTaskDto } from "./interface";
 
-// export const API_PATH = "http://172.16.1.249:3000";
 export const API_PATH = "http://localhost:3000";
+export const API_BASE = "http://localhost:3000";
+
+// export const API_PATH = "https://asana.munitambopata.gob.pe:85/api/v1";
+// export const API_BASE = "https://asana.munitambopata.gob.pe:85";
 
 const api = axios.create({
-    baseURL: API_PATH,
+    baseURL: API_BASE,
     headers: {
         "Content-Type": "application/json",
     },

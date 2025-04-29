@@ -139,14 +139,14 @@ button{
 }
 
 .fc-prev-button, .fc-next-button, .fc-today-button, .fc-dayGridMonth-button, .fc-dayGridWeek-button, .fc-dayGridDay-button {
-  background-color: #4582e6 !important;
+  background-color: #e7733d !important;
   color: rgb(255, 255, 255) !important;   
   border: none !important;          
 }
 .fc-prev-button:hover, .fc-next-button:hover, .fc-today-button:hover, .fc-dayGridMonth-button:hover, .fc-dayGridWeek-button:hover, .fc-dayGridDay-button:hover {
-  background-color: #2668d3 !important;
+  background-color: #e7733dc8 !important;
 }
 .fc-day-today{
-background: #37b6d3 !important;
+background: #e7733d !important;
 color: white;
 }
