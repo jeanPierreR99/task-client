@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useForm, useFieldArray } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -22,6 +22,7 @@ import { API } from "../../../../../shared/js/api"
 import { ToasMessage } from "../../../../../components/ToasMessage"
 import useStoreTask from "../store/useStoreTask"
 import { useParams } from "react-router-dom"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../../../shared/components/ui/select"
 
 export interface IcreateTask {
     name: string;
@@ -32,6 +33,7 @@ export interface IcreateTask {
     dateCulmined: string;
     responsibleId: string;
     categoryId: string;
+    officeId: string;
 }
 
 export interface IcreateSubtask {
@@ -42,6 +44,11 @@ export interface IcreateSubtask {
     responsibleId: string;
 }
 
+interface Office {
+    id: string;
+    name: string;
+    siglas: string
+}
 
 const subtaskSchema = z.object({
     name: z.string().min(1, "Campo requerido"),
@@ -53,6 +60,7 @@ const taskSchema = z.object({
     description: z.string().min(1, "Campo requerido"),
     responsible: z.string().min(1, "Campo requerido"),
     dateCulmined: z.string().min(1, "Campo requerido"),
+    officeId: z.string().min(1, "Campo requerido"),
     subtasks: z.array(subtaskSchema),
 })
 
@@ -88,6 +96,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ categoryId, setOpen, date }) => {
     const [showCalendar, setShowCalendar] = useState(false)
     const [userId, setUserId] = useState<string>()
     const [subtaskUserIds, setSubtaskUserIds] = useState<string[]>([])
+    const [office, setOffice] = useState<Office[]>([])
 
 
     const onSubmit = async (data: TaskFormValues) => {
@@ -100,7 +109,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ categoryId, setOpen, date }) => {
                 status: "pendiente",
                 responsibleId: userId!,
                 categoryId: categoryId,
-                created_by: id
+                created_by: id,
             };
 
             const response = await API.createTask(newTask);
@@ -162,7 +171,18 @@ const TaskForm: React.FC<TaskFormProps> = ({ categoryId, setOpen, date }) => {
         }
     };
 
-
+    useEffect(() => {
+        const fetchOffices = async () => {
+            try {
+                const response = await API.getOffices();
+                if (response?.data && response?.success)
+                    setOffice(response.data);
+            } catch (err: any) {
+                console.log(err)
+            }
+        };
+        fetchOffices();
+    }, []);
 
     return (
         <Form {...form}>
@@ -236,6 +256,35 @@ const TaskForm: React.FC<TaskFormProps> = ({ categoryId, setOpen, date }) => {
                     )}
                 />
 
+                {/* OFICINA */}
+
+                <FormField
+                    control={form.control}
+                    name="officeId"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel className="text-gray-700">Oficina</FormLabel>
+                            <FormControl>
+                                <Select
+                                    value={field.value ?? ""}
+                                    onValueChange={field.onChange}
+                                >
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="Selecciona una oficina" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {office && office.map((offi: Office, index) =>
+                                            <SelectItem className="cursor-pointer hover:bg-gray-50" key={index} value={offi.id}>{offi.siglas}</SelectItem>
+                                        )}
+                                    </SelectContent>
+                                </Select>
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+
+
                 {/* Descripción */}
                 <FormField
                     control={form.control}
@@ -283,7 +332,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ categoryId, setOpen, date }) => {
                                 setSubtaskUserIds(prev => [...prev, ""]);
                             }}
 
-                            className="text-blue-600 hover:text-blue-700 flex items-center gap-1"
+                            className="text-orange-500 hover:text-orange-600 flex items-center gap-1"
                         >
                             <Plus size={16} /> Añadir
                         </Button>
@@ -346,7 +395,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ categoryId, setOpen, date }) => {
                     </div>
                 </div>
 
-                <Button type="submit" disabled={!userId || userId === ""} className="w-full bg-blue-600 hover:bg-blue-700">
+                <Button type="submit" disabled={!userId || userId === ""} className="w-full bg-orange-500 hover:bg-orange-400">
                     Agregar tarea
                 </Button>
             </form>

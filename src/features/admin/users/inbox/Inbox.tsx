@@ -69,7 +69,6 @@ const Inbox = () => {
             const response = await API.getAllActivities(limit, offsetValue);
 
             if (!response.data || !response.success) return;
-            console.log(response.data)
             if (offsetValue === 0) {
                 setActivities(response.data);
             } else {

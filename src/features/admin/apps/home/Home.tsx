@@ -11,15 +11,21 @@ import useStoreLogin from '../../../../shared/state/useStoreLogin';
 
 const Home = () => {
     const [users, setUsers] = useState<User[]>([])
-    const { name } = useStoreLogin();
+    const { id, name } = useStoreLogin();
+    const [counTask, setCountTask] = useState("");
 
     const getUser = async () => {
         const response = await API.getUser()
         setUsers(response.data)
     }
+    const getTaskFalse = async () => {
+        const response = await API.getTaskAllFalse(id)
+        setCountTask(response.data)
+    }
 
     useEffect(() => {
-        getUser()
+        getUser();
+        getTaskFalse();
     }, [])
     return (
         <div className='pt-10'>
@@ -27,7 +33,7 @@ const Home = () => {
                 <span className="text-md font-light">{dateFormated.toLocaleUpperCase()}</span>
                 <span className="text-3xl">Hola, {name}</span>
                 <div className='flex gap-3 md:gap-12 text-gray-400 text-sm bg-gray-100 py-2 px-4 rounded-full'>
-                    <div className='flex gap-2 items-center'><CheckCheck></CheckCheck><span className='text-2xl'>{0}</span>Tareas para hoy</div>
+                    <div className='flex gap-2 items-center'><CheckCheck></CheckCheck><span className='text-2xl'>{counTask && counTask.length}</span>Tareas para hoy</div>
                     <div className='flex gap-2 items-center'><UserPenIcon></UserPenIcon><span className='text-2xl'>{users && users.length}</span>Colaboradores</div>
                 </div>
             </div>

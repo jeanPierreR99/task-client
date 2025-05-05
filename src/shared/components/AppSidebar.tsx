@@ -1,4 +1,4 @@
-import { ClipboardList, DatabaseBackupIcon, Folder, Home, ListTodo, MessageSquareMore, PackagePlus, Tag, UserRoundPlus } from "lucide-react"
+import { ClipboardList, Folder, Home, ListTodo, MessageSquareMore, PackagePlus, UserRoundPlus } from "lucide-react"
 
 import {
   Sidebar,
@@ -58,20 +58,20 @@ const itemsUsers = [
 
 const itemsInventory = [
   {
-    title: "Registrar",
-    url: "/users/register",
+    title: "Impresoras y escaners",
+    url: "/inventory/print-scanners",
     icon: PackagePlus,
   },
-  {
-    title: "Lista",
-    url: "/users/list",
-    icon: DatabaseBackupIcon,
-  },
-  {
-    title: "Categorias",
-    url: "/users/activities",
-    icon: Tag,
-  },
+  // {
+  //   title: "Lista",
+  //   url: "/users/list",
+  //   icon: DatabaseBackupIcon,
+  // },
+  // {
+  //   title: "Categorias",
+  //   url: "/users/activities",
+  //   icon: Tag,
+  // },
 ]
 
 export function AppSidebar() {

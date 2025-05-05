@@ -9,6 +9,12 @@ export type User = {
     roleId: string
 }
 
+export type Office = {
+    id: string;
+    name: string;
+    siglas: string
+}
+
 export type Task = {
     id: string
     name: string
@@ -18,6 +24,7 @@ export type Task = {
     dateCulmined: string
     created_by: User
     responsible: User
+    office: Office
 }
 
 export type Category = {
@@ -76,12 +83,16 @@ const useStoreTask = create<TaskStore>((set, get) => ({
         set((state) => ({
             categories: state.categories.filter((cat) => cat.id !== categoryId),
         })),
-    findTasksByName: (searchTerm) =>
-        get().categories.flatMap((cat) =>
+    findTasksByName: (searchTerm) => {
+        if (!searchTerm.trim()) return [];
+
+        return get().categories.flatMap((cat) =>
             cat.tasks.filter((task) =>
                 task.name.toLowerCase().includes(searchTerm.toLowerCase())
             )
-        ),
+        );
+    }
+
 }))
 
 export default useStoreTask

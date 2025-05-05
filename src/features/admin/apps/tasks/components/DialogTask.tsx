@@ -45,6 +45,11 @@ export interface Comments {
     date: string
 }
 
+interface Office {
+    name: string;
+    siglas: string
+}
+
 export interface Task {
     id: string
     name: string
@@ -53,6 +58,7 @@ export interface Task {
     status: string
     dateCulmined: string;
     responsible: Responsible;
+    office: Office;
 }
 
 interface DialogTasksProps {
@@ -311,13 +317,11 @@ const DialogTasks: React.FC<DialogTasksProps> = ({ open, setOpen, task, created_
             setLoadingSubtask(true);
             try {
                 const response = await API.getFileByTask(task.id);
-                console.log(response)
                 if (response?.success) {
 
                     const filesOnly = response.data.comments
                         .flatMap((comment: any) => comment.files || [])
                     setFiles(filesOnly);
-                    console.log(filesOnly)
                 } else {
                     console.error("No se encontraron subtareas con archivos");
                 }
@@ -412,7 +416,8 @@ const DialogTasks: React.FC<DialogTasksProps> = ({ open, setOpen, task, created_
                             }
                             <div className="flex gap-2 items-center"><span className="text-sm">Creado por:</span> <span className="text-sm">{created_by}</span></div>
                             <div className="flex gap-2 items-center"><span className="text-sm">Responsable:</span> <span className="text-sm">{task.responsible.name}</span><ChangeResponsible task={task} /></div>
-                            <div className="flex gap-2 items-center"><span className="text-sm">Fecha de entrega:</span> <span className="text-sm text-green-500">{`${dateFormatedTwo(task.dateCulmined)} (${getRelativeDay(task.dateCulmined)})`}</span></div>
+                            <div className="flex gap-2 items-center"><span className="text-sm">Oficina:</span> <span className="text-sm">{task.office?.siglas}</span></div>
+                            <div className="flex gap-2 items-center"><span className="text-sm">Fecha de entrega:</span> <span className="text-sm text-orange-500">{`${dateFormatedTwo(task.dateCulmined)} (${getRelativeDay(task.dateCulmined)})`}</span></div>
                             <div className="flex flex-col gap-2 "><span className="text-sm">Descripcion</span>
                                 <textarea disabled readOnly rows={3} className="border resize-none rounded-md outline-0 p-2 text-gray-400 text-sm">{task.description}</textarea>
                             </div>

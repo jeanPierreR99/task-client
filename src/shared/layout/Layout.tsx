@@ -57,7 +57,7 @@ export default function Layout() {
                                 </div>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className="w-56 text-center">
-                                <div className="flex flex-col justify-center items-center">{!imageUrl ? <span className="font-black w-14 h-14 flex items-center justify-center bg-blue-300 rounded-full">JR</span> : <img className="w-14 h-14 rounded-full" src={API_PATH + imageUrl} alt="" />}
+                                <div className="flex flex-col justify-center items-center">{!imageUrl ? <span className="font-black w-14 h-14 flex items-center justify-center bg-orange-400 rounded-full">JR</span> : <img className="w-14 h-14 rounded-full" src={API_PATH + imageUrl} alt="" />}
                                     <span className="text-sm font-black">{name}</span>
                                     <span className="text-sm text-gray-500">{email}</span>
                                 </div>

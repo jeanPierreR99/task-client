@@ -17,11 +17,12 @@ import { useState } from "react";
 
 const RoleSchema = z.object({
     name: z.string().nonempty("Campo requerido."),
+    siglas: z.string().nonempty("Campo requerido."),
 });
 
 type RoleFormValues = z.infer<typeof RoleSchema>;
 
-const FormRole = ({ setRoleData }: any) => {
+const FormOffice = () => {
     const [loading, setLoading] = useState(false);
 
     const form = useForm<RoleFormValues>({
@@ -31,7 +32,7 @@ const FormRole = ({ setRoleData }: any) => {
     const onSubmit = async (data: z.infer<typeof RoleSchema>) => {
         try {
             setLoading(true);
-            const response = await API.createRole(data);
+            const response = await API.createOffice(data);
 
             if (!response?.data || !response?.success) {
                 ToasMessage({
@@ -43,19 +44,19 @@ const FormRole = ({ setRoleData }: any) => {
             }
 
             form.reset({
-                name: ""
+                name: "",
+                siglas: ""
             });
-            setRoleData((prev: any) => [...prev, response.data])
             ToasMessage({
-                title: "Rol registrado",
-                description: "El rol se ha registrado correctamente.",
+                title: "Oficina registrado",
+                description: "La oficina ha sido registrado correctamente.",
                 type: "success",
             });
         } catch (error) {
-            console.error("Error al registrar el rol:", error);
+            console.error("Error al registrar la oficina:", error);
             ToasMessage({
                 title: "Error",
-                description: "Ocurrió un error al registrar el rol.",
+                description: "Ocurrió un error al registrar la oficina.",
                 type: "error",
             });
         } finally {
@@ -67,27 +68,41 @@ const FormRole = ({ setRoleData }: any) => {
         <div className="flex items-center justify-center">
             <div className="w-full rounded-md">
                 <fieldset className="border p-4 rounded-md">
-                    <legend className="font-bold px-2">Registrar Rol</legend>
+                    <legend className="font-bold px-2">Registrar Oficina</legend>
                     <FormProvider {...form}>
                         <form
                             onSubmit={form.handleSubmit(onSubmit)}
-                            className="grid grid-cols-1 gap-6 mt-6"
+                            className="grid md:grid-cols-2 gap-6 mt-6"
                         >
                             <FormField
                                 control={form.control}
                                 name="name"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Nombre del Rol</FormLabel>
+                                        <FormLabel>Nombre de la Oficina</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="Ej. Administrador" {...field} />
+                                            <Input placeholder="Ej. Administración" {...field} />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}
                             />
 
-                            <div className="flex justify-end">
+                            <FormField
+                                control={form.control}
+                                name="siglas"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Siglas</FormLabel>
+                                        <FormControl>
+                                            <Input placeholder="Ej. ADM" {...field} />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <div className="flex justify-end col-span-2">
                                 <Button
                                     type="submit"
                                     className="float-right bg-orange-500 hover:bg-orange-400 text-white"
@@ -107,4 +122,4 @@ const FormRole = ({ setRoleData }: any) => {
     );
 };
 
-export default FormRole;
+export default FormOffice;

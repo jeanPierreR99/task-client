@@ -1,5 +1,5 @@
 import axios from "axios";
-import { CreateRoleDto, CreateSubtaskDto, CreateTaskDto, CreateUserDto, UpdateSubtaskDto, UpdateTaskDto } from "./interface";
+import { createOfficeDto, CreateRoleDto, CreateSubtaskDto, CreateTaskDto, CreateUserDto, UpdateSubtaskDto, UpdateTaskDto } from "./interface";
 
 export const API_PATH = "http://localhost:3000";
 export const API_BASE = "http://localhost:3000";
@@ -8,7 +8,7 @@ export const API_BASE = "http://localhost:3000";
 // export const API_BASE = "https://asana.munitambopata.gob.pe:85";
 
 const api = axios.create({
-    baseURL: API_BASE,
+    baseURL: API_PATH,
     headers: {
         "Content-Type": "application/json",
     },
@@ -161,6 +161,10 @@ export const API = {
         const response = await api.get(`/tasks/${status}/user/${idUser}`);
         return response.data;
     },
+    getTaskAllFalse: async (idUser:string) => {
+        const response = await api.get(`/tasks/user/${idUser}`);
+        return response.data;
+    },
 
     //SUBTASK
     createSubTask: async (data: CreateSubtaskDto) => {
@@ -203,4 +207,20 @@ export const API = {
         const response = await api.get("/activities/task/" + id)
         return response.data
     },
+
+    //print-scanners
+    getAllPrintScanners: async () => {
+        const response = await api.get(`/print-scanners`)
+        return response.data
+    },
+
+    //OFFICE
+    createOffice: async (data: createOfficeDto) => {
+        const response = await api.post(`/offices`, data)
+        return response.data
+    },
+    getOffices: async () => {
+        const response = await api.get(`/offices`)
+        return response.data
+    }
 };

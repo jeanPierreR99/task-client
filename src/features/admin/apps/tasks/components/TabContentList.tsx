@@ -56,7 +56,6 @@ const TabContentList = ({ assignedCategoriesFalse, assignedCategoriesTrue }: any
             }
             const response = await API.setCategory(data)
 
-
             if (!response?.data || !response?.success) {
                 ToasMessage({
                     title: "Aviso",
@@ -163,36 +162,38 @@ const TabContentList = ({ assignedCategoriesFalse, assignedCategoriesTrue }: any
                     className="pl-10 pr-4"
                 />
             </div>
+            {taskFound.length > 0 && <div>
+                <span className='text-sm text-gray-400'>Lista de sugerencias</span>
+                <div className='flex flex-col gap-1'>
+                    {
+                        taskFound.map((data, index) =>
+                            <li key={`${data.id}-${index}`} className="flex items-center gap-2">
+                                <Checkbox
+                                    checked={data.completed}
+                                    disabled
+                                    className="border-gray-400 data-[state=unchecked]:hover:bg-green-100 data-[state=checked]:bg-green-500 data-[state=checked]:border-green-600 data-[state=checked]:text-white"
+                                />
+                                <span
+                                    className={`hover:text-blue-500 text-sm hover:border-b border-blue-500 cursor-pointer ${data.completed ? 'line-through text-gray-500' : ''
+                                        }`}
+                                    onClick={() => handleOpen(data)}
+                                >
+                                    {data.name + " (de " + data.created_by.name + ")"}
+                                </span>
+                                <span
+                                    className={`text-xs py-[2px] px-3 rounded-full ${data.status === 'completado'
+                                        ? 'bg-green-100 text-green-700'
+                                        : 'bg-yellow-100 text-yellow-700'
+                                        }`}
+                                >
+                                    {data.status}
+                                </span>
+                            </li>
+                        )
+                    }
+                </div>
+            </div>}
 
-            <span className='text-sm text-gray-400'>Lista de sugerencias</span>
-            <div>
-                {
-                    taskFound.map((data, index) =>
-                        <li key={`${data.id}-${index}`} className="flex items-center gap-2">
-                            <Checkbox
-                                checked={data.completed}
-                                disabled
-                                className="border-gray-400 data-[state=unchecked]:hover:bg-green-100 data-[state=checked]:bg-green-500 data-[state=checked]:border-green-600 data-[state=checked]:text-white"
-                            />
-                            <span
-                                className={`hover:text-blue-500 text-sm hover:border-b border-blue-500 cursor-pointer ${data.completed ? 'line-through text-gray-500' : ''
-                                    }`}
-                                onClick={() => handleOpen(data)}
-                            >
-                                {data.name + " (de " + data.created_by.name + ")"}
-                            </span>
-                            <span
-                                className={`text-xs py-[2px] px-3 rounded-full ${data.status === 'completado'
-                                    ? 'bg-green-100 text-green-700'
-                                    : 'bg-yellow-100 text-yellow-700'
-                                    }`}
-                            >
-                                {data.status}
-                            </span>
-                        </li>
-                    )
-                }
-            </div>
             {message != "" && <span className='text-sm text-gray-400'>Tienes nuevas tareas recarga la página.</span>}
             <Accordion type="single" collapsible className="w-full">
                 <AccordionItem value='item-0'>

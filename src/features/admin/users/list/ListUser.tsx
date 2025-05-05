@@ -1,3 +1,4 @@
+import TableOffice from './components/TableOffice';
 import TableRole from './components/TableRole';
 import TableUser from './components/TableUser';
 
@@ -8,6 +9,9 @@ const ListUser = () => {
             <br />
             <br />
             <TableRole />
+            <br />
+            <br />
+            <TableOffice />
             <br />
             <br />
             <TableUser></TableUser>

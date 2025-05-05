@@ -263,7 +263,7 @@ const FormUser = ({ roleData }: any) => {
                             <div className="md:col-span-2">
                                 <Button
                                     type="submit"
-                                    className="float-right bg-blue-600 hover:bg-blue-700 text-white"
+                                    className="float-right bg-orange-500 hover:bg-orange-400 text-white"
                                     disabled={visible}
                                 >
                                     {visible && <Loader2 className="animate-spin mr-2 w-4 h-4" />}

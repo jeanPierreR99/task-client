@@ -68,3 +68,26 @@ export interface CreateUserDto {
 export interface CreateRoleDto {
     name: string;
 }
+
+
+//PRINT-SCANNERS
+export interface PrintScannerDto {
+    id: string;
+    sedes: string;
+    oficina: string;
+    oficinaEspecifica: string;
+    codPatrimonial: string;
+    serie: string;
+    marca: string;
+    tipo: string;
+    modelo: string;
+    color: string;
+    mac: string;
+    ip: string;
+    estado: string;
+}
+
+export interface createOfficeDto {
+    name: string;
+    siglas: string
+}

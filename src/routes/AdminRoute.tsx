@@ -15,6 +15,7 @@ const RegisterUser = React.lazy(() => import("../features/admin/users/register/R
 const ListUser = React.lazy(() => import("../features/admin/users/list/ListUser"));
 const ViewUser = React.lazy(() => import("../features/admin/users/view-user/ViewUser"));
 const Notification = React.lazy(() => import("../features/admin/apps/notification/Notification"));
+const PrintScanner = React.lazy(() => import("../features/admin/inventory/printScanner"))
 
 const withSuspense = (Component: React.ReactNode) => (
     <Suspense fallback={<LoadingFallback />}>{Component}</Suspense>
@@ -48,6 +49,27 @@ export const AdminRoutes: RouteObject[] = [
                     {
                         path: "register",
                         element: withSuspense(<RegisterUser />),
+                    },
+                    {
+                        path: "list",
+                        element: withSuspense(<ListUser />),
+                    },
+                    {
+                        path: "view/:id",
+                        element: withSuspense(<ViewUser />),
+                    },
+                    {
+                        path: "activities",
+                        element: withSuspense(<Inbox />),
+                    },
+                ]
+            },
+            {
+                path: "inventory",
+                children: [
+                    {
+                        path: "print-scanners",
+                        element: withSuspense(<PrintScanner />),
                     },
                     {
                         path: "list",

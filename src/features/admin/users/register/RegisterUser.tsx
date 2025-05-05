@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import FormRole from './components/FormRole';
 import FormUser from './components/FormUser';
 import { API } from '../../../../shared/js/api';
+import FormOffice from './components/FormOffice';
 
 const RegisterUser = () => {
     const [roleData, setRoleData] = useState();
@@ -22,6 +23,9 @@ const RegisterUser = () => {
             <br />
             <br />
             <FormUser roleData={roleData} />
+            <br />
+            <br />
+            <FormOffice />
         </div>
     );
 };

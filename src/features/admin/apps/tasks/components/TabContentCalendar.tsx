@@ -39,6 +39,7 @@ const TabContentCalendar = () => {
                 dateCulmined: task.dateCulmined,
                 created_by: task.created_by,
                 responsible: task.responsible,
+                office: task.office
             },
             start: task.dateCulmined,
             end: task.dateCulmined,
