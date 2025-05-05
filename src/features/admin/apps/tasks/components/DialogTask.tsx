@@ -116,7 +116,7 @@ const DialogTasks: React.FC<DialogTasksProps> = ({ open, setOpen, task, created_
                 completed: true,
                 status: "completado",
             }
-            const response = await API.UpdateTask(task.id, newTask)
+            const response = await API.UpdateTask(task.id, id, newTask)
 
             if (!response?.data || !response?.success) {
                 ToasMessage({
@@ -149,7 +149,7 @@ const DialogTasks: React.FC<DialogTasksProps> = ({ open, setOpen, task, created_
                 completed: false,
                 status: "pendiente",
             }
-            const response = await API.UpdateTask(task.id, newTask)
+            const response = await API.UpdateTask(task.id, id, newTask)
 
             if (!response?.data || !response?.success) {
                 ToasMessage({

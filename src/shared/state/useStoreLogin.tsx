@@ -8,7 +8,8 @@ interface ILogin {
     name: string;
     imageUrl: string;
     email: string;
-    login: (role: string, name: string, imageUrl: string, email: string, id: string) => void;
+    telephone: string;
+    login: (role: string, name: string, imageUrl: string, email: string, id: string, telephone: string) => void;
     logout: () => void;
 }
 
@@ -19,8 +20,9 @@ const useStoreLogin = create<ILogin>((set) => ({
     name: "",
     imageUrl: "",
     email: "",
-    login: (role, name, imageUrl, email, id) => set(() => ({ isLogIn: true, role, name, imageUrl, email, id })),
-    logout: () => set(() => ({ isLogIn: false, role: "", name: "", imageUrl: "", email: "" }))
+    telephone: "",
+    login: (role, name, imageUrl, email, id, telephone) => set(() => ({ isLogIn: true, role, name, imageUrl, email, id, telephone })),
+    logout: () => set(() => ({ isLogIn: false, role: "", name: "", imageUrl: "", email: "", telephone: "" }))
 }));
 
 export default useStoreLogin;

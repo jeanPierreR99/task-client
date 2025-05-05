@@ -43,7 +43,8 @@ const Login = () => {
                 userData.name,
                 userData.imageUrl,
                 userData.email,
-                userData.id
+                userData.id,
+                userData.telephone
             );
             window.location.reload();
         } catch (error) {

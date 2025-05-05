@@ -8,6 +8,7 @@ import SheetTask from './SheetTask';
 import useStoreTask, { Task as T } from '../store/useStoreTask';
 import { API } from '../../../../../shared/js/api';
 import { ToasMessage } from '../../../../../components/ToasMessage';
+import useStoreLogin from '../../../../../shared/state/useStoreLogin';
 
 const convertToUTC = (dateString: string) => {
     return new Date(dateString).toISOString();
@@ -27,7 +28,7 @@ const TabContentCalendar = () => {
     const [created_by, setCreated_by] = useState("")
     const [categoryName, setCategoryName] = useState("");
     const [createdId, setCreatedId] = useState("");
-
+    const { id } = useStoreLogin();
     const events = categories.flatMap((label) =>
         label.tasks.map((task) => ({
             task: {
@@ -59,7 +60,7 @@ const TabContentCalendar = () => {
             const movedEventDate = info.event.startStr;
             const newDateCulmined: any = { dateCulmined: convertToUTC(movedEventDate) };
 
-            const response = await API.UpdateTask(event.extendedProps.task.id, newDateCulmined);
+            const response = await API.UpdateTask(event.extendedProps.task.id, id, newDateCulmined);
             if (!response?.data || !response?.success) {
                 ToasMessage({
                     title: "Aviso",

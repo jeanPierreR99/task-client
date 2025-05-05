@@ -64,6 +64,13 @@ export interface CreateUserDto {
     passwordHash: string;
     roleId: string;
 }
+export interface UpdateUserUserDto {
+    name: string;
+    email: string;
+    passwordHash: string;
+}
+
+//ROLE
 
 export interface CreateRoleDto {
     name: string;

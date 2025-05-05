@@ -1,5 +1,5 @@
 import axios from "axios";
-import { createOfficeDto, CreateRoleDto, CreateSubtaskDto, CreateTaskDto, CreateUserDto, UpdateSubtaskDto, UpdateTaskDto } from "./interface";
+import { createOfficeDto, CreateRoleDto, CreateSubtaskDto, CreateTaskDto, CreateUserDto, UpdateSubtaskDto, UpdateTaskDto, UpdateUserUserDto } from "./interface";
 
 export const API_PATH = "http://localhost:3000";
 export const API_BASE = "http://localhost:3000";
@@ -44,6 +44,10 @@ export const API = {
 
     changeUserActiveStatus: async (userId: string, isActive: boolean) => {
         const response = await api.patch(`/users/${userId}/active`, { isActive });
+        return response.data;
+    },
+    updateUser: async (userId: string, data: UpdateUserUserDto) => {
+        const response = await api.put(`/users/${userId}`, data);
         return response.data;
     },
 
@@ -145,8 +149,8 @@ export const API = {
         const response = await api.patch(`/tasks/category?id_task=${idTask}&id_category=${idCategory}`)
         return response.data
     },
-    UpdateTask: async (idTask: string, data: UpdateTaskDto) => {
-        const response = await api.put(`/tasks/${idTask}`, data);
+    UpdateTask: async (idTask: string, idUser: string, data: UpdateTaskDto) => {
+        const response = await api.put(`/tasks/${idTask}?id=${idUser}`, data);
         return response.data;
     },
     getTasksFileByTask: async (idTask: string) => {
@@ -161,7 +165,7 @@ export const API = {
         const response = await api.get(`/tasks/${status}/user/${idUser}`);
         return response.data;
     },
-    getTaskAllFalse: async (idUser:string) => {
+    getTaskAllFalse: async (idUser: string) => {
         const response = await api.get(`/tasks/user/${idUser}`);
         return response.data;
     },

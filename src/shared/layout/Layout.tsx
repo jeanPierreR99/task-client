@@ -1,6 +1,6 @@
 import { AppSidebar } from "../components/AppSidebar"
 import { SidebarProvider, SidebarTrigger } from "../components/ui/sidebar"
-import { Outlet } from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
 import { ArrowLeft, ChevronDown, ChevronsLeftRight, User2 } from "lucide-react"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuSeparator, DropdownMenuTrigger } from "../components/ui/dropdown-menu";
 import { Button } from "../components/ui/button";
@@ -66,8 +66,8 @@ export default function Layout() {
                                 <Button variant={"ghost"} style={{ fontWeight: 400 }} className="w-full flex justify-start text-gray-700">
                                     <User2 />  Perfil
                                 </Button>
-                                <Button variant={"ghost"} style={{ fontWeight: 400 }} className="w-full flex justify-start text-gray-700">
-                                    <ChevronsLeftRight></ChevronsLeftRight>  Configuración
+                                <Button variant={"ghost"} style={{ fontWeight: 400 }} className="w-full overflow-hidden flex p-0 justify-start text-gray-700 ">
+                                    <NavLink to="config" className="flex gap-1 w-full p-2 pl-3"><ChevronsLeftRight></ChevronsLeftRight>  Configuración</NavLink>
                                 </Button>
                                 <Button onClick={() => deleteStorage()} variant={"ghost"} style={{ fontWeight: 400 }} className="w-full flex justify-start text-gray-700">
                                     <ArrowLeft></ArrowLeft> Cerrar sesión
@@ -76,7 +76,7 @@ export default function Layout() {
                         </DropdownMenu >
                     </div>
                 </div>
-                <div className="px-5 py-5 ">
+                <div className="px-5 py-5">
                     <Outlet />
                 </div>
             </main>

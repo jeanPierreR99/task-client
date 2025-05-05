@@ -16,13 +16,17 @@ const RegisterUser = () => {
     }, [])
     return (
         <div>
-            <span className='text-sm text-gray-400'>Registro de Usuarios</span>
+            <span className='text-sm text-gray-400'>Registro de Roles</span>
             <br />
             <br />
             <FormRole setRoleData={setRoleData} />
             <br />
+            <span className='text-sm text-gray-400'>Registro de Usuarios</span>
+            <br />
             <br />
             <FormUser roleData={roleData} />
+            <br />
+            <span className='text-sm text-gray-400'>Registro de Oficinas</span>
             <br />
             <br />
             <FormOffice />

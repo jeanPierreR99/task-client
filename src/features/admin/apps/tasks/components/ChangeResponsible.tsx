@@ -19,6 +19,8 @@ import { API } from "../../../../../shared/js/api"
 import { ToasMessage } from "../../../../../components/ToasMessage"
 import { UserRoundPen } from "lucide-react"
 import { TooltipWrapper } from "../../../../../components/TooltipWrapper"
+import useStoreLogin from "../../../../../shared/state/useStoreLogin"
+import { GetDay } from "../../../../../lib/date"
 
 const formSchema = z.object({
     responsible: z.string().min(1, "Campo requerido")
@@ -29,7 +31,7 @@ type FormValues = z.infer<typeof formSchema>
 const ChangeResponsible = ({ task }: any) => {
     const [userId, setUserId] = useState("")
     const [loading, setLoading] = useState(false)
-
+    const { id } = useStoreLogin();
     const form = useForm<FormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -42,10 +44,11 @@ const ChangeResponsible = ({ task }: any) => {
             setLoading(true)
 
             const newTask = {
-                responsibleId: userId
+                responsibleId: userId,
+                dateAux: GetDay
 
             }
-            const response = await API.UpdateTask(task.id, newTask)
+            const response = await API.UpdateTask(task.id, id, newTask)
             if (!response?.data || !response?.success) {
                 ToasMessage({
                     title: "Aviso",

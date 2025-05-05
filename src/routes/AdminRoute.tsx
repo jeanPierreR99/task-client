@@ -16,6 +16,7 @@ const ListUser = React.lazy(() => import("../features/admin/users/list/ListUser"
 const ViewUser = React.lazy(() => import("../features/admin/users/view-user/ViewUser"));
 const Notification = React.lazy(() => import("../features/admin/apps/notification/Notification"));
 const PrintScanner = React.lazy(() => import("../features/admin/inventory/printScanner"))
+const Config = React.lazy(() => import("../features/admin/config/Config"))
 
 const withSuspense = (Component: React.ReactNode) => (
     <Suspense fallback={<LoadingFallback />}>{Component}</Suspense>
@@ -30,6 +31,10 @@ export const AdminRoutes: RouteObject[] = [
             {
                 index: true,
                 element: withSuspense(<Home />),
+            },
+            {
+                path: "config",
+                element: withSuspense(<Config />),
             },
             {
                 path: "tasks",

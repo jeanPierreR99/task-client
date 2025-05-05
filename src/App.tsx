@@ -13,7 +13,7 @@ function App() {
     useEffect(() => {
         const data = getStorage();
         if (data) {
-            login(data.role.name, data.name, data.imageUrl, data.email, data.id);
+            login(data.role.name, data.name, data.imageUrl, data.email, data.id, data.telephone);
         }
         setIsAuthChecked(true);
     }, []);
