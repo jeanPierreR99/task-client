@@ -30,10 +30,7 @@ export const UserAutoComplete = ({ field, onSelect, setUserId }: Props) => {
         const delay = setTimeout(async () => {
             try {
                 const response = await API.getUserSugestion(search)
-                console.log(search)
-                console.log(response)
                 if (response?.success && response.data) {
-                    console.log(response)
                     setSuggestions(response.data)
                 }
             } catch (error) {

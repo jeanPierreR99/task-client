@@ -23,12 +23,11 @@ export default function Layout() {
         socket.emit('joinTaskAsigned', id);
 
         socket.on('updateTaskAsigned', (data) => {
-            console.log(id)
-            console.log(data.userId)
-            if (data.userId === id) return;
+
+            if (data.userId !== id) return;
             ToasMessage({
                 title: "Tienes una nueva tarea asginada",
-                description: "Se te asigno una nueva tarea por: " + data.task.created_by.name,
+                description: `Se te asignó la tarea ${data.task.name} por: ${data.task.created_by.name}`,
                 type: "success",
                 duration: 7000
             });

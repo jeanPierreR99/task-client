@@ -8,7 +8,7 @@ export type Notification = {
 const useStoreNotification = create<Notification>((set) => ({
     message: "",
 
-    setMessage: (message) => set({ message })  // Establecer el mensaje
+    setMessage: (message) => set({ message })
 }));
 
 export default useStoreNotification;

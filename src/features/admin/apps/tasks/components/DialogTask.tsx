@@ -263,6 +263,7 @@ const DialogTasks: React.FC<DialogTasksProps> = ({ open, setOpen, task, created_
                 description: "Se elimino la tarea correctamente",
                 type: "success",
             });
+            window.location.reload();
 
         } catch (error) {
             console.log(error)
