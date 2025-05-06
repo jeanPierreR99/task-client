@@ -160,7 +160,7 @@ const TabContentTable: React.FC = () => {
                 setOpen={setOpenDrawer}
                 categoryId={indexCategory}
                 form
-                date={GetDay}
+                date={GetDay()}
             />
         </div>
     );

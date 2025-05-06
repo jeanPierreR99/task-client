@@ -30,7 +30,7 @@ const Home = () => {
     return (
         <div className='pt-10'>
             <div className='flex flex-col gap-2 items-center'>
-                <span className="text-md font-light">{dateFormated.toLocaleUpperCase()}</span>
+                <span className="text-md font-light">{dateFormated().toLocaleUpperCase()}</span>
                 <span className="text-3xl">Hola, {name}</span>
                 <div className='flex gap-3 md:gap-12 text-gray-400 text-sm bg-gray-100 py-2 px-4 rounded-full'>
                     <div className='flex gap-2 items-center'><CheckCheck></CheckCheck><span className='text-2xl'>{counTask && counTask.length}</span>Tareas para hoy</div>

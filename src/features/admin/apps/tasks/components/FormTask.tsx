@@ -130,7 +130,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ categoryId, setOpen, date }) => {
             const subtasksToSend = subtasks.map((st, index) => ({
                 name: st.name,
                 completed: false,
-                dateCulmined: GetDay,
+                dateCulmined: GetDay(),
                 taskId: taskId,
                 responsibleId: subtaskUserIds[index],
             }));

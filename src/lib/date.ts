@@ -1,13 +1,11 @@
 import { format, formatDistanceToNow, isToday, isTomorrow, isYesterday, parseISO } from "date-fns";
 import { es } from "date-fns/locale";
 
-const dateNow = new Date();
 
-export const dateFormated = format(
-    dateNow,
-    "EEEE d 'de' MMMM",
-    { locale: es }
-);
+export const dateFormated = () => {
+    return format(new Date(), "EEEE d 'de' MMMM", { locale: es });
+  };
+  
 
 export const dateFormatedTwo = (dateString: string): string => {
     const date = parseISO(dateString);
@@ -35,8 +33,7 @@ export function getRelativeDay(dateString: string): string {
     return diff;
 }
 
-const today = new Date();
-export const GetDay = today.toISOString()
+export const GetDay = () => new Date().toISOString();
 
 export function normalizeToLocalMidnight(dateStr: string): Date {
     const date = new Date(dateStr)

@@ -374,7 +374,7 @@ const TabContentList = ({ assignedCategoriesFalse, assignedCategoriesTrue }: any
                 open={openDrawer}
                 setOpen={setOpenDrawer}
                 categoryId={categoryId}
-                date={GetDay}
+                date={GetDay()}
                 form
             >
             </SheetTask>

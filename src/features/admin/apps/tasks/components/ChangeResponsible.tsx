@@ -45,7 +45,7 @@ const ChangeResponsible = ({ task }: any) => {
 
             const newTask = {
                 responsibleId: userId,
-                dateAux: GetDay
+                dateAux: GetDay()
 
             }
             const response = await API.UpdateTask(task.id, id, newTask)

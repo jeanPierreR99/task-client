@@ -203,7 +203,7 @@ const DialogTasks: React.FC<DialogTasksProps> = ({ open, setOpen, task, created_
         const formData = new FormData();
 
         formData.append("comment", labelComment);
-        formData.append("date", GetDay);
+        formData.append("date", GetDay());
         formData.append("taskId", task.id);
         formData.append("userId", id);
 
