@@ -28,6 +28,7 @@ const RegisterSchema = z.object({
     passwordHash: z.string().min(6, "Mínimo 6 caracteres"),
     telephone: z.string().nonempty("Campo requerido."),
     roleId: z.string().nonempty("Campo requerido."),
+    projectId: z.string().nonempty("Campo requerido."),
 });
 
 interface Role {
@@ -37,7 +38,7 @@ interface Role {
 }
 
 
-const FormUser = ({ roleData }: any) => {
+const FormUser = ({ roleData, projectData }: any) => {
     const [visible, setVisible] = useState(false);
     const [uploading, setUploading] = useState(false);
     const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
@@ -83,7 +84,7 @@ const FormUser = ({ roleData }: any) => {
                 telephone: Number(data.telephone),
                 imageUrl: imageUrlRef.current,
             };
-
+            console.log(payload)
             const response = await API.register(payload);
 
             if (!response?.data || !response?.success) {
@@ -100,6 +101,7 @@ const FormUser = ({ roleData }: any) => {
                 telephone: "",
                 passwordHash: "",
                 roleId: "",
+                projectId: "",
             });
 
             setImagePreview(null);
@@ -220,6 +222,34 @@ const FormUser = ({ roleData }: any) => {
                                 )}
                             />
 
+                            {/* Project */}
+                            <FormField
+                                control={form.control}
+                                name="projectId"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Proyecto</FormLabel>
+                                        <FormControl>
+                                            <Select
+                                                value={field.value ?? ""}
+                                                onValueChange={field.onChange}
+                                            >
+                                                <SelectTrigger className="w-full">
+                                                    <SelectValue placeholder="Selecciona un proyecto" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    {projectData && projectData.map((project: any) => (
+                                                        <SelectItem key={project.id} value={String(project.id)}>
+                                                            {project.name}
+                                                        </SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
 
                             {/* Imagen de perfil */}
                             <FormItem className="">

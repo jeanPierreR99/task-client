@@ -24,7 +24,9 @@ export type Task = {
     dateCulmined: string
     created_by: User
     responsible: User
-    office: Office
+    office: Office,
+    ticket?: boolean;
+    nameTicket?: string
 }
 
 export type Category = {
@@ -86,12 +88,16 @@ const useStoreTask = create<TaskStore>((set, get) => ({
     findTasksByName: (searchTerm) => {
         if (!searchTerm.trim()) return [];
 
+        const lowerTerm = searchTerm.toLowerCase();
+
         return get().categories.flatMap((cat) =>
             cat.tasks.filter((task) =>
-                task.name.toLowerCase().includes(searchTerm.toLowerCase())
+            (task.name?.toLowerCase().includes(lowerTerm) ||
+                task.nameTicket?.toLowerCase().includes(lowerTerm))
             )
         );
     }
+
 
 }))
 

@@ -88,8 +88,8 @@ const TabContentTable: React.FC = () => {
 
     const handleOpen = (task: any) => {
         setSelectedTask(task);
-        setCreated_by(task.created_by.name)
-        setCreatedId(task.created_by.id)
+        setCreated_by(task.created_by?.name || "N/A")
+        setCreatedId(task.created_by?.id || null)
         setOpen(true);
     };
 

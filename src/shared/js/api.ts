@@ -1,11 +1,11 @@
 import axios from "axios";
-import { createOfficeDto, CreateRoleDto, CreateSubtaskDto, CreateTaskDto, CreateUserDto, UpdateSubtaskDto, UpdateTaskDto, UpdateUserUserDto } from "./interface";
+import { createOfficeDto, createProjectDto, CreateRoleDto, CreateSubtaskDto, CreateTaskDto, CreateUserDto, UpdateSubtaskDto, UpdateTaskDto, UpdateUserUserDto } from "./interface";
 
-//export const API_PATH = "http://localhost:3000";
-//export const API_BASE = "http://localhost:3000/api/v1";
+export const API_PATH = "http://localhost:3000";
+export const API_BASE = "http://localhost:3000/api/v1";
 
- export const API_BASE = "https://asana.munitambopata.gob.pe:85/api/v1";
- export const API_PATH = "https://asana.munitambopata.gob.pe:85";
+//  export const API_BASE = "https://asana.munitambopata.gob.pe:85/api/v1";
+//  export const API_PATH = "https://asana.munitambopata.gob.pe:85";
 
 const api = axios.create({
     baseURL: API_BASE,
@@ -29,8 +29,8 @@ export const API = {
         const response = await api.post("/users", data)
         return response.data
     },
-    getUser: async () => {
-        const response = await api.get("/users")
+    getUser: async (id: string) => {
+        const response = await api.get("/users/project/" + id,)
         return response.data
     },
     getUserId: async (userId: string) => {
@@ -50,6 +50,10 @@ export const API = {
         const response = await api.put(`/users/${userId}`, data);
         return response.data;
     },
+    getAllUsers: async () => {
+        const response = await api.get(`/users`);
+        return response.data;
+    },
 
     //category
     setCategory: async (data: any) => {
@@ -60,8 +64,8 @@ export const API = {
         const response = await api.get("/categories/user/" + userId)
         return response.data
     },
-    getCategoryByResponsible: async (userId: string, status: string) => {
-        const response = await api.get("/categories/assigned/" + userId + "?status=" + status)
+    getCategoryByResponsible: async (id: string, status: string) => {
+        const response = await api.get("/categories/assigned/" + id + "?status=" + status)
         return response.data
     },
 
@@ -161,15 +165,26 @@ export const API = {
         const response = await api.delete(`/tasks/${idTask}/user/${userId}`);
         return response.data;
     },
-    getTasksStatusUser: async (idUser: string, status: string) => {
-        const response = await api.get(`/tasks/${status}/user/${idUser}`);
+    getTasksStatusUser: async (id: string, status: string) => {
+        const response = await api.get(`/tasks/${status}/project/${id}`);
         return response.data;
     },
     getTaskAllFalse: async (idUser: string) => {
         const response = await api.get(`/tasks/user/${idUser}`);
         return response.data;
     },
-
+    getAllTasks: async () => {
+        const response = await api.get(`/tasks`);
+        return response.data;
+    },
+    getAllTasksTicket: async () => {
+        const response = await api.get(`/tasks/ticket`);
+        return response.data;
+    },
+    updateTaskCompleted: async (id: string, body: any) => {
+        const response = await api.patch(`/tasks/${id}/status`, body);
+        return response.data;
+    },
     //SUBTASK
     createSubTask: async (data: CreateSubtaskDto) => {
         const response = await api.post("/subtasks", data)
@@ -225,6 +240,27 @@ export const API = {
     },
     getOffices: async () => {
         const response = await api.get(`/offices`)
+        return response.data
+    },
+
+    //PROJECTS
+    createProject: async (data: createProjectDto) => {
+        const response = await api.post(`/projects`, data)
+        return response.data
+    },
+    getProjects: async () => {
+        const response = await api.get(`/projects`)
+        return response.data
+    },
+
+    getProjectOne: async (id: string) => {
+        const response = await api.get(`/projects/${id}`)
+        return response.data
+    },
+    //TICKETS
+
+    getTickets: async () => {
+        const response = await api.get(`/tickets`)
         return response.data
     }
 };

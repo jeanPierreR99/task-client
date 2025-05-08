@@ -44,7 +44,8 @@ const Login = () => {
                 userData.imageUrl,
                 userData.email,
                 userData.id,
-                userData.telephone
+                userData.telephone,
+                userData.project.id
             );
             window.location.reload();
         } catch (error) {

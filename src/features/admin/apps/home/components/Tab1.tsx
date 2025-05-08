@@ -1,4 +1,4 @@
-import { ClockAlert } from "lucide-react";
+import { CheckCircle } from "lucide-react";
 import { AlertMessage } from "../../../../../components/AlertMessage";
 import NotTasks from "./NotTasks";
 import { NavLink } from "react-router-dom";
@@ -10,7 +10,7 @@ import useStoreLogin from "../../../../../shared/state/useStoreLogin";
 import { dateFormatedTwo } from "../../../../../lib/date";
 
 const Tab1 = () => {
-    const { id } = useStoreLogin();
+    const { projectId } = useStoreLogin();
     const [assignedCategoriesFalse, setAssignedCategoriesFalse] = useState<Task[]>([]);
 
     const {
@@ -18,8 +18,8 @@ const Tab1 = () => {
         error: responsibleErrorFalse,
         isLoading: responsibleLoadingFalse
     } = useApiFetch(
-        ["categories_by_responsible_false", id],
-        () => API.getCategoryByResponsible(id, "false")
+        ["categories_by_responsible_false", projectId],
+        () => API.getTasksStatusUser(projectId, "true")
     );
 
     useEffect(() => {
@@ -39,20 +39,18 @@ const Tab1 = () => {
     return (
         <div className="w-full">
             {assignedCategoriesFalse.length > 0 ? (
-                assignedCategoriesFalse.map((category: any, catIndex: number) => (
-                    category.tasks.map((task: Task, taskIndex: number) => (
-                        <NavLink
-                            to="tasks"
-                            key={`${catIndex}-${taskIndex}`}
-                            className="flex w-full px-2 hover:bg-gray-100 gap-2 items-center justify-between border-b py-2 text-gray-500 text-sm"
-                        >
-                            <div className="flex gap-2">
-                                <ClockAlert size={18} />
-                                <span>{task.name}</span>
-                            </div>
-                            <span className="text-orange-400"> para el {dateFormatedTwo(task.dateCulmined)}</span>
-                        </NavLink>
-                    ))
+                assignedCategoriesFalse.map((task: Task, taskIndex: number) => (
+                    <NavLink
+                        to="tasks"
+                        key={taskIndex}
+                        className="flex w-full px-2 hover:bg-gray-100 gap-2 items-center justify-between border-b py-2 text-gray-500 text-sm"
+                    >
+                        <div className="flex gap-2">
+                            <CheckCircle size={18} />
+                            <span>{task.name}</span>
+                        </div>
+                        <span className="text-orange-400"> para el {dateFormatedTwo(task.dateCulmined)}</span>
+                    </NavLink>
                 ))
             ) : (
                 <NotTasks />

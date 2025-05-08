@@ -11,7 +11,7 @@ import { Subtask } from "./DialogTask";
 import ViewSubTask from "./ViewSubTask";
 
 interface SheetTaskProps {
-    createdId: string;
+    createdId: string | null;
     title: string;
     open: boolean;
     setOpen: React.Dispatch<React.SetStateAction<boolean>>
@@ -48,7 +48,7 @@ const SheetTask: React.FC<SheetTaskProps> = ({
                         <FormTask categoryId={categoryId} setOpen={setOpen} date={date} />
                     ) : (
                         subTask ? (
-                            <ViewSubTask setOpen={setOpen} createdId={createdId} subTask={subTask} setSubtask={setSubtask} />
+                            <ViewSubTask setOpen={setOpen} createdId={createdId ? createdId : null} subTask={subTask} setSubtask={setSubtask} />
                         ) : (
                             <p>No hay subtarea para ver</p>
                         )

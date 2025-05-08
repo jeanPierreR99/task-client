@@ -8,22 +8,27 @@ import { User } from '../tasks/store/useStoreTask';
 import { API, API_PATH } from '../../../../shared/js/api';
 import { Avatar, AvatarFallback, AvatarImage } from '../../../../shared/components/ui/avatar';
 import useStoreLogin from '../../../../shared/state/useStoreLogin';
+import { getStorage } from '../../../../shared/js/functions';
 
 const Home = () => {
     const [users, setUsers] = useState<User[]>([])
-    const { id, name } = useStoreLogin();
+    const { name, projectId } = useStoreLogin();
     const [counTask, setCountTask] = useState("");
+    const [project, setProject] = useState({ id: "", name: "", description: "" });
 
     const getUser = async () => {
-        const response = await API.getUser()
+        const response = await API.getUser(projectId)
         setUsers(response.data)
     }
     const getTaskFalse = async () => {
-        const response = await API.getTaskAllFalse(id)
+        const response = await API.getTaskAllFalse(projectId)
         setCountTask(response.data)
     }
 
+
     useEffect(() => {
+        const projectStorage = getStorage()
+        setProject(projectStorage.project)
         getUser();
         getTaskFalse();
     }, [])
@@ -41,9 +46,12 @@ const Home = () => {
                 <div className='md:col-span-2 h-[400px] overflow-y-auto w-full shadow-lg rounded-md p-4 hover:bg-gray-50 duration-300 ease-linear'>
                     <TabTasks></TabTasks>
                 </div>
-                <div className='shadow-lg h-[400px] rounded-md p-4 hover:bg-gray-50 duration-300 ease-linear'>
+                <div className='shadow-lg h-[400px] rounded-md p-4'>
                     <span className='text-xl font-bold'>Proyectos</span>
-                    <NotProjects></NotProjects>
+                    {project ? <div className='border-b mt-2 hover:bg-gray-50 duration-300 ease-linear cursor-pointer p-2'>
+                        <span className='font-medium'>{project.name}</span>
+                        <p className='text-sm text-gray-500'>{project.description}</p>
+                    </div> : <NotProjects></NotProjects>}
                 </div>
                 <div className='shadow-lg h-[400px] overflow-y-auto rounded-md p-4'>
                     <span className='text-xl font-bold'>Colaboradores</span>

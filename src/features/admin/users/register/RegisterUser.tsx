@@ -3,33 +3,38 @@ import FormRole from './components/FormRole';
 import FormUser from './components/FormUser';
 import { API } from '../../../../shared/js/api';
 import FormOffice from './components/FormOffice';
+import FormProjects from './components/FormProjects';
 
 const RegisterUser = () => {
     const [roleData, setRoleData] = useState();
+    const [projectData, setProjectData] = useState();
 
     useEffect(() => {
         const getRoles = async () => {
             const response = await API.getRole();
             setRoleData(response.data)
         }
+
+        const getProejcts = async () => {
+            const response = await API.getProjects();
+            setProjectData(response.data)
+        }
+
         getRoles()
+        getProejcts()
     }, [])
     return (
         <div>
-            <span className='text-sm text-gray-400'>Registro de Roles</span>
-            <br />
-            <br />
             <FormRole setRoleData={setRoleData} />
-            <br />
-            <span className='text-sm text-gray-400'>Registro de Usuarios</span>
-            <br />
-            <br />
-            <FormUser roleData={roleData} />
-            <br />
-            <span className='text-sm text-gray-400'>Registro de Oficinas</span>
             <br />
             <br />
             <FormOffice />
+            <br />
+            <br />
+            <FormProjects />
+            <br />
+            <br />
+            <FormUser roleData={roleData} projectData={projectData} />
         </div>
     );
 };

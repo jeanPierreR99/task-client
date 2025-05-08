@@ -8,12 +8,12 @@ import Tab3 from "./Tab3"
 
 
 export function TabTasks() {
-  const { imageUrl, id } = useStoreLogin();
+  const { imageUrl, projectId } = useStoreLogin();
   const [task, setTask] = useState<any[] | []>([])
 
   useEffect(() => {
     const getTaskStatus = async () => {
-      const response = await API.getTasksStatusUser(id, "false")
+      const response = await API.getTasksStatusUser(projectId, "false")
       setTask(response.data)
     }
 
@@ -26,7 +26,7 @@ export function TabTasks() {
         <img className="w-15 h-15 mix-blend-multiply rounded-full" src={API_PATH + imageUrl} alt="" />
         <div> <span className='text-xl font-bold'>Mis tareas</span>
           <TabsList className="grid w-full grid-cols-2 gap-4">
-            <TabsTrigger value="assigned">Asignadas</TabsTrigger>
+            <TabsTrigger value="assigned">Completadas</TabsTrigger>
             <TabsTrigger value="pending">Pendientes</TabsTrigger>
           </TabsList>
         </div>

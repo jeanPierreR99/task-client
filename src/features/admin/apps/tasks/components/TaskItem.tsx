@@ -22,7 +22,7 @@ const TaskItem = ({ task, taskIndex, labelIndex, toggleTask, handleOpen }: any) 
                             } hover:text-blue-500 hover:border-b border-blue-500`}
                         onClick={() => handleOpen(task)}
                     >
-                        {task.name}
+                        {task.ticket && task.nameTicket ? task.nameTicket : task.name}
                     </span>
                     <span className={`text-xs px-2 py-0.5 rounded-full ${task.status === 'completado'
                         ? 'bg-green-100 text-green-700'

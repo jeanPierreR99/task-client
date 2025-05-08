@@ -3,52 +3,53 @@ import { API } from "../../../../../shared/js/api";
 import { Loader2, Search } from "lucide-react";
 import { AlertMessage } from "../../../../../components/AlertMessage";
 
-type Office = {
+type Project = {
     name: string;
-    siglas: string;
+    description: string;
 };
 
 const ITEMS_PER_PAGE = 10;
 
-export default function TableOffice() {
-    const [office, setOffice] = useState<Office[]>([]);
+export default function TableProject() {
+    const [project, setProject] = useState<Project[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<Error | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
-        const fetchOffices = async () => {
+        const fetchProjects = async () => {
             try {
-                const response = await API.getOffices();
-                setOffice(response.data);
+                const response = await API.getProjects();
+                setProject(response.data);
             } catch (err: any) {
                 setError(err);
             } finally {
                 setLoading(false);
             }
         };
-        fetchOffices();
+        fetchProjects();
     }, []);
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(e.target.value.toLowerCase());
         setCurrentPage(1);
     };
-    const filteredOffices = office.filter(offi =>
-        offi.name.toLowerCase().includes(searchQuery) || offi.siglas.toLocaleLowerCase().includes(searchQuery)
+
+    const filteredProjects = project.filter(pro =>
+        pro.name.toLowerCase().includes(searchQuery)
     );
 
-    const totalPages = Math.ceil(filteredOffices.length / ITEMS_PER_PAGE);
+    const totalPages = Math.ceil(filteredProjects.length / ITEMS_PER_PAGE);
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    const currentOffices = filteredOffices.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+    const currentProjects = filteredProjects.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
     if (loading) {
         return <Loader2 className="animate-spin text-xl text-blue-500 mx-auto" />;
     }
 
     if (error) {
-        return <AlertMessage message={`Ocurrió un error al cargar los roles: ${error.message}`} />;
+        return <AlertMessage message={`Ocurrió un error al cargar los proyectos: ${error.message}`} />;
     }
 
     return (
@@ -69,17 +70,17 @@ export default function TableOffice() {
                     <tr>
                         <th>#</th>
                         <th className="px-6 border-r py-3 text-left text-sm font-medium text-gray-600">Nombre</th>
-                        <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Siglas</th>
+                        <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Descripción</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {currentOffices.map((offi, index) => (
+                    {currentProjects.map((pro, index) => (
                         <tr key={index} className="border-t hover:bg-gray-50 transition-all">
                             <td className="px-6 py-4 text-sm text-gray-700 text-center font-bold">
                                 {startIndex + index + 1}
                             </td>
-                            <td className="px-6 py-4 text-sm text-gray-700">{offi.name}</td>
-                            <td className="px-6 py-4 text-sm text-gray-700">{offi.siglas}</td>
+                            <td className="px-6 py-4 text-sm text-gray-700">{pro.name}</td>
+                            <td className="px-6 py-4 text-sm text-gray-700">{pro.description}</td>
                         </tr>
                     ))}
                 </tbody>

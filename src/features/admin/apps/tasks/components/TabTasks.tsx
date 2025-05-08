@@ -6,7 +6,7 @@ import TabContentTable from "./TabContentTable"
 import TabContentCalendar from "./TabContentCalendar";
 import TabContentFile from "./TabContentFIle";
 
-export function TabTasks({ assignedCategoriesFalse, assignedCategoriesTrue }: any) {
+export function TabTasks() {
 
     return (
         <Tabs defaultValue="list" className="w-full">
@@ -18,7 +18,7 @@ export function TabTasks({ assignedCategoriesFalse, assignedCategoriesTrue }: an
                 <TabsTrigger value="attachment"><File></File><span className="hidden md:block">Archivos</span></TabsTrigger>
             </TabsList>
             <TabsContent value="list">
-                <TabContentList assignedCategoriesFalse={assignedCategoriesFalse} assignedCategoriesTrue={assignedCategoriesTrue}></TabContentList>
+                <TabContentList></TabContentList>
             </TabsContent>
             <TabsContent value="table">
                 <TabContentTable />

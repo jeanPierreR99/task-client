@@ -16,7 +16,7 @@ import { useParams } from 'react-router-dom';
 interface ViewSubTaskProp {
     setOpen: (open: boolean) => void
     subTask: Subtask;
-    createdId: string;
+    createdId: string | null;
     setSubtask: any
 }
 

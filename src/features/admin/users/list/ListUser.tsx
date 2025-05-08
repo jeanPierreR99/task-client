@@ -1,4 +1,5 @@
 import TableOffice from './components/TableOffice';
+import TableProject from './components/TableProject';
 import TableRole from './components/TableRole';
 import TableUser from './components/TableUser';
 
@@ -15,6 +16,12 @@ const ListUser = () => {
             <br />
             <br />
             <TableOffice />
+            <br />
+            <br />
+            <span className='text-sm text-gray-400'>Lista de Proyectos</span>
+            <br />
+            <br />
+            <TableProject />
             <br />
             <br />
             <span className='text-sm text-gray-400'>Lista de Usuarios</span>

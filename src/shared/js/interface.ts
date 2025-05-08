@@ -26,6 +26,8 @@ export interface UpdateTaskDto {
     dateCulmined?: string;
     responsibleId?: string;
     categoryId?: string;
+    projectId?: string
+    nameTicket?: string;
 }
 
 
@@ -97,4 +99,19 @@ export interface PrintScannerDto {
 export interface createOfficeDto {
     name: string;
     siglas: string
+}
+
+export interface createProjectDto {
+    name: string;
+    description: string
+}
+
+export interface CreateTicketDto {
+    code: string;
+    description: string;
+    requestedBy: string;
+    area: string;
+    createdAt: string;
+    status: boolean;
+    updatedAt: string;
 }

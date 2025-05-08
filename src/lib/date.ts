@@ -4,8 +4,8 @@ import { es } from "date-fns/locale";
 
 export const dateFormated = () => {
     return format(new Date(), "EEEE d 'de' MMMM", { locale: es });
-  };
-  
+};
+
 
 export const dateFormatedTwo = (dateString: string): string => {
     const date = parseISO(dateString);
@@ -33,7 +33,13 @@ export function getRelativeDay(dateString: string): string {
     return diff;
 }
 
-export const GetDay = () => new Date().toISOString();
+export const GetDay = () => {
+    const now = new Date();
+    const offset = now.getTimezoneOffset() * 60000;
+    const localISO = new Date(now.getTime() - offset).toISOString().slice(0, -1);
+    return localISO;
+};
+
 
 export function normalizeToLocalMidnight(dateStr: string): Date {
     const date = new Date(dateStr)

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { API } from "../../../../../shared/js/api";
 import { Loader2, Search } from "lucide-react";
 import { AlertMessage } from "../../../../../components/AlertMessage";
+import { Button } from "../../../../../shared/components/ui/button";
 
 type Role = {
     name: string;
@@ -13,6 +14,8 @@ export default function TableRole() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<Error | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const rolesPerPage = 10;
 
     useEffect(() => {
         const fetchRoles = async () => {
@@ -30,18 +33,32 @@ export default function TableRole() {
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(e.target.value.toLowerCase());
+        setCurrentPage(1);
     };
 
     const filteredRoles = roles.filter(role =>
         role.name.toLowerCase().includes(searchQuery)
     );
 
+    const totalRoles = filteredRoles.length;
+    const totalPages = Math.ceil(totalRoles / rolesPerPage);
+    const startIndex = (currentPage - 1) * rolesPerPage;
+    const paginatedRoles = filteredRoles.slice(startIndex, startIndex + rolesPerPage);
+
+    const handlePrevPage = () => {
+        if (currentPage > 1) setCurrentPage(prev => prev - 1);
+    };
+
+    const handleNextPage = () => {
+        if (currentPage < totalPages) setCurrentPage(prev => prev + 1);
+    };
+
     if (loading) {
         return <Loader2 className="animate-spin text-xl text-blue-500 mx-auto" />;
     }
 
     if (error) {
-        return <AlertMessage message={`Ocurrió un error al cargar los roles: ${error.message}`} ></ AlertMessage >;
+        return <AlertMessage message={`Ocurrió un error al cargar los roles: ${error.message}`} />;
     }
 
     return (
@@ -66,15 +83,41 @@ export default function TableRole() {
                     </tr>
                 </thead>
                 <tbody>
-                    {filteredRoles.map((role, index) => (
+                    {paginatedRoles.map((role, index) => (
                         <tr key={index} className="border-t hover:bg-gray-50 transition-all">
-                            <td className="px-6 py-4 text-sm text-gray-700 text-center font-bold">{index + 1}</td>
+                            <td className="px-6 py-4 text-sm text-gray-700 text-center font-bold">
+                                {startIndex + index + 1}
+                            </td>
                             <td className="px-6 py-4 text-sm text-gray-700">{role.name}</td>
                             <td className="px-6 py-4 text-sm text-gray-700">{role.userCount}</td>
                         </tr>
                     ))}
                 </tbody>
             </table>
+
+            <div className="flex justify-between items-center mt-4">
+                <span className="text-sm text-gray-600">
+                    Página {currentPage} de {totalPages}
+                </span>
+                <div className="flex gap-2">
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        disabled={currentPage === 1}
+                        onClick={handlePrevPage}
+                    >
+                        Anterior
+                    </Button>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        disabled={currentPage === totalPages}
+                        onClick={handleNextPage}
+                    >
+                        Siguiente
+                    </Button>
+                </div>
+            </div>
         </div>
     );
 }

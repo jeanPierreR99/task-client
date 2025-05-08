@@ -12,6 +12,9 @@ const Tasks = React.lazy(() => import("../features/admin/apps/tasks/Tasks"));
 const Notification = React.lazy(() => import("../features/admin/apps/notification/Notification"));
 const Repository = React.lazy(() => import("../features/admin/apps/repository/Repository"));
 const Config = React.lazy(() => import("../features/admin/config/Config"));
+const AllTasks = React.lazy(() => import("../features/admin/apps/allTasks/AllTasks"))
+const AllTickets = React.lazy(() => import("../features/admin/apps/allTickets/AllTickets"))
+const Project = React.lazy(() => import("../features/admin/apps/project/Project"))
 
 const withSuspense = (Component: React.ReactNode) => (
     <Suspense fallback={<LoadingFallback />}>{Component}</Suspense>
@@ -30,6 +33,18 @@ export const UserRoutes: RouteObject[] = [
             {
                 path: "tasks",
                 element: withSuspense(<Tasks />),
+            },
+            {
+                path: "projects",
+                element: withSuspense(<Project />),
+            },
+            {
+                path: "all-tasks",
+                element: withSuspense(<AllTasks />),
+            },
+            {
+                path: "all-tickets",
+                element: withSuspense(<AllTickets />),
             },
             {
                 path: "config",

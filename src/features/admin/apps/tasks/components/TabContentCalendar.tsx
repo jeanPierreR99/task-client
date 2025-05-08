@@ -27,12 +27,13 @@ const TabContentCalendar = () => {
     const { categories, updateTaskById } = useStoreTask();
     const [created_by, setCreated_by] = useState("")
     const [categoryName, setCategoryName] = useState("");
-    const [createdId, setCreatedId] = useState("");
+    const [createdId, setCreatedId] = useState<any>("");
     const { id } = useStoreLogin();
     const events = categories.flatMap((label) =>
         label.tasks.map((task) => ({
             task: {
                 id: task.id,
+                title: task.ticket && task.nameTicket ? task.nameTicket : task.name,
                 name: task.name,
                 description: task.description,
                 completed: task.completed,
@@ -40,13 +41,15 @@ const TabContentCalendar = () => {
                 dateCulmined: task.dateCulmined,
                 created_by: task.created_by,
                 responsible: task.responsible,
-                office: task.office
+                office: task.office,
+                ticket: task.ticket,
+                nameTicket: task.nameTicket
             },
             start: task.dateCulmined,
             end: task.dateCulmined,
         }))
     );
-
+    console.log(events)
     const handleDateClick = (arg: any) => {
         setOpenSheet(true)
         setDate(convertToUTCISO(arg.date))
@@ -88,15 +91,15 @@ const TabContentCalendar = () => {
 
 
     const handleOpenDialog = (task: T) => {
-        setCreated_by(task.created_by.name)
-        setCreatedId(task.created_by.id)
+        setCreated_by(task.created_by?.name || "N/A")
+        setCreatedId(task.created_by?.id || null)
         setSelectedTask(task);
         setOpen(true);
     };
 
     const renderEventContent = (eventInfo: any) => {
         const { event } = eventInfo;
-        const isCompleted = event.extendedProps.task.status === 'completado';
+        const isCompleted = event.extendedProps.task.completed;
         return (
             <div
                 onClick={() => handleOpenDialog(event.extendedProps.task)}
@@ -105,7 +108,7 @@ const TabContentCalendar = () => {
                     `}
             >
                 {isCompleted && <CheckCircle size={15} className="mt-1 mx-auto" />}
-                <span className='whitespace-normal break-words'>{event.extendedProps.task.name}</span>
+                <span className='whitespace-normal break-words'>{event.extendedProps.task.title}</span>
             </div>
         );
     };

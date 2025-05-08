@@ -21,6 +21,7 @@ import { UserRoundPen } from "lucide-react"
 import { TooltipWrapper } from "../../../../../components/TooltipWrapper"
 import useStoreLogin from "../../../../../shared/state/useStoreLogin"
 import { GetDay } from "../../../../../lib/date"
+import { getStorage } from "../../../../../shared/js/functions"
 
 const formSchema = z.object({
     responsible: z.string().min(1, "Campo requerido")
@@ -32,6 +33,9 @@ const ChangeResponsible = ({ task }: any) => {
     const [userId, setUserId] = useState("")
     const [loading, setLoading] = useState(false)
     const { id } = useStoreLogin();
+
+    const userStorage = getStorage();
+
     const form = useForm<FormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -45,7 +49,8 @@ const ChangeResponsible = ({ task }: any) => {
 
             const newTask = {
                 responsibleId: userId,
-                dateAux: GetDay()
+                dateAux: GetDay(),
+                projectId: userStorage.project.id
 
             }
             const response = await API.UpdateTask(task.id, id, newTask)

@@ -7,7 +7,7 @@ import {
 import React, { useEffect, useState } from "react"
 import { Button } from "../../../../../shared/components/ui/button"
 import { CalendarDays, CheckIcon, ChevronRight, Download, FileText, Loader2, MessageSquareText, MonitorCheck, Plus, Send, Unlock } from "lucide-react"
-import { dateFormatedTwo, GetDay, getRelativeDay } from "../../../../../lib/date"
+import { dateFormatedTwo, GetDay } from "../../../../../lib/date"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../../../shared/components/ui/tabs"
 import SheetTask from "./SheetTask"
 import { API, API_PATH } from "../../../../../shared/js/api"
@@ -20,6 +20,8 @@ import { TooltipWrapper } from "../../../../../components/TooltipWrapper"
 import { io } from "socket.io-client"
 import { es } from "date-fns/locale"
 import { AlertDeleteTask } from "./AlertDeleteTask"
+import { Badge } from "../../../../../shared/components/ui/badge"
+import { Input } from "../../../../../shared/components/ui/input"
 
 interface Responsible {
     id: string
@@ -59,6 +61,8 @@ export interface Task {
     dateCulmined: string;
     responsible: Responsible;
     office: Office;
+    nameTicket?: string | null;
+    ticket?: boolean;
 }
 
 interface DialogTasksProps {
@@ -66,7 +70,7 @@ interface DialogTasksProps {
     setOpen: (open: boolean) => void
     task: Task;
     created_by: string;
-    createdId: string;
+    createdId: string | null;
 }
 
 interface User {
@@ -116,7 +120,7 @@ const DialogTasks: React.FC<DialogTasksProps> = ({ open, setOpen, task, created_
                 completed: true,
                 status: "completado",
             }
-            const response = await API.UpdateTask(task.id, id, newTask)
+            const response = await API.updateTaskCompleted(task.id, newTask)
 
             if (!response?.data || !response?.success) {
                 ToasMessage({
@@ -149,7 +153,7 @@ const DialogTasks: React.FC<DialogTasksProps> = ({ open, setOpen, task, created_
                 completed: false,
                 status: "pendiente",
             }
-            const response = await API.UpdateTask(task.id, id, newTask)
+            const response = await API.updateTaskCompleted(task.id, newTask)
 
             if (!response?.data || !response?.success) {
                 ToasMessage({
@@ -360,6 +364,47 @@ const DialogTasks: React.FC<DialogTasksProps> = ({ open, setOpen, task, created_
 
     }, [open]);
 
+    const [tikcketAsignedName, setTicketAsignedName] = useState("");
+
+    const addNameTicket = async () => {
+        try {
+            if (!tikcketAsignedName.trim()) {
+                ToasMessage({
+                    title: "Alerta",
+                    description: "Debe tener un nombre",
+                    type: "warning",
+                });
+                return
+            }
+            const payload = {
+                nameTicket: tikcketAsignedName
+            }
+
+            const response = await API.UpdateTask(task.id, id, payload);
+
+            if (response?.success) {
+
+                ToasMessage({
+                    title: "Success",
+                    description: "Se cambio el nombre de la tarea",
+                    type: "success",
+                });
+                window.location.reload();
+            } else {
+                console.error("No se actualizo el nombre");
+            }
+        } catch (error) {
+            console.error("Error en traer los comenrtarios desde task", error);
+            ToasMessage({
+                title: "Error",
+                description: "Ocurrio un error: " + error,
+                type: "error",
+            });
+        } finally {
+            setLoadingComment(false);
+        }
+    };
+
     useEffect(() => {
         const socket = io(API_PATH);
         socket.emit('joinTask', task.id);
@@ -377,13 +422,14 @@ const DialogTasks: React.FC<DialogTasksProps> = ({ open, setOpen, task, created_
         };
     }, [task.id]);
 
-    const isAllowed = createdId === id || task.responsible.id === id;
+    const isAllowed = createdId === id || task.responsible?.id === id;
+
     const isAllowedComment = labelComment == "" || loadingSubmitComment;
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogContent className="sm:max-w-6xl h-[80vh] md:h-[90vh] overflow-hidden p-0 flex gap-0 flex-col">
                 <DialogHeader className="p-4 border-b">
-                    {(createdId === id || task.responsible.id === id) && !task.completed ? (
+                    {(createdId === id || task.responsible?.id === id) && !task.completed ? (
                         <Button
                             disabled={!isAllowed}
                             className="w-fit"
@@ -408,17 +454,27 @@ const DialogTasks: React.FC<DialogTasksProps> = ({ open, setOpen, task, created_
                 <div className="flex-1 overflow-y-auto pt-4">
                     <div className="px-4">
                         <DialogDescription className="flex items-center text-base font-semibold text-foreground">
-                            {task.name}
+                            {!task.ticket ? task.name : task.nameTicket}
                             <ChevronRight size={20} className="ml-2" />
                         </DialogDescription>
+
+                        {task.ticket && !task?.nameTicket && (
+                            <div className="flex gap-2 mt-2">
+                                <Input placeholder="Coloque un nombre para la tarea" onChange={(e) => setTicketAsignedName(e.target.value)} />
+                                <Button variant="outline" onClick={addNameTicket}>Actualizar</Button>
+                            </div>
+                        )}
+
                         <div className="flex flex-col gap-2 mt-4">
-                            {task.status === "pendiente" ? <span className="text-md bg-yellow-100 text-yellow-700 w-fit text-sm py-[2px] px-3 rounded-full">{task.status}</span>
-                                : <span className="text-md bg-green-100 text-green-700 w-fit text-sm py-[2px] px-3 rounded-full">{task.status}</span>
+                            {task.status === "pendiente" ? <Badge className="bg-yellow-100 text-yellow-800">{task.status}</Badge>
+                                : <Badge className="bg-green-100 text-green-800">{task.status}</Badge>
                             }
-                            <div className="flex gap-2 items-center"><span className="text-sm">Creado por:</span> <span className="text-sm">{created_by}</span></div>
-                            <div className="flex gap-2 items-center"><span className="text-sm">Responsable:</span> <span className="text-sm">{task.responsible.name}</span><ChangeResponsible task={task} /></div>
-                            <div className="flex gap-2 items-center"><span className="text-sm">Oficina:</span> <span className="text-sm">{task.office?.siglas}</span></div>
-                            <div className="flex gap-2 items-center"><span className="text-sm">Fecha de entrega:</span> <span className="text-sm text-orange-500">{`${dateFormatedTwo(task.dateCulmined)} (${getRelativeDay(task.dateCulmined)})`}</span></div>
+                            {task.ticket && <div className="flex gap-2 items-center"><span className="text-sm">Código de Ticket:</span> <span className="text-sm"><Badge className="bg-blue-100 text-blue-400 font-bold">{task.name}</Badge></span></div>
+                            }
+                            <div className="flex gap-2 items-center"><span className="text-sm">Creado por:</span> <span className="text-sm">{created_by ? created_by : "N/A"}</span></div>
+                            <div className="flex gap-2 items-center"><span className="text-sm">Responsable:</span> <span className="text-sm">{task.responsible?.name || "N/A"}</span><ChangeResponsible task={task} /></div>
+                            <div className="flex gap-2 items-center"><span className="text-sm">Oficina:</span> <span className="text-sm">{task.office?.siglas || "N/ A"}</span></div>
+                            <div className="flex gap-2 items-center"><span className="text-sm">Fecha de entrega:</span> <span className="text-sm text-orange-500">{`${dateFormatedTwo(task.dateCulmined)}`}</span></div>
                             <div className="flex flex-col gap-2 "><span className="text-sm">Descripcion</span>
                                 <textarea disabled readOnly rows={3} className="border resize-none rounded-md outline-0 p-2 text-gray-400 text-sm">{task.description}</textarea>
                             </div>
@@ -640,13 +696,14 @@ const DialogTasks: React.FC<DialogTasksProps> = ({ open, setOpen, task, created_
                                 />
                             ))}
                         </div>
-                        {(task.responsible.id === id || createdId === id) && (
+                        {((task.responsible?.id === id) || (createdId === id)) && (
                             <AlertDeleteTask deleteTask={deleteTask} />
                         )}
+
                     </div>
                 </div>
             </DialogContent>
-            {selectedTask && (<SheetTask createdId={createdId} title="Contenido de la subtarea imagenes, archivos, videos, etc y registro de toda la actividad relacionada con esta." open={openSheet} setOpen={setOpenSheet} subTask={selectedTask} setSubtask={setSubtaskData}></SheetTask>)}
+            {selectedTask && (<SheetTask createdId={createdId ? createdId : null} title="Contenido de la subtarea imagenes, archivos, videos, etc y registro de toda la actividad relacionada con esta." open={openSheet} setOpen={setOpenSheet} subTask={selectedTask} setSubtask={setSubtaskData}></SheetTask>)}
         </Dialog >
     )
 }

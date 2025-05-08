@@ -1,4 +1,4 @@
-import { ClipboardList, Folder, Home, ListTodo, MessageSquareMore, PackagePlus, UserRoundPlus } from "lucide-react"
+import { ClipboardList, Folder, Home, ListTodo, Logs, MessageSquareMore, PackagePlus, Tickets, UserRoundPlus } from "lucide-react"
 
 import {
   Sidebar,
@@ -22,9 +22,24 @@ const items = [
     icon: Home,
   },
   {
-    title: "Mis tareas",
+    title: "Tareas",
     url: "/tasks",
     icon: ListTodo,
+  },
+  // {
+  //   title: "Proyectos",
+  //   url: "/projects",
+  //   icon: LucideGroup,
+  // },
+  {
+    title: "Todas las Tareas",
+    url: "/all-tasks",
+    icon: Logs,
+  },
+  {
+    title: "Todos los Tickets",
+    url: "/all-tickets",
+    icon: Tickets,
   },
   {
     title: "Mis Actividades",

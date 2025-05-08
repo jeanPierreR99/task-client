@@ -4,17 +4,14 @@ import { Button } from "../../../../../shared/components/ui/button";
 import { API } from "../../../../../shared/js/api";
 import { ToasMessage } from "../../../../../components/ToasMessage";
 import useStoreLogin from "../../../../../shared/state/useStoreLogin";
-import { useParams } from "react-router-dom";
 
 const FormFileFolder = ({ setFiles, folderName }: any) => {
     const [file, setFile] = useState<File[]>([]);
     const [isUploading, setIsUploading] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const { id: userIdParam } = useParams<{ id: string }>();
-    const { id: userIdStore } = useStoreLogin()
+    const {projectId } = useStoreLogin()
 
-    const id = userIdParam ?? userIdStore;
 
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,7 +32,7 @@ const FormFileFolder = ({ setFiles, folderName }: any) => {
         setIsUploading(true);
 
         try {
-            const response = await API.uploadFileFoler(id, folderName, formData);
+            const response = await API.uploadFileFoler(projectId, folderName, formData);
             if (!response?.data || !response?.success) {
                 ToasMessage({
                     title: "Error",
