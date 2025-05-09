@@ -103,9 +103,7 @@ const DialogTasks: React.FC<DialogTasksProps> = ({ open, setOpen, task, created_
     const [activities, setActivities] = useState<Activity[]>([])
     const [files, setFiles] = useState<any[]>([]);
     const [loadingSubmitComment, setLoadingSubmitComment] = useState(false)
-
     const { id } = useStoreLogin()
-
     const handleOpenDialog = (subTask: Subtask) => {
 
         if (subTask) {
@@ -214,7 +212,6 @@ const DialogTasks: React.FC<DialogTasksProps> = ({ open, setOpen, task, created_
         selectedFiles.forEach((file) => {
             formData.append("files", file);
         });
-
         try {
             const response = await API.createComment(formData);
 

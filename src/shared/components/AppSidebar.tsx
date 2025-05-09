@@ -32,17 +32,17 @@ const items = [
   //   icon: LucideGroup,
   // },
   {
-    title: "Todas las Tareas",
+    title: "Lista de Tareas",
     url: "/all-tasks",
     icon: Logs,
   },
   {
-    title: "Todos los Tickets",
+    title: "Lista de Tickets",
     url: "/all-tickets",
     icon: Tickets,
   },
   {
-    title: "Mis Actividades",
+    title: "Mi Actividad",
     url: "/activity",
     icon: MessageSquareMore,
   },

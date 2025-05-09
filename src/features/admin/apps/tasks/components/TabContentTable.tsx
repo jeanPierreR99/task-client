@@ -47,7 +47,6 @@ const TabContentTable: React.FC = () => {
 
     const handleDragEnd = async (result: DropResult) => {
         const { destination, source } = result;
-        console.log(result)
         if (!destination) return;
 
         if (
@@ -69,11 +68,6 @@ const TabContentTable: React.FC = () => {
             console.log(response)
 
             if (!response.success && !response.data) return
-            ToasMessage({
-                title: "Tarea movida",
-                description: "La tarea fue movida exitosamente a otra categoría",
-                type: "success",
-            });
 
         } catch (error) {
             console.error('Error al actualizar la tarea:', error);

@@ -44,7 +44,10 @@ type TaskStore = {
     clearCategories: () => void
     updateTaskById: (taskId: string, updates: Partial<Pick<Task, 'status' | 'completed'>>) => void
     removeCategory: (categoryId: string) => void
-    findTasksByName: (searchTerm: string) => Task[] // 👈 nuevo
+    findTasksByName: (searchTerm: string) => Task[],
+    moveTaskToCategory: (taskId: string, targetCategoryId: string) => any,
+    removeTaskFromCategory: (categoryId: string, taskId: string) => void
+
 }
 
 const useStoreTask = create<TaskStore>((set, get) => ({
@@ -96,8 +99,52 @@ const useStoreTask = create<TaskStore>((set, get) => ({
                 task.nameTicket?.toLowerCase().includes(lowerTerm))
             )
         );
-    }
+    },
+    moveTaskToCategory: (taskId: string, targetCategoryId: string) =>
+        set((state) => {
+            let taskToMove: Task | null = null;
 
+            // Remover la tarea de su categoría actual
+            const updatedCategories = state.categories.map((cat) => {
+                const hasTask = cat.tasks.some((t) => t.id === taskId);
+                if (hasTask) {
+                    const filteredTasks = cat.tasks.filter((t) => {
+                        if (t.id === taskId) {
+                            taskToMove = t;
+                            return false; // excluye la tarea
+                        }
+                        return true;
+                    });
+                    return { ...cat, tasks: filteredTasks };
+                }
+                return cat;
+            });
+
+            // Si no se encontró la tarea, no hacer nada
+            if (!taskToMove) return { categories: updatedCategories };
+
+            // Agregar la tarea a la nueva categoría
+            const finalCategories = updatedCategories.map((cat) => {
+                if (cat.id === targetCategoryId) {
+                    return { ...cat, tasks: [...cat.tasks, taskToMove!] };
+                }
+                return cat;
+            });
+
+            return { categories: finalCategories };
+        }),
+    removeTaskFromCategory: (categoryId: string, taskId: string) =>
+        set((state) => ({
+            categories: state.categories.map((cat) => {
+                if (cat.id === categoryId) {
+                    return {
+                        ...cat,
+                        tasks: cat.tasks.filter((task) => task.id !== taskId),
+                    };
+                }
+                return cat;
+            }),
+        })),
 
 }))
 

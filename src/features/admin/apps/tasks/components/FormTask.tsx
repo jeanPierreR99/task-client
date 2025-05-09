@@ -20,8 +20,6 @@ import { UserAutoComplete } from "./UserAutocomplete"
 import useStoreLogin from "../../../../../shared/state/useStoreLogin"
 import { API } from "../../../../../shared/js/api"
 import { ToasMessage } from "../../../../../components/ToasMessage"
-import useStoreTask from "../store/useStoreTask"
-import { useParams } from "react-router-dom"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../../../../shared/components/ui/select"
 
 export interface IcreateTask {
@@ -73,12 +71,9 @@ interface TaskFormProps {
 }
 
 const TaskForm: React.FC<TaskFormProps> = ({ categoryId, setOpen, date }) => {
-    const { id: userIdParam } = useParams<{ id: string }>();
-    const { id: userIdStore } = useStoreLogin()
+    const { id } = useStoreLogin()
 
-    const id = userIdParam ?? userIdStore;
 
-    const { addTaskToCategory } = useStoreTask();
 
     const form = useForm<TaskFormValues>({
         resolver: zodResolver(taskSchema),
@@ -123,7 +118,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ categoryId, setOpen, date }) => {
                 return;
             }
 
-            addTaskToCategory(categoryId, response.data);
+            // addTaskToCategory(categoryId, response.data);
 
             const taskId = response.data.id;
 
@@ -151,12 +146,6 @@ const TaskForm: React.FC<TaskFormProps> = ({ categoryId, setOpen, date }) => {
                     console.log(response)
                 }));
             }
-
-            ToasMessage({
-                title: "Tarea creada",
-                description: "Se ha creado la tarea correctamente",
-                type: "success",
-            });
 
             form.reset();
             setOpen(false);

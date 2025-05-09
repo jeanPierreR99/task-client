@@ -13,7 +13,7 @@ import DialogTasks from './DialogTask';
 import SheetTask from './SheetTask';
 import { Search, TagIcon } from 'lucide-react';
 import { API } from '../../../../../shared/js/api';
-import useStoreTask, { Category, Task } from '../store/useStoreTask';
+import useStoreTask, { Task } from '../store/useStoreTask';
 import { GetDay } from '../../../../../lib/date';
 import { ToasMessage } from '../../../../../components/ToasMessage';
 import useStoreLogin from '../../../../../shared/state/useStoreLogin';
@@ -27,7 +27,7 @@ const TabContentList = () => {
     const [categoryId, setCategoryId] = useState("");
     const [categoryName, setCategoryName] = useState("");
     const [created_by, setCreated_by] = useState("")
-    const { categories, setCategories, removeCategory, findTasksByName } = useStoreTask();
+    const { categories, findTasksByName } = useStoreTask();
     const [createdId, setCreatedId] = useState("");
     const { projectId } = useStoreLogin()
     const { message } = useStoreNotification();
@@ -59,21 +59,6 @@ const TabContentList = () => {
                 });
                 return;
             }
-
-            ToasMessage({
-                title: "Categoria creada",
-                description: "Se ha creado la categoria correctamente",
-                type: "success",
-            });
-
-            const newEntry: Category = {
-                id: response.data.id,
-                title: response.data.title,
-                index: response.data.index,
-                tasks: []
-            };
-
-            setCategories((prev) => [...prev, newEntry]);
             setNewLabel('');
         } catch (error) {
             console.log("error:" + error)
@@ -86,6 +71,7 @@ const TabContentList = () => {
     }
 
     const handleOpen = (task: any) => {
+        console.log(task)
         setSelectedTask(task);
         setCreated_by(task.created_by?.name || "N/A")
         setCreatedId(task.created_by?.id || null)
@@ -104,12 +90,6 @@ const TabContentList = () => {
                 });
                 return;
             }
-            ToasMessage({
-                title: "Eliminada",
-                description: "Se ha eliminado la categoria correctamente",
-                type: "success",
-            });
-            removeCategory(caregoryId)
         } catch (error) {
             ToasMessage({
                 title: "Error",

@@ -34,10 +34,8 @@ export function getRelativeDay(dateString: string): string {
 }
 
 export const GetDay = () => {
-    const now = new Date();
-    const offset = now.getTimezoneOffset() * 60000;
-    const localISO = new Date(now.getTime() - offset).toISOString().slice(0, -1);
-    return localISO;
+    const now = new Date().toISOString();
+    return now;
 };
 
 
@@ -45,3 +43,12 @@ export function normalizeToLocalMidnight(dateStr: string): Date {
     const date = new Date(dateStr)
     return new Date(date.getFullYear(), date.getMonth(), date.getDate())
 }
+
+
+
+// const showConvertDate = () => {
+//     const dateUTC = new Date()
+//     const dateLocal = dateUTC.toLocaleString();
+
+//     return dateLocal;
+// } 

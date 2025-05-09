@@ -14,10 +14,6 @@ const convertToUTC = (dateString: string) => {
     return new Date(dateString).toISOString();
 };
 
-const convertToUTCISO = (date: Date) => {
-    return new Date(date).toISOString();
-}
-
 const TabContentCalendar = () => {
     const [open, setOpen] = useState(false);
     const [selectedTask, setSelectedTask] = useState<T | null>(null);
@@ -49,10 +45,10 @@ const TabContentCalendar = () => {
             end: task.dateCulmined,
         }))
     );
-    console.log(events)
+
     const handleDateClick = (arg: any) => {
         setOpenSheet(true)
-        setDate(convertToUTCISO(arg.date))
+        setDate(convertToUTC(arg.date))
         setCategoryId(categories[0].id)
         setCategoryName(categories[0].title)
     };
@@ -88,7 +84,6 @@ const TabContentCalendar = () => {
             });
         }
     }
-
 
     const handleOpenDialog = (task: T) => {
         setCreated_by(task.created_by?.name || "N/A")
