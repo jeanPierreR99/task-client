@@ -550,7 +550,7 @@ const DialogTasks: React.FC<DialogTasksProps> = ({ open, setOpen, task, created_
                                                         }
 
                                                     </div>
-                                                    <span className="text-xs text-muted-foreground text-right">    {formatDistanceToNow(new Date(comment.date).toLocaleString(), {
+                                                    <span className="text-xs text-muted-foreground text-right">    {formatDistanceToNow(new Date(comment.date), {
                                                         addSuffix: true,
                                                         locale: es,
                                                     })}</span>
@@ -576,7 +576,7 @@ const DialogTasks: React.FC<DialogTasksProps> = ({ open, setOpen, task, created_
                                             <div className="flex flex-col">
                                                 <span className="text-sm font-medium">{activity.user.name}</span>
                                                 <span className="text-sm text-muted-foreground">{activity.action}</span>
-                                                <span className="text-xs text-muted-foreground">{formatDistanceToNow(new Date(activity.createdAt).toLocaleString(), {
+                                                <span className="text-xs text-muted-foreground">{formatDistanceToNow(new Date(activity.createdAt), {
                                                     addSuffix: true,
                                                     locale: es,
                                                 })}</span>
