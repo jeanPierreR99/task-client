@@ -15,9 +15,10 @@ import {
 import { Badge } from '../../../../shared/components/ui/badge';
 import { Input } from '../../../../shared/components/ui/input';
 import { Search, Loader2, User, UserCheck2, Info, ClipboardList, CalendarClock } from 'lucide-react';
-import { format, parseISO } from 'date-fns';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../../shared/components/ui/select';
 import { io } from 'socket.io-client';
+import { formatDistanceToNow } from 'date-fns';
+import { es } from 'date-fns/locale/es';
 
 const AllTasks = () => {
     const [selectedTask, setSelectedTask] = useState<Task | null>(null);
@@ -159,8 +160,19 @@ const AllTasks = () => {
                                     </div>
                                     <p>
                                         <span className="font-medium text-gray-900">Fecha de solicitud:</span>{' '}
-                                        {task.dateCulmined ? format(parseISO(task.dateCulmined), 'yyyy-MM-dd HH:mm:ss') : '—'}
+                                        {task.dateCulmined ? (
+                                            <>
+                                                {new Date(task.dateCulmined).toLocaleString()}{' '}
+                                                ({formatDistanceToNow(new Date(task.dateCulmined), {
+                                                    addSuffix: true,
+                                                    locale: es,
+                                                })})
+                                            </>
+                                        ) : (
+                                            '—'
+                                        )}
                                     </p>
+
                                 </div>
                             </CardContent>
 

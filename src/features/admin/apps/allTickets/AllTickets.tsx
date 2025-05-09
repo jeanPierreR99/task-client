@@ -148,18 +148,23 @@ const AllTickets = () => {
                                         addSuffix: true,
                                         locale: es,
                                     })})
+
                                 </p>
                             </div>
                             <div className="flex items-start gap-2">
                                 <CalendarCheck className="w-4 h-4 mt-1 text-gray-500" />
                                 <p><span className="font-medium text-gray-900">Fecha atendida: </span>
-                                    {ticket.updatedAt
-                                        ? format(parseISO(ticket.updatedAt), 'yyyy-MM-dd HH:mm:ss')
-
-                                        : "—"} ({formatDistanceToNow(new Date(ticket.updatedAt), {
-                                            addSuffix: true,
-                                            locale: es,
-                                        })})
+                                    {ticket.updatedAt ? (
+                                        <>
+                                            {format(parseISO(ticket.updatedAt), 'yyyy-MM-dd HH:mm:ss')}{' '}
+                                            ({formatDistanceToNow(new Date(ticket.updatedAt), {
+                                                addSuffix: true,
+                                                locale: es,
+                                            })})
+                                        </>
+                                    ) : (
+                                        '—'
+                                    )}
                                 </p>
                             </div>
                         </CardContent>
