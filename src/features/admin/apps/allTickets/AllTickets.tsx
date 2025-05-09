@@ -23,6 +23,8 @@ import { AlertMessage } from "../../../../components/AlertMessage";
 import { format, formatDistanceToNow, parseISO } from 'date-fns';
 import { io } from "socket.io-client";
 import { es } from "date-fns/locale/es";
+import { Button } from "../../../../shared/components/ui/button";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 
 const getStatusBadge = (status: boolean) => {
@@ -35,6 +37,9 @@ const AllTickets = () => {
     const [statusFilter, setStatusFilter] = useState("all");
     const [search, setSearch] = useState('');
     const [tickets, setTickets] = useState<CreateTicketDto[]>([]);
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 9;
 
     const {
         data,
@@ -81,6 +86,18 @@ const AllTickets = () => {
         return matchesSearch && matchesStatus;
     });
 
+    const totalPages = Math.ceil(filteredTickets.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const currentTickets = filteredTickets.slice(startIndex, startIndex + itemsPerPage);
+
+    const handleNext = () => {
+        if (currentPage < totalPages) setCurrentPage((prev) => prev + 1);
+    };
+
+    const handlePrev = () => {
+        if (currentPage > 1) setCurrentPage((prev) => prev - 1);
+    };
+
     return (
         <div>
             <span className="text-sm text-gray-400">Todos los Tickets</span>
@@ -93,11 +110,17 @@ const AllTickets = () => {
                         placeholder="Buscar por código"
                         className="pl-10 pr-4"
                         value={search}
-                        onChange={(e) => setSearch(e.target.value)}
+                        onChange={(e) => {
+                            setSearch(e.target.value);
+                            setCurrentPage(1); 
+                        }}
                     />
                 </div>
 
-                <Select value={statusFilter} onValueChange={setStatusFilter}>
+                <Select value={statusFilter} onValueChange={(value) => {
+                    setStatusFilter(value);
+                    setCurrentPage(1);
+                }}>
                     <SelectTrigger className="w-[180px]">
                         <SelectValue placeholder="Filtrar por estado" />
                     </SelectTrigger>
@@ -113,7 +136,7 @@ const AllTickets = () => {
             {error && <AlertMessage message={`Ocurrió un error al cargar datos: ${error}`} />}
 
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                {filteredTickets.map((ticket: CreateTicketDto, index: number) => (
+                {currentTickets.map((ticket: CreateTicketDto, index: number) => (
                     <Card key={index} className="shadow-md border border-gray-200 hover:shadow-lg transition">
                         <CardHeader className="flex flex-col pb-2">
                             <CardTitle className="text-lg font-semibold flex items-center gap-2 text-primary">
@@ -148,7 +171,6 @@ const AllTickets = () => {
                                         addSuffix: true,
                                         locale: es,
                                     })})
-
                                 </p>
                             </div>
                             <div className="flex items-start gap-2">
@@ -175,6 +197,32 @@ const AllTickets = () => {
                     </Card>
                 ))}
             </div>
+
+            {totalPages > 1 && (
+                <div className="flex justify-center items-center gap-4 mt-6">
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handlePrev}
+                        disabled={currentPage === 1}
+                    >
+                        <ChevronLeft className="w-4 h-4" />
+                        Anterior
+                    </Button>
+                    <span className="text-sm text-gray-600">
+                        Página {currentPage} de {totalPages}
+                    </span>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleNext}
+                        disabled={currentPage === totalPages}
+                    >
+                        Siguiente
+                        <ChevronRight className="w-4 h-4" />
+                    </Button>
+                </div>
+            )}
         </div>
     );
 };

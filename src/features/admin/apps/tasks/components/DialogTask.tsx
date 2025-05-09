@@ -117,6 +117,7 @@ const DialogTasks: React.FC<DialogTasksProps> = ({ open, setOpen, task, created_
             const newTask = {
                 completed: true,
                 status: "completado",
+                updateAt: GetDay()
             }
             const response = await API.updateTaskCompleted(task.id, newTask)
 
@@ -150,6 +151,7 @@ const DialogTasks: React.FC<DialogTasksProps> = ({ open, setOpen, task, created_
             const newTask = {
                 completed: false,
                 status: "pendiente",
+                updateAt: GetDay()
             }
             const response = await API.updateTaskCompleted(task.id, newTask)
 

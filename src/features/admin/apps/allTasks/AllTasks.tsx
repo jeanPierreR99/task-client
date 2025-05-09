@@ -14,10 +14,11 @@ import {
 } from '../../../../shared/components/ui/card';
 import { Badge } from '../../../../shared/components/ui/badge';
 import { Input } from '../../../../shared/components/ui/input';
+import { Button } from '../../../../shared/components/ui/button';
 import { Search, Loader2, User, UserCheck2, Info, ClipboardList, CalendarClock } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../../shared/components/ui/select';
 import { io } from 'socket.io-client';
-import { formatDistanceToNow } from 'date-fns';
+import { format, formatDistanceToNow, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale/es';
 
 const AllTasks = () => {
@@ -26,6 +27,8 @@ const AllTasks = () => {
     const [search, setSearch] = useState('');
     const [statusFilter, setStatusFilter] = useState<string>('all');
     const [tasks, setTasks] = useState<Task[]>([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 9;
 
     const {
         data,
@@ -44,8 +47,10 @@ const AllTasks = () => {
             (statusFilter === 'pendiente' && task.status !== 'completado');
 
         return (nameMatch || responsibleMatch || createdByMatch) && statusMatch;
-    })
+    });
 
+    const totalPages = Math.ceil(filteredTasks.length / itemsPerPage);
+    const paginatedTasks = filteredTasks.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
     const handleOpen = (task: Task) => {
         setSelectedTask(task);
@@ -102,12 +107,18 @@ const AllTasks = () => {
                     <Input
                         placeholder="Buscar por nombre, creador o responsable"
                         value={search}
-                        onChange={(e) => setSearch(e.target.value)}
+                        onChange={(e) => {
+                            setSearch(e.target.value);
+                            setCurrentPage(1);
+                        }}
                         className="pl-10 pr-4"
                     />
                 </div>
 
-                <Select onValueChange={setStatusFilter} value={statusFilter}>
+                <Select onValueChange={(val) => {
+                    setStatusFilter(val);
+                    setCurrentPage(1);
+                }} value={statusFilter}>
                     <SelectTrigger className="w-[180px]">
                         <SelectValue placeholder="Filtrar por estado" />
                     </SelectTrigger>
@@ -117,15 +128,14 @@ const AllTasks = () => {
                         <SelectItem value="pendiente">Pendiente</SelectItem>
                     </SelectContent>
                 </Select>
-
             </div>
 
             {isLoading && <Loader2 className="animate-spin text-blue-400 m-auto" />}
             {error && <AlertMessage message={`Ocurrió un error al cargar datos: ${error}`} />}
 
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                {filteredTasks.length > 0 ? (
-                    filteredTasks.map((task: Task) => (
+                {paginatedTasks.length > 0 ? (
+                    paginatedTasks.map((task: Task) => (
                         <Card key={task.id} className="shadow-md border border-gray-200 hover:shadow-lg transition cursor-pointer" onClick={() => handleOpen(task)}>
                             <CardHeader className="flex flex-row items-center justify-between pb-2">
                                 <CardTitle className="text-lg font-semibold flex items-center gap-2 text-primary">
@@ -142,37 +152,29 @@ const AllTasks = () => {
 
                             <CardContent className="text-sm text-muted-foreground space-y-2">
                                 <div className="flex items-start gap-2">
-                                    <div>
-                                        <ClipboardList className="w-4 h-4 mt-1 text-gray-500" />
-                                    </div>
+                                    <ClipboardList className="w-4 h-4 mt-1 text-gray-500" />
                                     <p>
                                         <span className="font-medium text-gray-900">Descripción:</span> {task.description || '—'}
                                     </p>
                                 </div>
                                 <div className="flex items-start gap-2">
-                                    <div>
-                                        <User className="w-4 h-4 mt-1 text-gray-500" />
-                                    </div>
+                                    <User className="w-4 h-4 mt-1 text-gray-500" />
                                     <p><span className="font-medium text-gray-900">Responsable:</span> {task.responsible?.name || '—'}</p>
                                 </div>
                                 <div className="flex items-start gap-2">
-                                    <div><CalendarClock className="w-4 h-4 mt-1 text-gray-500" />
-                                    </div>
+                                    <CalendarClock className="w-4 h-4 mt-1 text-gray-500" />
                                     <p>
                                         <span className="font-medium text-gray-900">Fecha de solicitud:</span>{' '}
                                         {task.dateCulmined ? (
                                             <>
-                                                {new Date(task.dateCulmined).toLocaleString()}{' '}
+                                                {format(parseISO(task.dateCulmined), 'yyyy-MM-dd HH:mm:ss')}{' '}
                                                 ({formatDistanceToNow(new Date(task.dateCulmined), {
                                                     addSuffix: true,
                                                     locale: es,
                                                 })})
                                             </>
-                                        ) : (
-                                            '—'
-                                        )}
+                                        ) : '—'}
                                     </p>
-
                                 </div>
                             </CardContent>
 
@@ -186,6 +188,31 @@ const AllTasks = () => {
                 )}
             </div>
 
+            {totalPages > 1 && (
+                <div className="flex justify-center mt-6 gap-2">
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        disabled={currentPage === 1}
+                        onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                    >
+                        Anterior
+                    </Button>
+                    <span className="text-sm text-gray-600 flex items-center">
+                        Página {currentPage} de {totalPages}
+                    </span>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        disabled={currentPage === totalPages}
+                        onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                    >
+                        Siguiente
+                    </Button>
+                </div>
+            )}
+
+            {/* Dialog */}
             {selectedTask && (
                 <DialogTasks
                     open={open}
