@@ -175,7 +175,7 @@ const AllTickets = () => {
                             <div className="flex items-start gap-2">
                                 <CalendarClock className="w-4 h-4 mt-1 text-gray-500" />
                                 <p><span className="font-medium text-gray-900">Fecha de solicitud: </span>
-                                    {format(parseISO(ticket.createdAt), 'yyyy-MM-dd HH:mm:ss')} ({formatDistanceToNow(new Date(ticket.createdAt), {
+                                    {format(parseISO(ticket.create_at), 'yyyy-MM-dd HH:mm:ss')} ({formatDistanceToNow(new Date(ticket.create_at), {
                                         addSuffix: true,
                                         locale: es,
                                     })})
@@ -184,10 +184,10 @@ const AllTickets = () => {
                             <div className="flex items-start gap-2">
                                 <CalendarCheck className="w-4 h-4 mt-1 text-gray-500" />
                                 <p><span className="font-medium text-gray-900">Fecha atendida: </span>
-                                    {ticket.updatedAt && ticket.status == true ? (
+                                    {ticket.update_at && ticket.status == true ? (
                                         <>
-                                            {format(parseISO(ticket.updatedAt), 'yyyy-MM-dd HH:mm:ss')}{' '}
-                                            ({formatDistanceToNow(new Date(ticket.updatedAt), {
+                                            {format(parseISO(ticket.update_at), 'yyyy-MM-dd HH:mm:ss')}{' '}
+                                            ({formatDistanceToNow(new Date(ticket.update_at), {
                                                 addSuffix: true,
                                                 locale: es,
                                             })})

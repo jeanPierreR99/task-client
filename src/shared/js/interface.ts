@@ -111,8 +111,8 @@ export interface CreateTicketDto {
     description: string;
     requestedBy: string;
     area: string;
-    createdAt: string;
+    create_at: string;
     status: boolean;
-    updatedAt: string;
+    update_at: string;
     descriptionStatus: string
 }

@@ -86,7 +86,7 @@ interface User {
 interface Activity {
     id: string;
     action: string;
-    createdAt: string;
+    create_at: string;
     user: User;
 }
 
@@ -615,7 +615,7 @@ const DialogTasks: React.FC<DialogTasksProps> = ({ open, setOpen, task, created_
                                             <div className="flex flex-col">
                                                 <span className="text-sm font-medium">{activity.user.name}</span>
                                                 <span className="text-sm text-muted-foreground">{activity.action}</span>
-                                                <span className="text-xs text-muted-foreground">{formatDistanceToNow(new Date(activity.createdAt), {
+                                                <span className="text-xs text-muted-foreground">{formatDistanceToNow(new Date(activity.create_at), {
                                                     addSuffix: true,
                                                     locale: es,
                                                 })}</span>
