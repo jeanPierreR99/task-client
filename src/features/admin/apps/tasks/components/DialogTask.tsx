@@ -177,7 +177,7 @@ const DialogTasks: React.FC<DialogTasksProps> = ({ open, setOpen, task, created_
             const newTicket = {
                 status: false,
                 descriptionStatus: status,
-                updatedAt: GetDay()
+                update_at: GetDay()
             }
             const response = await API.updateTicket(task.name!, newTicket)
 

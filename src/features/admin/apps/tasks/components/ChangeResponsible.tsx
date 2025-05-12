@@ -49,7 +49,7 @@ const ChangeResponsible = ({ task }: any) => {
 
             const newTask = {
                 responsibleId: userId,
-                dateAux: GetDay(),
+                update_at: GetDay(),
                 projectId: userStorage.project.id
 
             }

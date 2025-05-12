@@ -45,7 +45,7 @@ interface Comment {
 export interface Activity {
     id: string;
     action: string;
-    createdAt: string;
+    create_at: string;
     user: User;
     task: Task;
     subtask: any | null;
@@ -157,7 +157,7 @@ const Notification = () => {
                             })}
                         </div>
                         <p className="text-xs text-muted-foreground float-end mb-2">
-                            {formatDistanceToNow(new Date(activity.createdAt), {
+                            {formatDistanceToNow(new Date(activity.create_at), {
                                 addSuffix: true,
                                 locale: es,
                             })}
