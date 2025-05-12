@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react";
 import { API } from "../../../../../shared/js/api";
-import { Loader2, Search } from "lucide-react";
+import { Eye, Loader2, Search } from "lucide-react";
 import { AlertMessage } from "../../../../../components/AlertMessage";
+import { TooltipWrapper } from "../../../../../components/TooltipWrapper";
+import { NavLink } from "react-router-dom";
+import { Button } from "../../../../../shared/components/ui/button";
 
 type Project = {
+    id: string;
     name: string;
     description: string;
 };
@@ -70,7 +74,8 @@ export default function TableProject() {
                     <tr>
                         <th>#</th>
                         <th className="px-6 border-r py-3 text-left text-sm font-medium text-gray-600">Nombre</th>
-                        <th className="px-6 py-3 text-left text-sm font-medium text-gray-600">Descripción</th>
+                        <th className="px-6 border-r py-3 text-left text-sm font-medium text-gray-600">Descripción</th>
+                        <th className="px-6 py-3 text-left text-sm font-medium text-gray-600"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -81,6 +86,15 @@ export default function TableProject() {
                             </td>
                             <td className="px-6 py-4 text-sm text-gray-700">{pro.name}</td>
                             <td className="px-6 py-4 text-sm text-gray-700">{pro.description}</td>
+                            <td className="px-6 py-4">
+                                <TooltipWrapper content="Inspeccionar">
+                                    <NavLink to={`/projects/view/${pro.id}`}>
+                                        <Button variant="outline" size="sm">
+                                            <Eye />
+                                        </Button>
+                                    </NavLink>
+                                </TooltipWrapper>
+                            </td>
                         </tr>
                     ))}
                 </tbody>

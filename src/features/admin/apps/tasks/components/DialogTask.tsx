@@ -117,7 +117,8 @@ const DialogTasks: React.FC<DialogTasksProps> = ({ open, setOpen, task, created_
             const newTask = {
                 completed: true,
                 status: "completado",
-                updateAt: GetDay()
+                descriptionStatus: "Atendido",
+                updatedAt: GetDay()
             }
             const response = await API.updateTaskCompleted(task.id, newTask)
 
@@ -131,11 +132,6 @@ const DialogTasks: React.FC<DialogTasksProps> = ({ open, setOpen, task, created_
             }
             updateTaskById(task.id, newTask);
             setOpen(false);
-            ToasMessage({
-                title: "Modificado",
-                description: "La tarea fue marcada como completada",
-                type: "success",
-            });
         } catch (error) {
             console.error("Error al actualizar la tarea:", error)
             ToasMessage({
@@ -151,7 +147,8 @@ const DialogTasks: React.FC<DialogTasksProps> = ({ open, setOpen, task, created_
             const newTask = {
                 completed: false,
                 status: "pendiente",
-                updateAt: GetDay()
+                descriptionStatus: "Aceptado",
+                updatedAt: GetDay()
             }
             const response = await API.updateTaskCompleted(task.id, newTask)
 
@@ -165,11 +162,6 @@ const DialogTasks: React.FC<DialogTasksProps> = ({ open, setOpen, task, created_
             }
             updateTaskById(task.id, newTask);
             setOpen(false);
-            ToasMessage({
-                title: "Modificado",
-                description: "La tarea fue habilitada",
-                type: "success",
-            });
         } catch (error) {
             console.error("Error al actualizar la tarea:", error)
             ToasMessage({
@@ -180,6 +172,39 @@ const DialogTasks: React.FC<DialogTasksProps> = ({ open, setOpen, task, created_
         }
     }
 
+    const updateTicket = async (status: string) => {
+        try {
+            const newTicket = {
+                status: false,
+                descriptionStatus: status,
+                updatedAt: GetDay()
+            }
+            const response = await API.updateTicket(task.name!, newTicket)
+
+            if (!response?.data || !response?.success) {
+                ToasMessage({
+                    title: "Aviso",
+                    description: "No se pudo actualizar la tarea",
+                    type: "warning",
+                });
+                return;
+            }
+
+            ToasMessage({
+                title: "Se actualizó el ticket",
+                description: "Se actualizó el estado del ticket a " + status,
+                type: "success",
+            });
+            setOpen(false);
+        } catch (error) {
+            console.error("Error al actualizar la tarea:", error)
+            ToasMessage({
+                title: "Error",
+                description: "Ocurrio un error: " + error,
+                type: "error",
+            });
+        }
+    }
 
     const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -260,13 +285,6 @@ const DialogTasks: React.FC<DialogTasksProps> = ({ open, setOpen, task, created_
                 });
                 return
             }
-
-            ToasMessage({
-                title: "Tarea eliminada",
-                description: "Se elimino la tarea correctamente",
-                type: "success",
-            });
-            window.location.reload();
 
         } catch (error) {
             console.log(error)
@@ -431,9 +449,8 @@ const DialogTasks: React.FC<DialogTasksProps> = ({ open, setOpen, task, created_
                     {(createdId === id || task.responsible?.id === id) && !task.completed ? (
                         <Button
                             disabled={!isAllowed}
-                            className="w-fit"
+                            className="w-fit bg-orange-500 hover:bg-orange-400 text-white"
                             onClick={() => updateTaskComplete()}
-                            variant="outline"
                         >
                             <CheckIcon />
                             Marcar como completada
@@ -441,14 +458,34 @@ const DialogTasks: React.FC<DialogTasksProps> = ({ open, setOpen, task, created_
                     ) : (
                         <Button
                             disabled={!isAllowed}
-                            className="w-fit"
+                            className="w-fit bg-orange-500 hover:bg-orange-400 text-white"
                             onClick={() => updateTaskEnable()}
-                            variant="outline"
                         >
                             <Unlock />
                             Habilitar
                         </Button>
                     )}
+                    {task?.ticket && !task?.completed && (
+                        <div className="flex gap-2">
+                            <Button
+                                disabled={!isAllowed}
+                                className="w-fit"
+                                variant="outline"
+                                onClick={() => updateTicket("Aceptado")}
+                            >
+                                Aceptado
+                            </Button>
+                            <Button
+                                disabled={!isAllowed}
+                                className="w-fit"
+                                variant="outline"
+                                onClick={() => updateTicket("En proceso")}
+                            >
+                                En proceso
+                            </Button>
+                        </div>
+                    )}
+
                 </DialogHeader>
                 <div className="flex-1 overflow-y-auto pt-4">
                     <div className="px-4">

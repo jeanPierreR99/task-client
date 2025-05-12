@@ -22,7 +22,7 @@ const RoleSchema = z.object({
 
 type RoleFormValues = z.infer<typeof RoleSchema>;
 
-const FormProjects = () => {
+const FormProjects = ({ setProjectData }: any) => {
     const [loading, setLoading] = useState(false);
 
     const form = useForm<RoleFormValues>({
@@ -47,6 +47,7 @@ const FormProjects = () => {
                 name: "",
                 description: ""
             });
+            setProjectData((prev: any) => [...prev, response.data])
             ToasMessage({
                 title: "Proyecto registrado",
                 description: "El Proyecto ha sido registrado correctamente.",

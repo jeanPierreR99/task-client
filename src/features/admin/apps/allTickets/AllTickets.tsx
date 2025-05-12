@@ -26,11 +26,19 @@ import { es } from "date-fns/locale/es";
 import { Button } from "../../../../shared/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-
-const getStatusBadge = (status: boolean) => {
-    return status
-        ? <Badge className="bg-green-100 text-green-800">Atendido</Badge>
-        : <Badge className="bg-yellow-100 text-yellow-800">Pendiente</Badge>;
+const getStatusBadge = (status: string) => {
+    switch (status) {
+        case 'Pendiente':
+            return <Badge className="bg-yellow-100 text-yellow-800">Pendiente</Badge>;
+        case 'Aceptado':
+            return <Badge className="bg-blue-100 text-blue-800">Aceptado</Badge>;
+        case 'En proceso':
+            return <Badge className="bg-orange-100 text-orange-800">En proceso</Badge>;
+        case 'Atendido':
+            return <Badge className="bg-green-100 text-green-800">Atendido</Badge>;
+        default:
+            return <Badge className="bg-gray-100 text-gray-800">Desconocido</Badge>;
+    }
 };
 
 const AllTickets = () => {
@@ -112,7 +120,7 @@ const AllTickets = () => {
                         value={search}
                         onChange={(e) => {
                             setSearch(e.target.value);
-                            setCurrentPage(1); 
+                            setCurrentPage(1);
                         }}
                     />
                 </div>
@@ -152,7 +160,7 @@ const AllTickets = () => {
                                     </div>
                                 )}
                             </CardTitle>
-                            <Badge className="bg-blue-100 text-blue-800">{ticket.area}</Badge>
+                            <span className="bg-blue-100 text-blue-800 py-1 px-2 text-xs font-medium rounded-lg">{ticket.area}</span>
                         </CardHeader>
 
                         <CardContent className="text-sm text-muted-foreground space-y-2">
@@ -176,7 +184,7 @@ const AllTickets = () => {
                             <div className="flex items-start gap-2">
                                 <CalendarCheck className="w-4 h-4 mt-1 text-gray-500" />
                                 <p><span className="font-medium text-gray-900">Fecha atendida: </span>
-                                    {ticket.updatedAt ? (
+                                    {ticket.updatedAt && ticket.status == true ? (
                                         <>
                                             {format(parseISO(ticket.updatedAt), 'yyyy-MM-dd HH:mm:ss')}{' '}
                                             ({formatDistanceToNow(new Date(ticket.updatedAt), {
@@ -192,7 +200,7 @@ const AllTickets = () => {
                         </CardContent>
 
                         <CardFooter className="flex justify-end">
-                            {getStatusBadge(ticket.status)}
+                            {getStatusBadge(ticket.descriptionStatus)}
                         </CardFooter>
                     </Card>
                 ))}

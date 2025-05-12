@@ -15,18 +15,20 @@ import useStoreTask from "../../features/admin/apps/tasks/store/useStoreTask";
 
 export default function Layout() {
     const { name, email, imageUrl, projectId } = useStoreLogin();
-    const { addTaskToCategory, setCategories, removeCategory, moveTaskToCategory, removeTaskFromCategory } = useStoreTask();
+    const { addTaskToCategory, setCategories, removeCategory, moveTaskToCategory, updateTaskById, removeTaskFromCategory } = useStoreTask();
 
     useEffect(() => {
+        if (!projectId) return;
+
         const socket = io(API_PATH, {
             reconnection: true,
             reconnectionAttempts: Infinity,
             reconnectionDelay: 1000,
         });
+
         socket.emit('joinTaskProject', projectId);
 
         socket.on('updateTaskProject', (data) => {
-
             if (data.projectId !== projectId) return;
             ToasMessage({
                 title: "Se agrego una nueva tarea al proyecto",
@@ -39,6 +41,7 @@ export default function Layout() {
 
         socket.on('updateCategoryProject', (data) => {
             if (data.projectId !== projectId) return;
+            console.log(data)
             ToasMessage({
                 title: "Se agrego una nueva categoría al proyecto",
                 description: `Categoría: ${data.category.title}`,
@@ -59,7 +62,6 @@ export default function Layout() {
         });
 
         socket.on('updateCategoryTaskProject', (data) => {
-            console.log(data)
             if (data.projectId !== projectId) return;
             ToasMessage({
                 title: "Se actualizó de categoría una tarea",
@@ -70,16 +72,38 @@ export default function Layout() {
         });
 
         socket.on('deleteTaskProject', (data) => {
-            console.log(data)
             if (data.projectId !== projectId) return;
             ToasMessage({
                 title: "Se elimino una tarea del proyecto",
-                description: `Se elimino la tarea ${data.task.name} por ${data.task.responsible.name}`,
+                description: `Se eliminó la tarea ${data.task.name} por ${data.task.responsible.name}`,
                 type: "success",
             });
             removeTaskFromCategory(data.task.category.id, data.task.id);
         });
 
+        socket.on('updateTaskStatusProject', (data) => {
+            if (data.projectId !== projectId) return;
+            ToasMessage({
+                title: "Se actualizó una tarea del proyecto",
+                description: `Se marcó como ${data.task.status} la tarea ${data.task.name}`,
+                type: "success",
+            });
+            updateTaskById(data.task.id, data.task);
+        });
+
+        socket.on('updateTaskDateProject', (data) => {
+            console.log(data)
+            if (data.projectId !== projectId) return;
+            ToasMessage({
+                title: "Se actualizó una tarea del proyecto",
+                description: `Se cambio la fecha de entrega de la tarea ${data.task.name}`,
+                type: "success",
+            });
+            const dataAux: any = {
+                dateCulmined: data.task.dateCulmined
+            }
+            updateTaskById(data.task.id, dataAux);
+        });
 
         return () => {
             socket.disconnect()

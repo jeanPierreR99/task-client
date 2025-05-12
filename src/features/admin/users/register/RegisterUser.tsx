@@ -31,7 +31,7 @@ const RegisterUser = () => {
             <FormOffice />
             <br />
             <br />
-            <FormProjects />
+            <FormProjects setProjectData={setProjectData} />
             <br />
             <br />
             <FormUser roleData={roleData} projectData={projectData} />

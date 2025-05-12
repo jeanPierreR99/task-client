@@ -32,7 +32,7 @@ const TabContentList = () => {
     const { projectId } = useStoreLogin()
     const { message } = useStoreNotification();
     const [searchTerm, setSearchTerm] = useState('');
-
+console.log(categories)
     const addLabel = async () => {
         try {
             if (newLabel.trim() === '') {
@@ -49,7 +49,6 @@ const TabContentList = () => {
                 projectId: projectId
             }
             const response = await API.setCategory(data)
-            console.log(response)
 
             if (!response?.data || !response?.success) {
                 ToasMessage({

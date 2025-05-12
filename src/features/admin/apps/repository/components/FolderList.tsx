@@ -13,16 +13,16 @@ const FolderList = ({ setDataFile, fileData }: any) => {
     const [selectedFolder, setSelectedFolder] = useState<Folder>();
 
     const { id: userIdParam } = useParams<{ id: string }>();
-    const { id: userIdStore, projectId } = useStoreLogin()
+    const { projectId } = useStoreLogin()
 
-    const id = userIdParam ?? userIdStore;
+    const id = userIdParam ?? projectId;
     useEffect(() => {
         const fetchFolders = async () => {
             setLoading(true);
             setError('');
 
             try {
-                const response = await API.getFolderByUser(projectId);
+                const response = await API.getFolderByUser(id);
                 setDataFile(response.data);
             } catch (err: any) {
                 setError('Ocurrió un error al cargar las carpetas.' + err);

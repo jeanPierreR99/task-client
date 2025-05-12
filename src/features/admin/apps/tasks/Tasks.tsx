@@ -7,16 +7,18 @@ import useStoreTask from './store/useStoreTask';
 import useStoreFile from './store/useStoreFile';
 import { AlertMessage } from '../../../../components/AlertMessage';
 import { getStorage } from '../../../../shared/js/functions';
+import { useParams } from 'react-router-dom';
 
 const Tasks = () => {
     const { setFiles } = useStoreFile()
+    const { id: projectIdParam } = useParams<{ id: string }>();
 
     const { id } = useStoreLogin();
     const { setCategories } = useStoreTask();
 
     const projectId = getStorage();
 
-    const projectIdValue = projectId?.project?.id;
+    const projectIdValue = projectIdParam ? projectIdParam : projectId.project.id;
 
     const {
         data: ownCategories,

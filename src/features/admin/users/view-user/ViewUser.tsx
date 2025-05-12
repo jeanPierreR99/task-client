@@ -10,7 +10,7 @@ const ViewUser = () => {
     const { id } = useParams<{ id: string }>();
     const [user, setUser] = useState<User>()
     const [loading, setLoading] = useState(false)
-    console.log(id)
+    
     const getUserId = async () => {
         setLoading(true);
         try {

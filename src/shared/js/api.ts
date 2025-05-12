@@ -1,10 +1,10 @@
 import axios from "axios";
 import { createOfficeDto, createProjectDto, CreateRoleDto, CreateSubtaskDto, CreateTaskDto, CreateUserDto, UpdateSubtaskDto, UpdateTaskDto, UpdateUserUserDto } from "./interface";
 
-//export const API_PATH = "http://localhost:3000";
-//export const API_BASE = "http://localhost:3000/api/v1";
-  export const API_BASE = "https://asana.munitambopata.gob.pe:85/api/v1";
-  export const API_PATH = "https://asana.munitambopata.gob.pe:85";
+export const API_PATH = "http://localhost:3000";
+export const API_BASE = "http://localhost:3000/api/v1";
+//   export const API_BASE = "https://asana.munitambopata.gob.pe:85/api/v1";
+//   export const API_PATH = "https://asana.munitambopata.gob.pe:85";
 
 const api = axios.create({
     baseURL: API_BASE,
@@ -184,6 +184,10 @@ export const API = {
         const response = await api.patch(`/tasks/${id}/status`, body);
         return response.data;
     },
+    updateTaskDate: async (id: string, body: any) => {
+        const response = await api.patch(`/tasks/date?id_task=${id}`, body);
+        return response.data;
+    },
     //SUBTASK
     createSubTask: async (data: CreateSubtaskDto) => {
         const response = await api.post("/subtasks", data)
@@ -256,10 +260,14 @@ export const API = {
         const response = await api.get(`/projects/${id}`)
         return response.data
     },
-    //TICKETS
 
+    //TICKETS
     getTickets: async () => {
         const response = await api.get(`/tickets`)
+        return response.data
+    },
+    updateTicket: async (id: string, data: any) => {
+        const response = await api.patch(`/tickets/${id}`, data)
         return response.data
     }
 };

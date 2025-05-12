@@ -114,4 +114,5 @@ export interface CreateTicketDto {
     createdAt: string;
     status: boolean;
     updatedAt: string;
+    descriptionStatus: string
 }

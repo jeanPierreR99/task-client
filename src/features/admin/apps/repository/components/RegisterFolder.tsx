@@ -4,12 +4,16 @@ import { API } from '../../../../../shared/js/api';
 import { ToasMessage } from '../../../../../components/ToasMessage';
 import { Button } from '../../../../../shared/components/ui/button';
 import { Input } from '../../../../../shared/components/ui/input';
+import { useParams } from 'react-router-dom';
 
 const RegisterFolder = ({ setDataFile }: any) => {
     const [folderName, setFolderName] = useState('');
     const [loading, setLoading] = useState(false);
 
+    const { id: projectIdParam } = useParams<{ id: string }>();
     const { projectId } = useStoreLogin()
+
+    const id = projectIdParam ? projectIdParam : projectId
 
 
     const handleFolderNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,7 +32,7 @@ const RegisterFolder = ({ setDataFile }: any) => {
 
         try {
             setLoading(true);
-            const response = await API.createFolderByUser(projectId, { folderName: folderName })
+            const response = await API.createFolderByUser(id, { folderName: folderName })
 
             if (!response?.data || !response?.success) {
                 ToasMessage({

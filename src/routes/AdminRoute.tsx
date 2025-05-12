@@ -3,6 +3,7 @@ import { RouteObject } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import Layout from "../shared/layout/Layout";
 import React from "react";
+import ViewProject from "../features/admin/users/view-project/ViewProject";
 
 const LoadingFallback = () => <div className="min-w-screen min-h-screen bg-gray-100/70  flex justify-center items-center">
     <Loader2 className="animate-spin text-blue-500" />
@@ -19,7 +20,6 @@ const PrintScanner = React.lazy(() => import("../features/admin/inventory/printS
 const Config = React.lazy(() => import("../features/admin/config/Config"))
 const AllTasks = React.lazy(() => import("../features/admin/apps/allTasks/AllTasks"))
 const AllTickets = React.lazy(() => import("../features/admin/apps/allTickets/AllTickets"))
-const Project = React.lazy(() => import("../features/admin/apps/project/Project"))
 
 const withSuspense = (Component: React.ReactNode) => (
     <Suspense fallback={<LoadingFallback />}>{Component}</Suspense>
@@ -45,7 +45,12 @@ export const AdminRoutes: RouteObject[] = [
             },
             {
                 path: "projects",
-                element: withSuspense(<Project />),
+                children: [
+                    {
+                        path: "view/:id",
+                        element: withSuspense(<ViewProject />),
+                    }
+                ]
             },
             {
                 path: "all-tasks",

@@ -7,6 +7,7 @@ import useStoreLogin from "../../../../../shared/state/useStoreLogin";
 import { format } from "date-fns";
 import FormFileFolder from "./FormFileFolder";
 import NoData from "../../../../../components/NotData";
+import { useParams } from "react-router-dom";
 
 interface ViewFolderFilesProps {
     open: boolean;
@@ -17,9 +18,9 @@ interface ViewFolderFilesProps {
 const ViewFolderFiles: React.FC<ViewFolderFilesProps> = ({ open, setOpen, selectedFolder }) => {
     const [files, setFiles] = useState<FileItem[]>([]);
     const [loading, setLoading] = useState(false);
-
+    const { id: projectIdParam } = useParams<{ id: string }>();
     const { projectId } = useStoreLogin()
-
+    const id = projectIdParam ? projectIdParam : projectId
 
     useEffect(() => {
         if (!open || !selectedFolder) return;
@@ -27,7 +28,7 @@ const ViewFolderFiles: React.FC<ViewFolderFilesProps> = ({ open, setOpen, select
         const fetchFiles = async () => {
             setLoading(true);
             try {
-                const response = await API.getFolderContent(projectId, selectedFolder.folder);
+                const response = await API.getFolderContent(id, selectedFolder.folder);
                 setFiles(response.data);
             } catch (err) {
                 console.error("Error fetching files", err);

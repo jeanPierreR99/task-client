@@ -74,7 +74,6 @@ const TaskForm: React.FC<TaskFormProps> = ({ categoryId, setOpen, date }) => {
     const { id } = useStoreLogin()
 
 
-
     const form = useForm<TaskFormValues>({
         resolver: zodResolver(taskSchema),
         defaultValues: {
@@ -108,7 +107,6 @@ const TaskForm: React.FC<TaskFormProps> = ({ categoryId, setOpen, date }) => {
             };
 
             const response = await API.createTask(newTask);
-
             if (!response?.data || !response?.success) {
                 ToasMessage({
                     title: "Aviso",
@@ -117,8 +115,6 @@ const TaskForm: React.FC<TaskFormProps> = ({ categoryId, setOpen, date }) => {
                 });
                 return;
             }
-
-            // addTaskToCategory(categoryId, response.data);
 
             const taskId = response.data.id;
 

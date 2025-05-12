@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Subtask } from './DialogTask';
 import { DialogDescription } from '../../../../../shared/components/ui/dialog';
 import { CalendarDays, CheckIcon, ChevronRight, Download, FileText, Search, Unlock } from 'lucide-react';
-import { dateFormatedTwo, getRelativeDay } from '../../../../../lib/date';
+import { dateFormatedTwo } from '../../../../../lib/date';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../../../../../shared/components/ui/accordion';
 import FormSubTask from './FormSubTask';
 import useStoreLogin from '../../../../../shared/state/useStoreLogin';
@@ -81,7 +81,7 @@ const ViewSubTask: React.FC<ViewSubTaskProp> = ({ setOpen, subTask, createdId, s
     return (
         <div className="">
             <div className='mb-2'>
-                {(subTask.responsible.id === id || createdId === id) && !subTask.completed ? (
+                {(subTask.responsible.id === id || createdId == id) && !subTask.completed ? (
                     <Button
                         disabled={!isAllowed}
                         className="w-fit"
@@ -120,7 +120,7 @@ const ViewSubTask: React.FC<ViewSubTaskProp> = ({ setOpen, subTask, createdId, s
                 <div className="flex gap-2 items-center">
                     <span className="text-sm">Fecha de entrega:</span>
                     <span className="text-sm text-green-500">
-                        {`${dateFormatedTwo(subTask.dateCulmined)} (${getRelativeDay(subTask.dateCulmined)})`}
+                        {`${dateFormatedTwo(subTask.dateCulmined)}`}
                     </span>
                 </div>
                 {

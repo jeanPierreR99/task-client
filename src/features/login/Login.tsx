@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, FormProvider } from "react-hook-form";
 import { z } from "zod";
 import { useState } from "react";
-import { Loader2 } from "lucide-react";
+import { Loader2, Eye, EyeOff } from "lucide-react";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "../../shared/components/ui/form";
 import { Input } from "../../shared/components/ui/input";
 import { Button } from "../../shared/components/ui/button";
@@ -20,6 +20,7 @@ const Login = () => {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState<string>("");
     const { login } = useStoreLogin();
+    const [showPassword, setShowPassword] = useState(false);
 
     const loginForm = useForm<z.infer<typeof LoginSchema>>({
         resolver: zodResolver(LoginSchema),
@@ -57,7 +58,7 @@ const Login = () => {
     }
 
     return (
-        <div className="grid h-screen bg-gray-50 grid-cols-1 md:grid-cols-2">
+        <div className="grid h-[100dvh] bg-gray-50 grid-cols-1 md:grid-cols-2">
             <div className="hidden md:flex items-center justify-center bg-white">
                 <img src="https://ablog.managemart.com/images/o_1dnpgpc711vd4r5d5e781f10vs8.png" alt="Login Illustration" className="object-contain w-full h-full animate-fade-in" />
             </div>
@@ -99,9 +100,23 @@ const Login = () => {
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormLabel className="text-sm font-medium text-gray-700">Contraseña</FormLabel>
-                                            <FormControl>
-                                                <Input type="password" className="bg-gray-100 w-full rounded-md" placeholder="Contraseña" {...field} />
-                                            </FormControl>
+                                            <div className="relative">
+                                                <FormControl>
+                                                    <Input
+                                                        type={showPassword ? "text" : "password"}
+                                                        className="bg-gray-100 w-full rounded-md pr-10"
+                                                        placeholder="Contraseña"
+                                                        {...field}
+                                                    />
+                                                </FormControl>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setShowPassword((prev) => !prev)}
+                                                    className="absolute right-2 top-2.5 text-gray-400 hover:text-gray-700"
+                                                >
+                                                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                                                </button>
+                                            </div>
                                             <FormMessage />
                                         </FormItem>
                                     )}

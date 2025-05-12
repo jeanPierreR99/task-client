@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, FormProvider } from "react-hook-form";
 import { z } from "zod";
 import { useRef, useState } from "react";
-import { Loader2, UploadCloud } from "lucide-react";
+import { Eye, EyeOff, Loader2, UploadCloud } from "lucide-react";
 import { Input } from "../../../../../shared/components/ui/input";
 import { Button } from "../../../../../shared/components/ui/button";
 import { API } from "../../../../../shared/js/api";
@@ -124,6 +124,7 @@ const FormUser = ({ roleData, projectData }: any) => {
         }
     }
 
+    const [showPassword, setShowPassword] = useState(false);
 
     return (
         <div className="flex items-center justify-center">
@@ -186,7 +187,20 @@ const FormUser = ({ roleData, projectData }: any) => {
                                     <FormItem>
                                         <FormLabel>Contraseña</FormLabel>
                                         <FormControl>
-                                            <Input type="password" placeholder="Contraseña" {...field} />
+                                            <div className="relative">
+                                                <Input
+                                                    type={showPassword ? "text" : "password"}
+                                                    placeholder="Contraseña"
+                                                    {...field}
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setShowPassword((prev) => !prev)}
+                                                    className="absolute right-2 top-1/2 transform -translate-y-1/2 text-sm text-muted-foreground"
+                                                >
+                                                    {showPassword ? <EyeOff size={20} className="text-gray-400" /> : <Eye size={20} className="text-gray-400" />}
+                                                </button>
+                                            </div>
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
