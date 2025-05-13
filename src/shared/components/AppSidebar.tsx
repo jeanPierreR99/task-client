@@ -1,4 +1,4 @@
-import { ClipboardList, Folder, Home, ListTodo, Logs, MessageSquareMore, PackagePlus, Tickets, UserRoundPlus } from "lucide-react"
+import { ClipboardList, Folder, Home, ListTodo, ListTree, Logs, MessageSquareMore, PackagePlus, Tickets, UserRoundPlus } from "lucide-react"
 
 import {
   Sidebar,
@@ -14,6 +14,7 @@ import { NavLink } from "react-router-dom"
 import { Separator } from "./ui/separator"
 import useStoreLogin from "../state/useStoreLogin"
 import { API_PATH } from "../js/api"
+import { useLocation } from "react-router-dom"
 
 const items = [
   {
@@ -22,9 +23,14 @@ const items = [
     icon: Home,
   },
   {
-    title: "Tareas",
+    title: "Tareas del Proyecto",
     url: "/tasks",
     icon: ListTodo,
+  },
+  {
+    title: "Mis Tareas",
+    url: "/tasks-me",
+    icon: ListTree,
   },
   // {
   //   title: "Proyectos",
@@ -32,12 +38,12 @@ const items = [
   //   icon: LucideGroup,
   // },
   {
-    title: "Lista de Tareas",
+    title: "Tareas Generadas",
     url: "/all-tasks",
     icon: Logs,
   },
   {
-    title: "Lista de Tickets",
+    title: "Tickets",
     url: "/all-tickets",
     icon: Tickets,
   },
@@ -91,6 +97,7 @@ const itemsInventory = [
 
 export function AppSidebar() {
   const { name, email, imageUrl, role } = useStoreLogin();
+  const location = useLocation();
 
   return (
     <Sidebar>
@@ -105,16 +112,25 @@ export function AppSidebar() {
           <SidebarGroupLabel>Aplicaciones</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <NavLink to={item.url}>
-                      <item.icon />
-                      {item.title}
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {items.map((item) => {
+                const isActive = location.pathname === item.url;
+
+                return (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton
+                      asChild
+                      className={isActive
+                        ? "hover:bg-gray-200 font-semibold bg-gray-200"
+                        : "hover:bg-gray-200"}
+                    >
+                      <NavLink to={item.url}>
+                        <item.icon />
+                        {item.title}
+                      </NavLink>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -124,16 +140,25 @@ export function AppSidebar() {
             <SidebarGroupLabel>Usuarios y actividades</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {itemsUsers.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild>
-                      <NavLink to={item.url}>
-                        <item.icon />
-                        {item.title}
-                      </NavLink>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
+                {itemsUsers.map((item) => {
+                  const isActive = location.pathname === item.url;
+
+                  return (
+                    <SidebarMenuItem key={item.title}>
+                      <SidebarMenuButton
+                        asChild
+                        className={isActive
+                          ? "hover:bg-gray-200 font-semibold bg-gray-200"
+                          : "hover:bg-gray-200"}
+                      >
+                        <NavLink to={item.url}>
+                          <item.icon />
+                          {item.title}
+                        </NavLink>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>
@@ -144,16 +169,25 @@ export function AppSidebar() {
             <SidebarGroupLabel>Inventario</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {itemsInventory.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild>
-                      <NavLink to={item.url}>
-                        <item.icon />
-                        {item.title}
-                      </NavLink>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
+                {itemsInventory.map((item) => {
+                  const isActive = location.pathname === item.url;
+
+                  return (
+                    <SidebarMenuItem key={item.title}>
+                      <SidebarMenuButton
+                        asChild
+                        className={isActive
+                          ? "hover:bg-gray-200 font-semibold bg-gray-200"
+                          : "hover:bg-gray-200"}
+                      >
+                        <NavLink to={item.url}>
+                          <item.icon />
+                          {item.title}
+                        </NavLink>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>

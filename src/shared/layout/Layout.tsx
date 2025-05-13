@@ -15,13 +15,13 @@ import useStoreTask from "../../features/admin/apps/tasks/store/useStoreTask";
 import { requestAndSubscribeUser } from "../js/subscribeUser";
 
 export default function Layout() {
-    const { name, email, imageUrl, projectId } = useStoreLogin();
+    const { name, email, imageUrl, projectId, id } = useStoreLogin();
     const { addTaskToCategory, setCategories, removeCategory, moveTaskToCategory, updateTaskById, removeTaskFromCategory } = useStoreTask();
 
     useEffect(() => {
         if (!projectId) return;
 
-        requestAndSubscribeUser();
+        requestAndSubscribeUser(id, name);
         const socket = io(API_PATH, {
             reconnection: true,
             reconnectionAttempts: Infinity,
