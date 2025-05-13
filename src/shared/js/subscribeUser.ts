@@ -8,8 +8,11 @@ async function subscribeUser() {
       const registration = await navigator.serviceWorker.ready;
 
       const existingSubscription = await registration.pushManager.getSubscription();
+
       if (existingSubscription) {
         console.log('Ya estás suscrito:', existingSubscription);
+        // Siempre actualiza la suscripción en el servidor, por si cambió el endpoint o las claves
+        await sendSubscriptionToServer(existingSubscription);
         return;
       }
 
@@ -18,13 +21,23 @@ async function subscribeUser() {
         applicationServerKey: urlBase64ToUint8Array(PUBLIC_VAPID_KEY),
       });
 
-      const response = await API.subscribeNotification(subscription);
-      console.log('Suscripción enviada al servidor:', response);
+      await sendSubscriptionToServer(subscription);
+
     } catch (error) {
       console.error('Error al suscribirse a las notificaciones:', error);
     }
   } else {
     console.warn('El navegador no soporta notificaciones push.');
+  }
+}
+
+async function sendSubscriptionToServer(subscription: PushSubscription) {
+  console.log('Enviando suscripción al servidor:', subscription.endpoint);
+  try {
+    const response = await API.subscribeNotification(subscription);
+    console.log('Suscripción enviada al servidor:', response);
+  } catch (error) {
+    console.error('Error enviando la suscripción al servidor:', error);
   }
 }
 
