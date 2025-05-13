@@ -10,3 +10,20 @@ self.addEventListener('fetch', event => {
     return
   }
 })
+
+self.addEventListener('push', event => {
+  const data = event.data?.json() || {}
+  const title = data.title || 'Notificación'
+  const options = {
+    body: data.body || 'Tienes una nueva alerta',
+    icon: '/icons/icon-192x192.png',
+    image: data.image || '/icons/icon-192x192.png',
+    data: data.url || '/'
+  }
+  event.waitUntil(self.registration.showNotification(title, options))
+})
+
+self.addEventListener('notificationclick', event => {
+  event.notification.close()
+  event.waitUntil(clients.openWindow(event.notification.data))
+})

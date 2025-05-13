@@ -12,6 +12,7 @@ import { useEffect } from "react";
 import { ToasMessage } from "../../components/ToasMessage";
 import { io } from "socket.io-client";
 import useStoreTask from "../../features/admin/apps/tasks/store/useStoreTask";
+import { requestAndSubscribeUser } from "../js/subscribeUser";
 
 export default function Layout() {
     const { name, email, imageUrl, projectId } = useStoreLogin();
@@ -20,6 +21,7 @@ export default function Layout() {
     useEffect(() => {
         if (!projectId) return;
 
+        requestAndSubscribeUser();
         const socket = io(API_PATH, {
             reconnection: true,
             reconnectionAttempts: Infinity,

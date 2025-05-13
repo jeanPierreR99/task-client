@@ -1,7 +1,6 @@
 import { Draggable } from '@hello-pangea/dnd';
 import { Card, CardContent, CardHeader, CardTitle } from '../../../../../shared/components/ui/card';
-import { format, formatDistanceToNow, parseISO } from 'date-fns';
-import { es } from 'date-fns/locale/es';
+import { format, parseISO } from 'date-fns';
 
 const TaskItem = ({ task, taskIndex, handleOpen }: any) => {
 
@@ -17,17 +16,12 @@ const TaskItem = ({ task, taskIndex, handleOpen }: any) => {
                     <CardHeader className="flex flex-row items-center justify-between pb-2">
                         <CardTitle className="text-lg font-semibold flex items-center gap-2 text-primary">
                             <span className={task.completed ? 'line-through text-gray-500' : ''}>
-                                {task.name}
+                                {task.ticket && task.nameTicket ? task.nameTicket : task.name}
                             </span>
                         </CardTitle>
                     </CardHeader>
 
                     <CardContent className="text-sm text-muted-foreground space-y-2">
-                        <div className="flex items-start gap-2">
-                            <p>
-                                <span className="font-medium text-gray-900">Descripción:</span> {task.description || '—'}
-                            </p>
-                        </div>
                         <div className="flex items-start gap-2">
                             <p><span className="font-medium text-gray-900">Responsable:</span> {task.responsible?.name || '—'}</p>
                         </div>
@@ -36,11 +30,7 @@ const TaskItem = ({ task, taskIndex, handleOpen }: any) => {
                                 <span className="font-medium text-gray-900">Fecha de entrega:</span>{' '}
                                 {task.dateCulmined ? (
                                     <>
-                                        {format(parseISO(task.dateCulmined), 'yyyy-MM-dd HH:mm:ss')}{' '}
-                                        ({formatDistanceToNow(new Date(task.dateCulmined), {
-                                            addSuffix: true,
-                                            locale: es,
-                                        })})
+                                        {format(parseISO(task.dateCulmined), 'yyyy-MM-dd')}{' '}
                                     </>
                                 ) : '—'}
                             </p>

@@ -269,5 +269,11 @@ export const API = {
     updateTicket: async (id: string, data: any) => {
         const response = await api.patch(`/tickets/${id}`, data)
         return response.data
-    }
+    },
+
+    //NOTIFICATION
+    subscribeNotification: async (data: any) => {
+        const response = await api.post(`/notifications/subscribe`, data)
+        return response.data
+    },
 };
