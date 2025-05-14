@@ -13,47 +13,46 @@ import { Button } from "../../../../../shared/components/ui/button"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../../../../../shared/components/ui/form"
-import { UserAutoComplete } from "./UserAutocomplete"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { API } from "../../../../../shared/js/api"
 import { ToasMessage } from "../../../../../components/ToasMessage"
-import { UserRoundPen } from "lucide-react"
+import { PenLine } from "lucide-react"
 import { TooltipWrapper } from "../../../../../components/TooltipWrapper"
 import useStoreLogin from "../../../../../shared/state/useStoreLogin"
+import { Input } from "../../../../../shared/components/ui/input"
 import { GetDay } from "../../../../../lib/date"
-import { getStorage } from "../../../../../shared/js/functions"
 
 const formSchema = z.object({
-    responsible: z.string().min(1, "Campo requerido")
+    name: z.string().min(1, "Campo requerido")
 })
 
 type FormValues = z.infer<typeof formSchema>
 
-const ChangeResponsible = ({ task }: any) => {
-    const [userId, setUserId] = useState("")
-    const [loading, setLoading] = useState(false)
+const ChangeName = ({ task }: any) => {
+    const [loading, setLoading] = useState(false);
     const { id } = useStoreLogin();
-
-    const userStorage = getStorage();
 
     const form = useForm<FormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            responsible: ""
-        }
-    })
+            name: "",
+        },
+    });
 
-    const updateTaskResponsible = async () => {
+    const updateTaskName = async (data: FormValues) => {
         try {
-            setLoading(true)
+            setLoading(true);
 
-            const newTask = {
-                responsibleId: userId,
-                update_at: GetDay(),
-                projectId: userStorage.projectId,
+            const newTask = task.ticket
+                ? {
+                    nameTicket: data.name.toUpperCase(), update_at: GetDay(),
+                }
+                : {
+                    name: data.name.toUpperCase(), update_at: GetDay(),
+                };
 
-            }
-            const response = await API.UpdateTask(task.id, id, newTask)
+            const response = await API.UpdateTask(task.id, id, newTask);
+
             if (!response?.data || !response?.success) {
                 ToasMessage({
                     title: "Aviso",
@@ -62,59 +61,56 @@ const ChangeResponsible = ({ task }: any) => {
                 });
                 return;
             }
-            window.location.reload()
+
             ToasMessage({
                 title: "Modificado",
-                description: "La tarea fue cambiada de responsable",
+                description: "El nombre de la tarea fue actualizado",
                 type: "success",
             });
-            setLoading(false)
+
+            setLoading(false);
+            window.location.reload();
         } catch (error) {
-            console.error("Error al actualizar la tarea:", error)
+            console.error("Error al actualizar la tarea:", error);
             ToasMessage({
                 title: "Error",
-                description: "Ocurrio un error: " + error,
+                description: "Ocurrió un error: " + error,
                 type: "error",
             });
-            setLoading(false)
+            setLoading(false);
         }
-    }
-    useEffect(() => {
-        if (task) {
-            form.setValue("responsible", "")
-        }
-    }, [task, form])
+    };
 
 
     return (
         <AlertDialog>
             <AlertDialogTrigger>
-                <TooltipWrapper content="Cambiar de responsable">
-                    <Button variant="outline"><UserRoundPen className="text-orange-500" /></Button>
+                <TooltipWrapper content="Cambiar nombre de tarea">
+                    <Button variant="outline">
+                        <PenLine className="text-orange-500" />
+                    </Button>
                 </TooltipWrapper>
             </AlertDialogTrigger>
 
             <AlertDialogContent>
                 <AlertDialogHeader>
-                    <AlertDialogTitle>Cambiar responsable</AlertDialogTitle>
+                    <AlertDialogTitle>Cambiar nombre de tarea</AlertDialogTitle>
                     <AlertDialogDescription>
-                        Ingresa el nombre del nuevo responsable. Este cambio puede deshacerse y la tarea se eliminará completamente de su lista de tareas.
+                        Ingresa el nuevo nombre para la tarea {task.ticket ? task.nameTicket : task.name}.
                     </AlertDialogDescription>
                 </AlertDialogHeader>
+
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(updateTaskResponsible)} className="space-y-4 mt-4">
+                    <form onSubmit={form.handleSubmit(updateTaskName)} className="space-y-4 mt-4">
                         <FormField
                             control={form.control}
-                            name="responsible"
+                            name="name"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Responsable</FormLabel>
+                                    <FormLabel>Nombre de tarea</FormLabel>
                                     <FormControl>
-                                        <UserAutoComplete field={field} setUserId={setUserId} />
+                                        <Input {...field} placeholder="Nuevo nombre de la tarea" />
                                     </FormControl>
-                                    {!userId && (
-                                        <span className="text-xs text-gray-400">Sin responsable seleccionado</span>
-                                    )}
                                     <FormMessage />
                                 </FormItem>
                             )}
@@ -123,17 +119,19 @@ const ChangeResponsible = ({ task }: any) => {
                         <Button
                             type="submit"
                             className="w-fit bg-orange-500 hover:bg-orange-400 text-white"
-                            disabled={!userId || loading}
+                            disabled={loading}
                         >
                             {loading ? "Guardando..." : "Confirmar cambio"}
                         </Button>
                     </form>
                 </Form>
+
                 <AlertDialogFooter>
                     <AlertDialogCancel>Cancelar</AlertDialogCancel>
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>
-    )
-}
-export default ChangeResponsible
+    );
+};
+
+export default ChangeName;

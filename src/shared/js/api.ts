@@ -1,5 +1,5 @@
 import axios from "axios";
-import { createOfficeDto, createProjectDto, CreateRoleDto, CreateSubtaskDto, CreateTaskDto, CreateUserDto, UpdateSubtaskDto, UpdateTaskDto, UpdateUserUserDto } from "./interface";
+import { createOfficeDto, createProjectDto, CreateRoleDto, CreateSubtaskDto, CreateTaskDto, UpdateSubtaskDto, UpdateTaskDto, UpdateUserUserDto } from "./interface";
 
 export const API_PATH = "http://localhost:3000";
 export const API_BASE = "http://localhost:3000/api/v1";
@@ -15,8 +15,8 @@ const api = axios.create({
 
 export const API = {
     //user
-    getUserSugestion: async (search: string) => {
-        const response = await api.get(`/users/search?q=${search}`)
+    getUserSugestion: async (search: string, projectId: string) => {
+        const response = await api.get(`/users/search?q=${search}&projectId=${projectId}`)
         return response.data
     },
 
@@ -24,7 +24,7 @@ export const API = {
         const response = await api.post("/users/login", data)
         return response.data
     },
-    register: async (data: CreateUserDto) => {
+    register: async (data: any) => {
         const response = await api.post("/users", data)
         return response.data
     },
@@ -184,8 +184,8 @@ export const API = {
         const response = await api.patch(`/tasks/${id}/status`, body);
         return response.data;
     },
-    getTaskUser: async (id: string) => {
-        const response = await api.get(`/tasks/user/find/${id}`);
+    getTaskUser: async (id: string, projectId: string) => {
+        const response = await api.get(`/tasks/user/find/${id}/${projectId}`);
         return response.data;
     },
     updateTaskDate: async (id: string, body: any) => {
@@ -263,6 +263,10 @@ export const API = {
 
     getProjectOne: async (id: string) => {
         const response = await api.get(`/projects/${id}`)
+        return response.data
+    },
+    updateUserProjects: async (userId: string, data: any) => {
+        const response = await api.patch(`/users/${userId}/projects`, data);
         return response.data
     },
 

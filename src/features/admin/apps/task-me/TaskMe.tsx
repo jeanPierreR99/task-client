@@ -29,12 +29,12 @@ const TaskMe = () => {
     const [tasks, setTasks] = useState<Task[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 9;
-    const { id } = useStoreLogin();
+    const { id, projectId } = useStoreLogin();
     const {
         data,
         error,
         isLoading,
-    } = useApiFetch(["all_tasks"], () => API.getTaskUser(id));
+    } = useApiFetch(["all_tasks"], () => API.getTaskUser(id, projectId));
 
     const filteredTasks = tasks.filter((task: Task) => {
         const nameMatch = task.name?.toLowerCase().includes(search.toLowerCase());

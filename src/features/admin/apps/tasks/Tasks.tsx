@@ -18,7 +18,7 @@ const Tasks = () => {
 
     const projectId = getStorage();
 
-    const projectIdValue = projectIdParam ? projectIdParam : projectId.project.id;
+    const projectIdValue = projectIdParam ? projectIdParam : projectId.projectId;
 
     const {
         data: ownCategories,

@@ -59,6 +59,7 @@ export default function Layout() {
                 title: "Se elimino una categoria del proyecto",
                 description: `Se elimino la categoria ${data.category.title}`,
                 type: "success",
+                duration: 7000
             });
             removeCategory(data.category.id);
         });
@@ -69,6 +70,7 @@ export default function Layout() {
                 title: "Se actualizó de categoría una tarea",
                 description: `La tarea ${data.task.name} se cambió de categoría a ${data.task.category.title}`,
                 type: "success",
+                duration: 7000
             });
             moveTaskToCategory(data.task.id, data.task.category.id);
         });
@@ -79,6 +81,7 @@ export default function Layout() {
                 title: "Se elimino una tarea del proyecto",
                 description: `Se eliminó la tarea ${data.task.name} por ${data.task.responsible.name}`,
                 type: "success",
+                duration: 7000
             });
             removeTaskFromCategory(data.task.category.id, data.task.id);
         });
@@ -89,6 +92,7 @@ export default function Layout() {
                 title: "Se actualizó una tarea del proyecto",
                 description: `Se marcó como ${data.task.status} la tarea ${data.task.name}`,
                 type: "success",
+                duration: 7000
             });
             updateTaskById(data.task.id, data.task);
         });
@@ -100,6 +104,7 @@ export default function Layout() {
                 title: "Se actualizó una tarea del proyecto",
                 description: `Se cambio la fecha de entrega de la tarea ${data.task.name}`,
                 type: "success",
+                duration: 7000
             });
             const dataAux: any = {
                 dateCulmined: data.task.dateCulmined

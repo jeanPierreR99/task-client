@@ -14,7 +14,7 @@ export const ToasMessage = ({
     title,
     description = "",
     type = "default",
-    duration = 3000,
+    duration = 6000,
     position = "top-right",
 }: ToastOptions) => {
     toast(title, {

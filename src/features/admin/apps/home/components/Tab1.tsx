@@ -49,7 +49,7 @@ const Tab1 = () => {
                             <CheckCircle size={18} />
                             <span>{task.name}</span>
                         </div>
-                        <span className="text-orange-400"> para el {dateFormatedTwo(task.dateCulmined)}</span>
+                        <span className="text-green-400"> para el {dateFormatedTwo(task.dateCulmined)}</span>
                     </NavLink>
                 ))
             ) : (

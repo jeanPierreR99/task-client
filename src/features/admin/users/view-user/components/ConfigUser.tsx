@@ -14,12 +14,18 @@ interface Role {
     name: string;
 }
 
+interface Project {
+    id: string;
+    name: string;
+}
+
 const ConfigUser = ({ open, setOpen, user }: { open: boolean, setOpen: (open: boolean) => void, user: any }) => {
-    console.log(user)
     const [selectedRole, setSelectedRole] = useState<string>("");
     const [isDeactivated, setIsDeactivated] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
     const [roles, setRoles] = useState<Role[]>([]);
+    const [projects, setProjects] = useState<Project[]>([]);
+    const [selectedProjects, setSelectedProjects] = useState<string[]>([]);
     const { id } = useParams<{ id: string }>();
 
     useEffect(() => {
@@ -37,7 +43,22 @@ const ConfigUser = ({ open, setOpen, user }: { open: boolean, setOpen: (open: bo
             }
         };
 
+        const fetchProjects = async () => {
+            try {
+                const res = await API.getProjects();
+                setProjects(res.data);
+            } catch (error) {
+                console.error("Error al cargar proyectos:", error);
+                ToasMessage({
+                    title: "Error",
+                    description: "No se pudieron cargar los proyectos",
+                    type: "error",
+                });
+            }
+        };
+
         fetchRoles();
+        fetchProjects();
     }, []);
 
     const handleUpdateRole = async () => {
@@ -103,20 +124,57 @@ const ConfigUser = ({ open, setOpen, user }: { open: boolean, setOpen: (open: bo
             setLoading(false);
         }
     };
+
+    const handleUpdateProjects = async () => {
+        try {
+            setLoading(true);
+            console.log(selectedProjects)
+            const response = await API.updateUserProjects(id!, selectedProjects);
+            console.log(response)
+            if (!response?.data || !response?.success) {
+                ToasMessage({
+                    title: "Aviso",
+                    description: "No se pudieron actualizar los proyectos",
+                    type: "warning",
+                });
+                return;
+            }
+
+            ToasMessage({
+                title: "Proyectos actualizados",
+                description: "Asignación de proyectos guardada correctamente",
+                type: "success",
+            });
+            setOpen(false);
+        } catch (error) {
+            console.error("Error al actualizar proyectos:", error);
+            ToasMessage({
+                title: "Error",
+                description: "Ocurrió un error al actualizar los proyectos",
+                type: "error",
+            });
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
     useEffect(() => {
         if (user) {
             setIsDeactivated(!user.active);
+            setSelectedProjects(user.projects?.map((p: any) => p.id) || []);
         }
     }, [user]);
 
+
     return (
         <Sheet open={open} onOpenChange={setOpen}>
-            <SheetContent className="w-[400px] sm:w-[500px] px-4">
+            <SheetContent className="overflow-y-auto">
                 <SheetHeader>
                     <SheetTitle>Configuración de Usuario</SheetTitle>
                 </SheetHeader>
 
-                <div className="py-6 space-y-8">
+                <div className="py-6 space-y-8 px-4">
                     <Card>
                         <CardHeader>
                             <CardTitle>Cambiar Rol</CardTitle>
@@ -175,6 +233,52 @@ const ConfigUser = ({ open, setOpen, user }: { open: boolean, setOpen: (open: bo
                             </Button>
                         </CardContent>
                     </Card>
+
+                    {/* Asignar/Desasignar Proyectos */}
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Asignar a Proyectos</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            {projects.map((project) => {
+                                const isSelected = selectedProjects.includes(project.id);
+
+                                const toggleProject = () => {
+                                    if (isSelected) {
+                                        setSelectedProjects(prev =>
+                                            prev.filter(id => id !== project.id)
+                                        );
+                                    } else {
+                                        setSelectedProjects(prev => [...prev, project.id]);
+                                    }
+                                };
+
+                                return (
+                                    <div
+                                        key={project.id}
+                                        className="flex items-center justify-between"
+                                    >
+                                        <Label htmlFor={`project-${project.id}`}>{project.name}</Label>
+                                        <Switch
+                                            id={`project-${project.id}`}
+                                            checked={isSelected}
+                                            onCheckedChange={toggleProject}
+                                        />
+                                    </div>
+                                );
+                            })}
+
+                            <Button
+                                disabled={loading}
+                                onClick={handleUpdateProjects}
+                                className="w-full bg-blue-600 hover:bg-blue-700"
+                            >
+                                {loading ? "Guardando..." : "Guardar cambios"}
+                            </Button>
+                        </CardContent>
+                    </Card>
+
+
                 </div>
             </SheetContent>
         </Sheet>

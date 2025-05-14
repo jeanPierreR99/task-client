@@ -1,4 +1,4 @@
-import { CheckCheck, UserPenIcon } from 'lucide-react';
+import { CheckCheck, FolderOpen, UserPenIcon } from 'lucide-react';
 import { dateFormated } from '../../../../lib/date';
 import { TabTasks } from './components/TabTasks';
 import NotProjects from './components/NotProjects';
@@ -8,13 +8,18 @@ import { User } from '../tasks/store/useStoreTask';
 import { API, API_PATH } from '../../../../shared/js/api';
 import { Avatar, AvatarFallback, AvatarImage } from '../../../../shared/components/ui/avatar';
 import useStoreLogin from '../../../../shared/state/useStoreLogin';
-import { getStorage } from '../../../../shared/js/functions';
+import { getStorage, saveStorage } from '../../../../shared/js/functions';
 
+interface Project {
+    id: string;
+    name: string;
+    description: string;
+}
 const Home = () => {
     const [users, setUsers] = useState<User[]>([])
     const { name, projectId } = useStoreLogin();
     const [counTask, setCountTask] = useState("");
-    const [project, setProject] = useState({ id: "", name: "", description: "" });
+    const [project, setProject] = useState<Project[] | null>(null);
 
     const getUser = async () => {
         const response = await API.getUser(projectId)
@@ -25,10 +30,17 @@ const Home = () => {
         setCountTask(response.data)
     }
 
+    function handleChangeActiveProject(id: string) {
+        const userStorage = getStorage();
+        userStorage.projectId = id
+
+        saveStorage(userStorage)
+        window.location.reload();
+    }
 
     useEffect(() => {
         const projectStorage = getStorage()
-        setProject(projectStorage.project)
+        setProject(projectStorage.projects)
         getUser();
         getTaskFalse();
     }, [])
@@ -48,11 +60,22 @@ const Home = () => {
                 </div>
                 <div className='shadow-lg h-[400px] rounded-md p-4'>
                     <span className='text-xl font-bold'>Proyectos</span>
-                    {project ? <div className='border-b mt-2 hover:bg-gray-50 duration-300 ease-linear cursor-pointer p-2'>
-                        <span className='font-medium'>{project.name}</span>
-                        <p className='text-sm text-gray-500'>{project.description}</p>
-                    </div> : <NotProjects></NotProjects>}
+                    {project ? project.map((project: Project) => {
+                        const isActive = project.id === projectId;
+                        return (
+                            <div
+                                key={project.id}
+                                onClick={() => handleChangeActiveProject(project.id)}
+                                className={`border-b mt-2 cursor-pointer p-2 duration-300 ease-linear hover:bg-gray-50 
+                    ${isActive ? ' text-blue-500' : ''}`}
+                            >
+                                <span className='font-medium flex gap-2'>{isActive ? <FolderOpen></FolderOpen> : ""}{project.name}</span>
+                                <p className='text-sm text-gray-500'>{project.description}</p>
+                            </div>
+                        );
+                    }) : <NotProjects />}
                 </div>
+
                 <div className='shadow-lg h-[400px] overflow-y-auto rounded-md p-4'>
                     <span className='text-xl font-bold'>Colaboradores</span>
                     <div className='mt-2 flex flex-col gap-2'>

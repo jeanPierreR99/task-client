@@ -1,7 +1,8 @@
 import { Draggable } from '@hello-pangea/dnd';
-import { Card, CardContent, CardHeader, CardTitle } from '../../../../../shared/components/ui/card';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '../../../../../shared/components/ui/card';
 import { format, parseISO } from 'date-fns';
-import { Info, UserCheck2 } from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from '../../../../../shared/components/ui/avatar';
+import { API_PATH } from '../../../../../shared/js/api';
 
 const TaskItem = ({ task, taskIndex, handleOpen }: any) => {
 
@@ -16,11 +17,6 @@ const TaskItem = ({ task, taskIndex, handleOpen }: any) => {
                     key={task.id} className={`${task.completed ? "bg-green-100" : "bg-yellow-100"} shadow-md border border-gray-200 hover:shadow-lg transition cursor-pointer`} onClick={() => handleOpen(task)}>
                     <CardHeader className="flex flex-row items-center justify-between pb-2">
                         <CardTitle className="text-lg font-semibold flex items-center gap-2 text-primary">
-                            {task.completed ? (
-                                <UserCheck2 className="w-5 h-5 text-green-500" />
-                            ) : (
-                                <Info className="w-5 h-5 text-yellow-500" />
-                            )}
                             <span className={task.completed ? 'line-through text-gray-500' : ''}>
                                 {task.ticket && task.nameTicket ? task.nameTicket : task.name}
                             </span>
@@ -42,34 +38,13 @@ const TaskItem = ({ task, taskIndex, handleOpen }: any) => {
                             </p>
                         </div>
                     </CardContent>
+                    <CardFooter className='flex justify-end'>
+                        <Avatar className="w-12 h-12">
+                            <AvatarImage src={API_PATH + task.responsible.imageUrl} />
+                            <AvatarFallback>{task.responsible.name}</AvatarFallback>
+                        </Avatar>
+                    </CardFooter>
                 </Card>
-                // <li
-                //     ref={provided.innerRef}
-                //     {...provided.draggableProps}
-                //     {...provided.dragHandleProps}
-                //     className="flex items-center gap-2 cursor-pointer bg-white p-2 rounded shadow-sm mb-2"
-                // >
-                //     <Checkbox
-                //         checked={task.completed}
-                //         disabled
-                //         onCheckedChange={() => toggleTask(labelIndex, taskIndex)}
-                //         className="border-gray-400 data-[state=unchecked]:hover:bg-green-100 data-[state=checked]:bg-green-500 data-[state=checked]:border-green-600 data-[state=checked]:text-white"
-                //     />
-                //     <span
-                //         className={`cursor-pointer text-sm text-gray-500 ${task.completed ? 'line-through text-gray-500' : ''
-                //             } hover:text-blue-500 hover:border-b border-blue-500`}
-                //         onClick={() => handleOpen(task)}
-                //     >
-                //         {task.ticket && task.nameTicket ? task.nameTicket : task.name}
-                //     </span>
-                //     <span className={`text-xs px-2 py-0.5 rounded-full ${task.status === 'completado'
-                //         ? 'bg-green-100 text-green-700'
-                //         : 'bg-yellow-100 text-yellow-700'
-                //         }`}
-                //     >
-                //         {task.status}
-                //     </span>
-                // </li>
             )}
         </Draggable>
     );

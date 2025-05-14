@@ -32,7 +32,7 @@ const TabContentList = () => {
     const { projectId } = useStoreLogin()
     const { message } = useStoreNotification();
     const [searchTerm, setSearchTerm] = useState('');
-console.log(categories)
+
     const addLabel = async () => {
         try {
             if (newLabel.trim() === '') {
@@ -70,7 +70,6 @@ console.log(categories)
     }
 
     const handleOpen = (task: any) => {
-        console.log(task)
         setSelectedTask(task);
         setCreated_by(task.created_by?.name || "N/A")
         setCreatedId(task.created_by?.id || null)

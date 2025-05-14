@@ -21,6 +21,7 @@ import {
     SelectValue,
 } from "../../../../../shared/components/ui/select";
 import { ToasMessage } from "../../../../../components/ToasMessage";
+import { MultiSelect } from "./MultiSelect";
 
 const RegisterSchema = z.object({
     name: z.string().nonempty("Campo requerido."),
@@ -28,7 +29,7 @@ const RegisterSchema = z.object({
     passwordHash: z.string().min(6, "Mínimo 6 caracteres"),
     telephone: z.string().nonempty("Campo requerido."),
     roleId: z.string().nonempty("Campo requerido."),
-    projectId: z.string().nonempty("Campo requerido."),
+    projectIds: z.array(z.string()).nonempty("Selecciona al menos un proyecto"),
 });
 
 interface Role {
@@ -80,11 +81,16 @@ const FormUser = ({ roleData, projectData }: any) => {
             setVisible(true);
 
             const payload = {
-                ...data,
+                name: data.name,
+                email: data.email,
+                passwordHash: data.passwordHash,
+                roleId: data.roleId,
                 telephone: Number(data.telephone),
                 imageUrl: imageUrlRef.current,
+                projectId: data.projectIds[0],
+                project: data.projectIds.map(id => ({ id })),
             };
-            console.log(payload)
+
             const response = await API.register(payload);
 
             if (!response?.data || !response?.success) {
@@ -93,20 +99,14 @@ const FormUser = ({ roleData, projectData }: any) => {
                     description: "No se pudo registrar el usuario.",
                     type: "warning",
                 });
-                return
+                return;
             }
-            form.reset({
-                name: "",
-                email: "",
-                telephone: "",
-                passwordHash: "",
-                roleId: "",
-                projectId: "",
-            });
 
+            form.reset();
             setImagePreview(null);
             setSelectedFileName(null);
             imageUrlRef.current = null;
+
             ToasMessage({
                 title: "Usuario registrado",
                 description: "El usuario se ha registrado correctamente.",
@@ -114,7 +114,7 @@ const FormUser = ({ roleData, projectData }: any) => {
             });
         } catch (err) {
             ToasMessage({
-                title: "Ocurrio un error",
+                title: "Ocurrió un error",
                 description: "El usuario no fue registrado.",
                 type: "error",
             });
@@ -123,6 +123,7 @@ const FormUser = ({ roleData, projectData }: any) => {
             setVisible(false);
         }
     }
+
 
     const [showPassword, setShowPassword] = useState(false);
 
@@ -239,31 +240,26 @@ const FormUser = ({ roleData, projectData }: any) => {
                             {/* Project */}
                             <FormField
                                 control={form.control}
-                                name="projectId"
+                                name="projectIds"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Proyecto</FormLabel>
+                                        <FormLabel>Proyectos</FormLabel>
                                         <FormControl>
-                                            <Select
-                                                value={field.value ?? ""}
-                                                onValueChange={field.onChange}
-                                            >
-                                                <SelectTrigger className="w-full">
-                                                    <SelectValue placeholder="Selecciona un proyecto" />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    {projectData && projectData.map((project: any) => (
-                                                        <SelectItem key={project.id} value={String(project.id)}>
-                                                            {project.name}
-                                                        </SelectItem>
-                                                    ))}
-                                                </SelectContent>
-                                            </Select>
+                                            <MultiSelect
+                                                options={projectData?.map((p: any) => ({
+                                                    label: p.name,
+                                                    value: p.id,
+                                                })) ?? []}
+                                                selected={field.value ?? []}
+                                                onChange={field.onChange}
+                                                placeholder="Selecciona uno o varios proyectos"
+                                            />
                                         </FormControl>
                                         <FormMessage />
                                     </FormItem>
                                 )}
                             />
+
 
                             {/* Imagen de perfil */}
                             <FormItem className="">

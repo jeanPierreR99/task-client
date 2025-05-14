@@ -22,6 +22,8 @@ import { es } from "date-fns/locale"
 import { AlertDeleteTask } from "./AlertDeleteTask"
 import { Badge } from "../../../../../shared/components/ui/badge"
 import { Input } from "../../../../../shared/components/ui/input"
+import ChangeName from "./ChangeName"
+import ChangeDate from "./ChangeDate"
 
 interface Responsible {
     id: string
@@ -103,7 +105,7 @@ const DialogTasks: React.FC<DialogTasksProps> = ({ open, setOpen, task, created_
     const [activities, setActivities] = useState<Activity[]>([])
     const [files, setFiles] = useState<any[]>([]);
     const [loadingSubmitComment, setLoadingSubmitComment] = useState(false)
-    const { id } = useStoreLogin()
+    const { id, role } = useStoreLogin()
     const handleOpenDialog = (subTask: Subtask) => {
 
         if (subTask) {
@@ -118,6 +120,7 @@ const DialogTasks: React.FC<DialogTasksProps> = ({ open, setOpen, task, created_
                 completed: true,
                 status: "completado",
                 descriptionStatus: "Atendido",
+                idUser: id,
                 update_at: GetDay()
             }
             const response = await API.updateTaskCompleted(task.id, newTask)
@@ -148,6 +151,7 @@ const DialogTasks: React.FC<DialogTasksProps> = ({ open, setOpen, task, created_
                 completed: false,
                 status: "pendiente",
                 descriptionStatus: "Aceptado",
+                idUser: id,
                 update_at: GetDay()
             }
             const response = await API.updateTaskCompleted(task.id, newTask)
@@ -491,26 +495,26 @@ const DialogTasks: React.FC<DialogTasksProps> = ({ open, setOpen, task, created_
                     <div className="px-4">
                         <DialogDescription className="flex items-center text-base font-semibold text-foreground">
                             {!task.ticket ? task.name : task.nameTicket}
-                            <ChevronRight size={20} className="ml-2" />
+                            <ChevronRight size={20} className="ml-2" /><ChangeName task={task} />
                         </DialogDescription>
 
                         {task.ticket && !task?.nameTicket && (
                             <div className="flex gap-2 mt-2">
-                                <Input placeholder="Coloque un nombre para la tarea" onChange={(e) => setTicketAsignedName(e.target.value)} />
+                                <Input placeholder="Coloque un nombre para la tarea" className="uppercase" onChange={(e) => setTicketAsignedName(e.target.value.toLocaleUpperCase())} />
                                 <Button variant="outline" onClick={addNameTicket}>Actualizar</Button>
                             </div>
                         )}
 
                         <div className="flex flex-col gap-2 mt-4">
-                            {task.status === "pendiente" ? <Badge className="bg-yellow-100 text-yellow-800">{task.status}</Badge>
-                                : <Badge className="bg-green-100 text-green-800">{task.status}</Badge>
-                            }
+                            {task.status === "pendiente" ? <div className="bg-yellow-100 p-2 text-md border-l-4 border-yellow-600 text-sm text-yellow-600 font-bold">Pendiente</div>
+                                : <div className="bg-green-100 p-2 text-md border-l-4 border-green-600 text-sm text-green-600 font-bold">Completado</div>}
+
                             {task.ticket && <div className="flex gap-2 items-center"><span className="text-sm">Código de Ticket:</span> <span className="text-sm"><Badge className="bg-blue-100 text-blue-400 font-bold">{task.name}</Badge></span></div>
                             }
                             <div className="flex gap-2 items-center"><span className="text-sm">Creado por:</span> <span className="text-sm">{created_by ? created_by : "N/A"}</span></div>
                             <div className="flex gap-2 items-center"><span className="text-sm">Responsable:</span> <span className="text-sm">{task.responsible?.name || "N/A"}</span><ChangeResponsible task={task} /></div>
                             <div className="flex gap-2 items-center"><span className="text-sm">Oficina:</span> <span className="text-sm">{task.office?.siglas || "N/ A"}</span></div>
-                            <div className="flex gap-2 items-center"><span className="text-sm">Fecha de entrega:</span> <span className="text-sm text-orange-500">{`${dateFormatedTwo(task.dateCulmined)}`}</span></div>
+                            <div className="flex gap-2 items-center"><span className="text-sm">Fecha de entrega:</span> <span className="text-sm text-orange-500">{`${dateFormatedTwo(task.dateCulmined)}`}</span><ChangeDate task={task} /></div>
                             <div className="flex flex-col gap-2 "><span className="text-sm">Descripcion</span>
                                 <textarea disabled readOnly rows={3} className="border resize-none rounded-md outline-0 p-2 text-gray-400 text-sm">{task.description}</textarea>
                             </div>
@@ -612,10 +616,10 @@ const DialogTasks: React.FC<DialogTasksProps> = ({ open, setOpen, task, created_
                                                 alt={activity.user.name}
                                                 className="w-8 h-8 rounded-full object-cover mt-1"
                                             />
-                                            <div className="flex flex-col">
+                                            <div className="flex flex-col w-full">
                                                 <span className="text-sm font-medium">{activity.user.name}</span>
                                                 <span className="text-sm text-muted-foreground">{activity.action}</span>
-                                                <span className="text-xs text-muted-foreground">{formatDistanceToNow(new Date(activity.create_at), {
+                                                <span className="text-xs text-muted-foreground text-right">{formatDistanceToNow(new Date(activity.create_at), {
                                                     addSuffix: true,
                                                     locale: es,
                                                 })}</span>
@@ -732,9 +736,9 @@ const DialogTasks: React.FC<DialogTasksProps> = ({ open, setOpen, task, created_
                                 />
                             ))}
                         </div>
-                        {((task.responsible?.id === id) || (createdId === id)) && (
+                        {role == "Administrador" &&
                             <AlertDeleteTask deleteTask={deleteTask} />
-                        )}
+                        }
 
                     </div>
                 </div>

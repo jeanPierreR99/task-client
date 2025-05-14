@@ -23,7 +23,7 @@ const Repository = () => {
 
     return (
         <div>
-            <span className='text-sm text-gray-400'>Repositorio personal</span>
+            <span className='text-sm text-gray-400'>Repositorio del Proyecto</span>
             <br />
             <br />
             <RegisterFolder setDataFile={setDataFile} />

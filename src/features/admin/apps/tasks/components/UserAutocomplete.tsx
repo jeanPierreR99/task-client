@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import { Input } from "../../../../../shared/components/ui/input"
 import { API } from "../../../../../shared/js/api"
+import useStoreLogin from "../../../../../shared/state/useStoreLogin"
+import { useParams } from "react-router-dom"
 
 type UserType = {
     id: string
@@ -23,13 +25,17 @@ export const UserAutoComplete = ({ field, onSelect, setUserId }: Props) => {
     const [search, setSearch] = useState(field.value || "")
     const [suggestions, setSuggestions] = useState<UserType[]>([])
     const [showSuggestions, setShowSuggestions] = useState(false)
+    const { projectId } = useStoreLogin();
+    const { id } = useParams<{ id: string }>();
+    
+    const projectIdParam = id ? id : projectId;
 
     useEffect(() => {
         if (!search || search.length < 3) return setSuggestions([])
 
         const delay = setTimeout(async () => {
             try {
-                const response = await API.getUserSugestion(search)
+                const response = await API.getUserSugestion(search, projectIdParam)
                 if (response?.success && response.data) {
                     setSuggestions(response.data)
                 }

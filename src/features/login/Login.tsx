@@ -46,7 +46,7 @@ const Login = () => {
                 userData.email,
                 userData.id,
                 userData.telephone,
-                userData.project.id
+                userData.projectId
             );
             window.location.reload();
         } catch (error) {
