@@ -24,29 +24,23 @@ const TaskItem = ({ task, taskIndex, handleOpen }: any) => {
                     </CardHeader>
 
                     <CardContent className="text-sm text-muted-foreground space-y-2">
-                        <div className="flex items-start gap-2">
-                            <p><span className="font-medium text-gray-900">Responsable:</span> {task.responsible?.name || '—'}</p>
-                        </div>
-                        <div className="flex items-start gap-2">
-                            <p>
-                                <span className="font-medium text-gray-900">Fecha de entrega:</span>{' '}
-                                {task.dateCulmined ? (
-                                    <>
-                                        {format(parseISO(task.dateCulmined), 'yyyy-MM-dd')}{' '}
-                                    </>
-                                ) : '—'}
-                            </p>
-                        </div>
                     </CardContent>
-                    <CardFooter className='flex justify-end'>
+                    <CardFooter className='flex gap-2'>
                         <Avatar className="w-12 h-12">
                             <AvatarImage src={API_PATH + task.responsible.imageUrl} />
                             <AvatarFallback>{task.responsible.name}</AvatarFallback>
                         </Avatar>
+                        <span className='text-gray-500 text-sm'> {task.responsible?.name || '—'} Reeys Frisancho Jean Pierre, {task.dateCulmined ?
+                            <span className={task.completed ? 'line-through text-gray-500 font-bold' : ' font-bold'}>
+                                ({format(parseISO(task.dateCulmined), 'yyyy-MM-dd')})
+                            </span>
+                            : '—'}</span>
+
                     </CardFooter>
-                </Card>
+
+                </Card >
             )}
-        </Draggable>
+        </Draggable >
     );
 };
 

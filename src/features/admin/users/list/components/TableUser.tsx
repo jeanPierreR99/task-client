@@ -12,6 +12,12 @@ type UserRole = {
     name: string;
 };
 
+type Project = {
+    id: string;
+    name: string;
+    description: string;
+};
+
 type User = {
     id: string;
     name: string;
@@ -22,7 +28,7 @@ type User = {
     active: boolean;
     roleId: string;
     role: UserRole;
-    project: { name: string };
+    projects: Project[];
 };
 
 export default function TableUser() {
@@ -106,15 +112,17 @@ export default function TableUser() {
                             <td className="px-6 py-4 text-sm text-gray-700">{user.name}</td>
                             <td className="px-6 py-4 text-sm text-gray-700">{user.telephone}</td>
                             <td className="px-6 py-4 text-sm text-blue-500">{user.email}</td>
-                            <td className="px-6 py-4 text-sm text-yellow-500">{user.project?.name || '-'}</td>
+                            <td className="px-6 py-4 flex gap-2 text-sm flex-col items-center justify-center">{user.projects?.map((project) => <span className="bg-yellow-100 text-yellow-700 w-fit text-sm  px-3 rounded-full">
+                                {project.name}
+                            </span>) || '-'}</td>
                             <td className="px-6 py-4 text-sm text-gray-700">{user.role.name}</td>
                             <td className="px-6 py-4 text-sm text-gray-700">
                                 {user.active ? (
-                                    <span className="bg-green-100 text-green-700 w-fit text-sm py-[2px] px-3 rounded-full">
+                                    <span className="bg-green-100 text-green-700 w-fit text-sm py-[3px] px-3 rounded-full">
                                         Activo
                                     </span>
                                 ) : (
-                                    <span className="bg-red-100 text-red-700 w-fit text-sm py-[2px] px-3 rounded-full">
+                                    <span className="bg-red-100 text-red-700 w-fit text-sm py-[3px] px-3 rounded-full">
                                         Baja
                                     </span>
                                 )}
