@@ -107,6 +107,7 @@ export interface createProjectDto {
 }
 
 export interface CreateTicketDto {
+    id: string;
     code: string;
     description: string;
     requestedBy: string;
@@ -114,5 +115,6 @@ export interface CreateTicketDto {
     create_at: string;
     status: boolean;
     update_at: string;
-    descriptionStatus: string
+    descriptionStatus: string,
+    status_string: string;
 }

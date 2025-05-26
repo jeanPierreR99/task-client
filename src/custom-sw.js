@@ -27,3 +27,11 @@ self.addEventListener('notificationclick', event => {
   event.notification.close()
   event.waitUntil(clients.openWindow(event.notification.data))
 })
+
+self.addEventListener('install', event => {
+  self.skipWaiting(); // ⬅️ fuerza la activación del nuevo SW sin esperar
+})
+
+self.addEventListener('activate', event => {
+  clients.claim(); // ⬅️ toma control de las pestañas abiertas
+})

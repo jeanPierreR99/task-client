@@ -30,7 +30,7 @@ const TaskItem = ({ task, taskIndex, handleOpen }: any) => {
                             <AvatarImage src={API_PATH + task.responsible.imageUrl} />
                             <AvatarFallback>{task.responsible.name}</AvatarFallback>
                         </Avatar>
-                        <span className='text-gray-500 text-sm'> {task.responsible?.name || '—'} Reeys Frisancho Jean Pierre, {task.dateCulmined ?
+                        <span className='text-gray-500 text-sm'> {task.responsible?.name || '—'}, {task.dateCulmined ?
                             <span className={task.completed ? 'line-through text-gray-500 font-bold' : ' font-bold'}>
                                 ({format(parseISO(task.dateCulmined), 'yyyy-MM-dd')})
                             </span>

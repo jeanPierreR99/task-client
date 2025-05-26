@@ -285,4 +285,18 @@ export const API = {
         const response = await api.post(`/notifications/subscribe`, data)
         return response.data
     },
+
+    //DASHBOARD
+    getTotalsDashboard: async (userId: any) => {
+        const response = await api.get(`/dashboard/${userId}`)
+        return response.data
+    },
+    getCompleteDashboard: async (userId: any) => {
+        const response = await api.get(`/dashboard/user/${userId}/complete`)
+        return response.data
+    },
+    getPendingDashboard: async (userId: any) => {
+        const response = await api.get(`/dashboard/user/${userId}/pending`)
+        return response.data
+    },
 };

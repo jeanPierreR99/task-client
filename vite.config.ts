@@ -32,6 +32,9 @@ export default defineConfig({
           { src: "/icons/icon-512x512.png", sizes: "512x512", type: "image/png" },
         ],
       },
+      injectManifest: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
+      },
     }),
   ],
   optimizeDeps: {

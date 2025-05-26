@@ -260,13 +260,16 @@ const TaskForm: React.FC<TaskFormProps> = ({ categoryId, setOpen, date }) => {
                                     value={field.value ?? ""}
                                     onValueChange={field.onChange}
                                 >
-                                    <SelectTrigger className="w-full">
+                                    <SelectTrigger className="w-full ">
                                         <SelectValue placeholder="Selecciona una oficina" />
                                     </SelectTrigger>
-                                    <SelectContent>
-                                        {office && office.map((offi: Office, index) =>
-                                            <SelectItem className="cursor-pointer hover:bg-gray-50" key={index} value={offi.id}>{offi.siglas}</SelectItem>
-                                        )}
+                                    <SelectContent className="w-[320px]">
+                                        {office && office.slice()
+                                            .sort((a, b) => a.name.localeCompare(b.name)).map((offi: Office, index) =>
+                                                <SelectItem className="cursor-pointer hover:bg-gray-50" key={index} value={offi.id}>
+                                                    {`${offi.name} (${offi.siglas})`}
+                                                </SelectItem>
+                                            )}
                                     </SelectContent>
                                 </Select>
                             </FormControl>

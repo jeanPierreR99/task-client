@@ -1,6 +1,5 @@
 import { NavLink } from 'react-router-dom';
 import NotTasks from './NotTasks';
-import { ClockAlert } from 'lucide-react';
 import { dateFormatedTwo } from '../../../../../lib/date';
 
 const Tab3 = ({ task }: any) => {
@@ -11,10 +10,9 @@ const Tab3 = ({ task }: any) => {
                     to={"tasks"}
                     key={index}
 
-                    className="flex w-full px-2 hover:bg-gray-100 gap-2 items-center justify-between border-b py-2 text-gray-500 text-sm"
+                    className="flex w-full flex-col md:flex-row px-2 hover:bg-gray-50 md:gap-2 md:items-center justify-between border-b py-2 text-gray-500 text-sm"
                 >
-                    <div className="flex gap-2">
-                        <ClockAlert size={18} />
+                    <div>
                         <span>{task.name}</span>
                     </div>
                     <span className="text-orange-400">para el {dateFormatedTwo(task.dateCulmined)}</span>

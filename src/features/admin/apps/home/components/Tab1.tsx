@@ -1,4 +1,3 @@
-import { CheckCircle } from "lucide-react";
 import { AlertMessage } from "../../../../../components/AlertMessage";
 import NotTasks from "./NotTasks";
 import { NavLink } from "react-router-dom";
@@ -43,10 +42,9 @@ const Tab1 = () => {
                     <NavLink
                         to="tasks"
                         key={taskIndex}
-                        className="flex w-full px-2 hover:bg-gray-100 gap-2 items-center justify-between border-b py-2 text-gray-500 text-sm"
+                        className="flex flex-col md:flex-row w-full px-2 hover:bg-gray-50 md:gap-2 md:items-center justify-between border-b py-2 text-gray-500 text-sm"
                     >
-                        <div className="flex gap-2">
-                            <CheckCircle size={18} />
+                        <div className="">
                             <span>{task.name}</span>
                         </div>
                         <span className="text-green-400"> para el {dateFormatedTwo(task.dateCulmined)}</span>

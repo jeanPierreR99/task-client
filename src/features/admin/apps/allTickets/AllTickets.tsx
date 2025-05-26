@@ -7,7 +7,7 @@ import {
     CardTitle,
 } from "../../../../shared/components/ui/card";
 import { Badge } from "../../../../shared/components/ui/badge";
-import { Briefcase, User, Info, Search, UserCheck2, CalendarCheck, CalendarClock, Loader2 } from "lucide-react";
+import { Briefcase, User, Info, Search, UserCheck2, CalendarCheck, CalendarClock, Loader2, Eraser } from "lucide-react";
 import { Input } from "../../../../shared/components/ui/input";
 import {
     Select,
@@ -41,6 +41,20 @@ const getStatusBadge = (status: string) => {
     }
 };
 
+const getCardBorderClass = (status: string) => {
+    switch (status) {
+        case 'Normal':
+            return 'border-gray-200';
+        case 'Moderado':
+            return 'border-yellow-200 bg-yellow-50/40';
+        case 'Urgente':
+            return 'border-red-200 bg-red-50/40';
+        default:
+            return 'border-gray-200';
+    }
+};
+
+
 const AllTickets = () => {
     const [statusFilter, setStatusFilter] = useState("all");
     const [search, setSearch] = useState('');
@@ -55,6 +69,20 @@ const AllTickets = () => {
         isLoading,
     } = useApiFetch(["all_tasks"], () => API.getTickets());
 
+
+
+    const handleChange = async (ticketId: string, value: string) => {
+        try {
+            const payload = {
+                status_string: value,
+            }
+            await API.updateTicket(ticketId, payload);
+
+        } catch (error) {
+            console.error("Error actualizando estado:", error);
+        }
+    };
+
     useEffect(() => {
         if (data?.data && Array.isArray(data.data)) {
             setTickets(data.data);
@@ -65,6 +93,7 @@ const AllTickets = () => {
         const socket = io(API_PATH);
 
         socket.on('updateTicket', (eventData) => {
+            console.log(eventData)
             setTickets((prev) => {
                 const updated = eventData.data;
                 const existingIndex = prev.findIndex((ticket: any) => ticket.id === updated.id);
@@ -112,7 +141,7 @@ const AllTickets = () => {
             <br /><br />
 
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
-                <div className="relative max-w-sm">
+                <div className="relative w-sm">
                     <Search className="absolute left-3 top-2.5 text-gray-400" size={18} />
                     <Input
                         placeholder="Buscar por código"
@@ -144,8 +173,13 @@ const AllTickets = () => {
             {error && <AlertMessage message={`Ocurrió un error al cargar datos: ${error}`} />}
 
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                {currentTickets.map((ticket: CreateTicketDto, index: number) => (
-                    <Card key={index} className="shadow-md border border-gray-200 hover:shadow-lg transition">
+                {currentTickets.length > 0 ? (currentTickets.map((ticket: CreateTicketDto, index: number) => (
+                    // <Card key={index} className="shadow-md border border-gray-200 hover:shadow-lg transition">
+                    <Card
+                        key={index}
+                        className={`shadow-md border hover:shadow-lg transition ${getCardBorderClass(ticket.status_string)}`}
+                    >
+
                         <CardHeader className="flex flex-col pb-2">
                             <CardTitle className="text-lg font-semibold flex items-center gap-2 text-primary">
                                 {!ticket.status ? (
@@ -197,13 +231,32 @@ const AllTickets = () => {
                                     )}
                                 </p>
                             </div>
+                            <div className="flex gap-2 items-center">
+                                <Eraser className="w-4 h-4 mt-1 text-gray-500" />
+                                <p className="flex gap-2 items-center"><span className="font-medium text-gray-900">Estado: </span>
+                                    <Select
+                                        value={ticket.status_string}
+                                        onValueChange={(newValue) => handleChange(ticket.code, newValue)}
+                                    >
+                                        <SelectTrigger className="w-full">
+                                            <SelectValue placeholder="Seleccionar estado" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="Normal">Normal</SelectItem>
+                                            <SelectItem value="Moderado">Moderado</SelectItem>
+                                            <SelectItem value="Urgente">Urgente</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+
+                                </p>
+                            </div>
                         </CardContent>
 
                         <CardFooter className="flex justify-end">
                             {getStatusBadge(ticket.descriptionStatus)}
                         </CardFooter>
                     </Card>
-                ))}
+                ))) : (!isLoading && <p className="text-sm text-gray-500">No se encontraron tickets.</p>)}
             </div>
 
             {totalPages > 1 && (

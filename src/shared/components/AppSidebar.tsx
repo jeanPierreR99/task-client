@@ -1,4 +1,4 @@
-import { ClipboardList, Folder, Home, ListTodo, ListTree, Logs, MessageSquareMore, PackagePlus, Tickets, UserRoundPlus } from "lucide-react"
+import { ChartBarIncreasing, ClipboardList, Folder, Home, ListTodo, ListTree, Logs, MessageSquareMore, PackagePlus, Tickets, UserRoundPlus } from "lucide-react"
 
 import {
   Sidebar,
@@ -15,6 +15,13 @@ import { Separator } from "./ui/separator"
 import useStoreLogin from "../state/useStoreLogin"
 import { API_PATH } from "../js/api"
 import { useLocation } from "react-router-dom"
+import { getStorage } from "../js/functions"
+
+interface Project {
+  id: string;
+  name: string;
+  description: string;
+}
 
 const items = [
   {
@@ -32,13 +39,8 @@ const items = [
     url: "/tasks-me",
     icon: ListTree,
   },
-  // {
-  //   title: "Proyectos",
-  //   url: "/projects",
-  //   icon: LucideGroup,
-  // },
   {
-    title: "Tareas Generadas",
+    title: "Tareas de Tickets",
     url: "/all-tasks",
     icon: Logs,
   },
@@ -56,6 +58,11 @@ const items = [
     title: "Repositorio",
     url: "/repository",
     icon: Folder,
+  },
+  {
+    title: "Mi reporte",
+    url: "/report",
+    icon: ChartBarIncreasing,
   },
 ]
 
@@ -83,21 +90,18 @@ const itemsInventory = [
     url: "/inventory/print-scanners",
     icon: PackagePlus,
   },
-  // {
-  //   title: "Lista",
-  //   url: "/users/list",
-  //   icon: DatabaseBackupIcon,
-  // },
-  // {
-  //   title: "Categorias",
-  //   url: "/users/activities",
-  //   icon: Tag,
-  // },
 ]
 
+
 export function AppSidebar() {
-  const { name, email, imageUrl, role } = useStoreLogin();
+  const { name, email, imageUrl, role, projectId } = useStoreLogin();
   const location = useLocation();
+
+  const getNameProject = () => {
+    const projectStorage = getStorage();
+    const project = projectStorage.projects.find((project: Project) => project.id === projectId);
+    return project ? project.name : 'Proyecto no encontrado';
+  }
 
   return (
     <Sidebar>
@@ -106,6 +110,8 @@ export function AppSidebar() {
           {!imageUrl ? <span className="font-black w-20 h-20 text-4xl flex items-center justify-center bg-orange-400 rounded-full">A</span> : <img className="w-30 h-30 rounded-full" src={API_PATH + imageUrl} alt="" />}
           <span className="text-sm font-black">{name}</span>
           <span className="text-sm text-gray-500">{email}</span>
+          <span className="text-sm text-blue-500">({getNameProject()})</span>
+
         </div>
         <Separator></Separator>
         <SidebarGroup>

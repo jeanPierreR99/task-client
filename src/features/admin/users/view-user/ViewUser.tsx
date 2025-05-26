@@ -5,12 +5,13 @@ import { User } from '../../apps/tasks/store/useStoreTask';
 import { Loader2 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '../../../../shared/components/ui/avatar';
 import { TabUserView } from './components/TabUserView';
+import DashBoard from './components/DashBoard';
 
 const ViewUser = () => {
     const { id } = useParams<{ id: string }>();
     const [user, setUser] = useState<User>()
     const [loading, setLoading] = useState(false)
-    
+
     const getUserId = async () => {
         setLoading(true);
         try {
@@ -48,6 +49,9 @@ const ViewUser = () => {
             {loading && <Loader2 className="animate-spin text-blue-400 m-auto"></Loader2>}
             <br />
             <TabUserView user={user} />
+            <br />
+            <br />
+            <DashBoard userId={id} />
         </div>
     );
 };

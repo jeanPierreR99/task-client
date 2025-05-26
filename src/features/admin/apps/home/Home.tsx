@@ -15,9 +15,10 @@ interface Project {
     name: string;
     description: string;
 }
+
 const Home = () => {
     const [users, setUsers] = useState<User[]>([])
-    const { name, projectId } = useStoreLogin();
+    const { name, projectId, } = useStoreLogin();
     const [counTask, setCountTask] = useState("");
     const [project, setProject] = useState<Project[] | null>(null);
 
@@ -38,6 +39,12 @@ const Home = () => {
         window.location.reload();
     }
 
+    const getNameProject = () => {
+        const projectStorage = getStorage();
+        const project = projectStorage.projects.find((project: Project) => project.id === projectId);
+        return project ? project.name : 'Proyecto no encontrado';
+    }
+
     useEffect(() => {
         const projectStorage = getStorage()
         setProject(projectStorage.projects)
@@ -47,15 +54,16 @@ const Home = () => {
     return (
         <div className='pt-10'>
             <div className='flex flex-col gap-2 items-center'>
-                <span className="text-md font-light">{dateFormated().toLocaleUpperCase()}</span>
-                <span className="text-3xl">Hola, {name}</span>
+                <span className="text-md font-light text-center">{dateFormated().toLocaleUpperCase()}</span>
+                <span className="text-3xl text-center">Hola, {name}</span>
+                <span className="text-3xl text-blue-500 text-center">Ahora estas en el proyecto ({getNameProject()})</span>
                 <div className='flex gap-3 md:gap-12 text-gray-400 text-sm bg-gray-100 py-2 px-4 rounded-full'>
-                    <div className='flex gap-2 items-center'><CheckCheck></CheckCheck><span className='text-2xl'>{counTask && counTask.length}</span>Tareas para hoy</div>
+                    <div className='flex gap-2 items-center'><CheckCheck></CheckCheck><span className='text-2xl'>{counTask && counTask.length}</span>Tareas pendientes</div>
                     <div className='flex gap-2 items-center'><UserPenIcon></UserPenIcon><span className='text-2xl'>{users && users.length}</span>Colaboradores</div>
                 </div>
             </div>
             <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-10'>
-                <div className='md:col-span-2 h-[400px] overflow-y-auto w-full shadow-lg rounded-md p-4 hover:bg-gray-50 duration-300 ease-linear'>
+                <div className='md:col-span-2 h-[400px] overflow-y-auto w-full shadow-lg rounded-md p-4'>
                     <TabTasks></TabTasks>
                 </div>
                 <div className='shadow-lg h-[400px] rounded-md p-4'>

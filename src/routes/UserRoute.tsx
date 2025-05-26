@@ -15,6 +15,7 @@ const Config = React.lazy(() => import("../features/admin/config/Config"));
 const AllTasks = React.lazy(() => import("../features/admin/apps/allTasks/AllTasks"))
 const AllTickets = React.lazy(() => import("../features/admin/apps/allTickets/AllTickets"))
 const TaskMe = React.lazy(() => import("../features/admin/apps/task-me/TaskMe"))
+const Report = React.lazy(() => import("../features/admin/apps/report/Report"))
 
 const withSuspense = (Component: React.ReactNode) => (
     <Suspense fallback={<LoadingFallback />}>{Component}</Suspense>
@@ -57,6 +58,10 @@ export const UserRoutes: RouteObject[] = [
             {
                 path: "repository",
                 element: withSuspense(<Repository />),
+            },
+            {
+                path: "report",
+                element: withSuspense(<Report />),
             },
         ],
     },
