@@ -1,8 +1,10 @@
 "use client"
 
 import { Bar, BarChart, XAxis, YAxis } from "recharts"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../../../../shared/components/ui/card"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../../../../../shared/components/ui/card"
 import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from "../../../../../shared/components/ui/chart"
+import { IdataComplete } from "./DashBoard"
+import { Clock10Icon } from "lucide-react"
 
 const chartConfig = {
     task: {
@@ -15,14 +17,8 @@ const chartConfig = {
     },
 } satisfies ChartConfig
 
-interface Idata {
-    date: string;
-    task: number;
-    ticket: number
-}
-
 interface PropChart {
-    data: Idata[] | []
+    data: IdataComplete
 }
 const ChartBarPending: React.FC<PropChart> = ({ data }) => {
     return (
@@ -33,7 +29,7 @@ const ChartBarPending: React.FC<PropChart> = ({ data }) => {
             </CardHeader>
             <CardContent>
                 <ChartContainer config={chartConfig}>
-                    <BarChart accessibilityLayer data={data}>
+                    <BarChart accessibilityLayer data={data.chart}>
                         <XAxis
                             dataKey="date"
                             tickLine={false}
@@ -68,6 +64,48 @@ const ChartBarPending: React.FC<PropChart> = ({ data }) => {
                     </BarChart>
                 </ChartContainer>
             </CardContent>
+            {data.data.length > 0 &&
+                <CardFooter className="flex-col items-start md:items-center">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <CardTitle>Lista de tareas</CardTitle>
+                            <div className="mt-2">
+                                {data.data
+                                    .filter((item) => item.ticket === false)
+                                    .map((item, index) =>
+                                        <li key={index} className="flex gap-2 text-sm text-gray-500">
+                                            <Clock10Icon size={15}></Clock10Icon>
+                                            <p>{item.name}</p>
+                                            <p className="font-bold">({new Date(item.dateCulmined).toLocaleDateString("es", {
+                                                month: "short",
+                                                day: "numeric",
+                                            })})
+                                            </p>
+                                        </li>
+                                    )}
+                            </div>
+                        </div>
+                        <div>
+                            <CardTitle>Lista de tickets</CardTitle>
+                            <div className="mt-2">
+                                {data.data
+                                    .filter((item) => item.ticket === true)
+                                    .map((item, index) =>
+                                        <li key={index} className="flex gap-2 text-sm text-gray-500">
+                                            <Clock10Icon size={15}></Clock10Icon>
+                                            <p>{item.name}</p>
+                                            <p className="font-bold">({new Date(item.dateCulmined).toLocaleDateString("es", {
+                                                month: "short",
+                                                day: "numeric",
+                                            })})
+                                            </p>
+                                        </li>
+                                    )}
+                            </div>
+                        </div>
+                    </div>
+                </CardFooter>
+            }
         </Card>
     )
 }

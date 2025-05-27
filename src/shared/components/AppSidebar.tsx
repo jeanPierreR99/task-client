@@ -106,7 +106,7 @@ export function AppSidebar() {
   return (
     <Sidebar>
       <SidebarContent >
-        <div className="w-full text-center h-[180px] py-4 px-5 mb-4 flex flex-col items-center">
+        <div className="w-full text-center max-h-[210px] py-4 px-5 mb-4 flex flex-col items-center">
           {!imageUrl ? <span className="font-black w-20 h-20 text-4xl flex items-center justify-center bg-orange-400 rounded-full">A</span> : <img className="w-30 h-30 rounded-full" src={API_PATH + imageUrl} alt="" />}
           <span className="text-sm font-black">{name}</span>
           <span className="text-sm text-gray-500">{email}</span>

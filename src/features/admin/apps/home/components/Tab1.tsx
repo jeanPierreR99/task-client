@@ -42,7 +42,7 @@ const Tab1 = () => {
                     <NavLink
                         to="tasks"
                         key={taskIndex}
-                        className="flex flex-col md:flex-row w-full px-2 hover:bg-gray-50 md:gap-2 md:items-center justify-between border-b py-2 text-gray-500 text-sm"
+                        className="flex flex-col md:flex-row w-full px-2 hover:bg-gray-50  duration-300 ease-linear md:gap-2 md:items-center justify-between border-b py-2 text-gray-500 text-sm"
                     >
                         <div className="">
                             <span>{task.name}</span>

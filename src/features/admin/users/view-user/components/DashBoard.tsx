@@ -4,25 +4,62 @@ import ChartBarComplete from './Chart-bar-complete';
 import ChartBarPending from './Chart-bar-pending';
 import { API } from '../../../../../shared/js/api';
 import { Loader2 } from 'lucide-react';
+import { DateRangePicker } from './DateRangePicker';
+import { DateRange } from 'react-day-picker';
+import ChartBartGradient from './Chart-bar-gradient';
 
-interface Itotal {
+export interface Itotal {
     taskCompleted: number;
     taskPending: number;
     ticketCompleted: number;
     ticketPending: number;
 }
 
-interface Idata {
+export interface Ichart {
     date: string;
     task: number;
     ticket: number
 }
+export interface Idata {
+    name: string;
+    ticket: boolean;
+    dateCulmined: string;
+}
+
+export interface IdataComplete {
+    chart: Ichart[];
+    data: Idata[];
+}
+const today = new Date();
 
 const DashBoard = ({ userId }: any) => {
     const [dataTotal, setDataTotal] = useState<Itotal | null>(null)
-    const [dataCompleted, setDataCompleted] = useState<Idata[]>([])
-    const [dataPending, setDataPending] = useState<Idata[]>([])
+    const [dataCompleted, setDataCompleted] = useState<IdataComplete>()
+    const [dataRange, setDataRange] = useState<IdataComplete>()
+    const [dataPending, setDataPending] = useState<IdataComplete>()
     const [loading, setLoading] = useState<boolean>(true);
+    const [dateRange, setDateRange] = useState<DateRange | undefined>({
+        from: today,
+        to: today,
+    });
+
+    const getConpleteRangeDateDashboard = async () => {
+        try {
+            const response = await API.getConpleteRangeDateDashboard(
+                userId,
+                dateRange?.from ? dateRange.from.toISOString() : '',
+                dateRange?.to ? dateRange.to.toISOString() : ''
+            );
+            console.log(response)
+            if (response?.success) {
+                setDataRange(response.data);
+            } else {
+                console.error("Error al obtener totales del dashboard");
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     const getDataTotal = async () => {
         try {
@@ -86,9 +123,14 @@ const DashBoard = ({ userId }: any) => {
     }, [userId]);
 
 
+    useEffect(() => {
+        console.log(dateRange)
+        getConpleteRangeDateDashboard()
+    }, [setDateRange, dateRange])
+
 
     return (
-        <div>
+        <div id="report-pdf" className='flex flex-col gap-4'>
             <div className='grid gap-4 grid-cols-1 md:grid-cols-4'>
                 <Card className="p-4 shadow-lg border-none bg-cyan-400 black hover:scale-95 duration-300">
                     <p className="text-sm">Tareas completadas</p>
@@ -101,7 +143,7 @@ const DashBoard = ({ userId }: any) => {
                     <h3 className="text-2xl font-bold">{dataTotal?.taskPending}</h3>
                 </Card>
                 <Card className="p-4  shadow-lg border-none bg-blue-400 text-white hover:scale-95 duration-300">
-                    <p className="text-sm">Tickets completados</p>
+                    <p className="text-sm">Tickets atendidos</p>
                     {loading && <Loader2 className='animate-spin text-whie' />}
                     <h3 className="text-2xl font-bold">{dataTotal?.ticketCompleted}</h3>
                 </Card>
@@ -111,10 +153,13 @@ const DashBoard = ({ userId }: any) => {
                     <h3 className="text-2xl font-bold">{dataTotal?.ticketPending}</h3>
                 </Card>
             </div>
-
+            <div className='flex flex-col gap-4'>
+                <DateRangePicker date={dateRange} setDate={setDateRange} />
+                {dataRange && <ChartBartGradient data={dataRange} />}
+            </div>
             <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-4'>
-                <ChartBarComplete data={dataCompleted} />
-                <ChartBarPending data={dataPending} />
+                {dataCompleted && <ChartBarComplete data={dataCompleted} />}
+                {dataPending && <ChartBarPending data={dataPending} />}
             </div>
         </div>
     );

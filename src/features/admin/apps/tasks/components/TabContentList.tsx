@@ -18,6 +18,7 @@ import { GetDay } from '../../../../../lib/date';
 import { ToasMessage } from '../../../../../components/ToasMessage';
 import useStoreLogin from '../../../../../shared/state/useStoreLogin';
 import useStoreNotification from '../../../../../shared/state/useStoreNotification';
+import ChangeNameCategory from './ChangeNameCategory';
 
 const TabContentList = () => {
     const [newLabel, setNewLabel] = useState('');
@@ -178,6 +179,9 @@ const TabContentList = () => {
                                         >
                                             +
                                         </Button>
+                                    </TooltipWrapper>
+                                    <TooltipWrapper content="Cambiar nombre de categoría">
+                                        <ChangeNameCategory category={label} />
                                     </TooltipWrapper>
                                     {label.index !== true && <TooltipWrapper content='Eliminar'>
                                         <Button onClick={(e) => {

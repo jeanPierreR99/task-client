@@ -19,7 +19,7 @@ function App() {
     }, []);
 
     if (!isAuthChecked) {
-        return <div></div>;
+        return <div className="text-center p-10">Verificando sesión...</div>;
     }
 
     const router = createBrowserRouter(

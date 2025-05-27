@@ -73,6 +73,11 @@ export const API = {
         return response.data
     },
 
+    updateCategory: async (categoryId: string, data: any) => {
+        const response = await api.patch("/categories/" + categoryId, data)
+        return response.data
+    },
+
     //role
     getRole: async () => {
         const response = await api.get("/roles")
@@ -297,6 +302,10 @@ export const API = {
     },
     getPendingDashboard: async (userId: any) => {
         const response = await api.get(`/dashboard/user/${userId}/pending`)
+        return response.data
+    },
+    getConpleteRangeDateDashboard: async (userId: string, start: string, end: string) => {
+        const response = await api.get(`/dashboard?userId=${userId}&start=${start}&end=${end}`)
         return response.data
     },
 };

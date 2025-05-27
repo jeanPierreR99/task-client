@@ -10,7 +10,7 @@ const Tab3 = ({ task }: any) => {
                     to={"tasks"}
                     key={index}
 
-                    className="flex w-full flex-col md:flex-row px-2 hover:bg-gray-50 md:gap-2 md:items-center justify-between border-b py-2 text-gray-500 text-sm"
+                    className="flex w-full flex-col md:flex-row px-2 hover:bg-gray-50  duration-300 ease-linear md:gap-2 md:items-center justify-between border-b py-2 text-gray-500 text-sm"
                 >
                     <div>
                         <span>{task.name}</span>

@@ -24,6 +24,7 @@ import { Badge } from "../../../../../shared/components/ui/badge"
 import { Input } from "../../../../../shared/components/ui/input"
 import ChangeName from "./ChangeName"
 import ChangeDate from "./ChangeDate"
+import { MentionsInput, Mention } from "react-mentions";
 
 interface Responsible {
     id: string
@@ -91,6 +92,52 @@ interface Activity {
     create_at: string;
     user: User;
 }
+
+const mentionInputStyle = {
+    control: {
+        backgroundColor: "#fff",
+        fontSize: 14,
+        fontWeight: "normal"
+    },
+    "&multiLine": {
+        control: {
+            minHeight: 63
+        },
+        highlighter: {
+            padding: 9,
+            border: "1px solid transparent"
+        },
+        input: {
+            padding: 4,
+        }
+    },
+    "&singleLine": {
+        display: "inline-block",
+        width: 180,
+        highlighter: {
+            padding: 1,
+            border: "1px solid transparent"
+        },
+        input: {
+            padding: 1,
+            border: "1px solid silver"
+        }
+    },
+    suggestions: {
+        list: {
+            backgroundColor: "white",
+            border: "1px solid rgba(0,0,0,0.15)",
+            fontSize: 14
+        },
+        item: {
+            padding: "5px 15px",
+            borderBottom: "1px solid rgba(0,0,0,0.15)",
+            "&focused": {
+                backgroundColor: "#cee4e5"
+            }
+        }
+    }
+};
 
 const DialogTasks: React.FC<DialogTasksProps> = ({ open, setOpen, task, created_by, createdId }) => {
     const [openSheet, setOpenSheet] = useState(false);
@@ -222,6 +269,22 @@ const DialogTasks: React.FC<DialogTasksProps> = ({ open, setOpen, task, created_
     const removeFile = (index: number) => {
         setSelectedFiles((prev) => prev.filter((_, i) => i !== index));
     };
+
+
+    const [users, setUsers] = useState([]);
+
+    useEffect(() => {
+        const fetchUsers = async () => {
+            const res = await API.getAllUsers(); // Asegúrate que esto te devuelve { id, name }
+            const formatted = res.data.map((u: any) => ({
+                id: u.id,
+                display: u.name,
+            }));
+            setUsers(formatted);
+        };
+        fetchUsers();
+    }, []);
+
 
     const handleComment = async () => {
         if (!labelComment.trim()) {
@@ -554,7 +617,7 @@ const DialogTasks: React.FC<DialogTasksProps> = ({ open, setOpen, task, created_
                                                 <div className="flex flex-col w-full">
                                                     <span className="text-sm font-medium">{comment.user.name}</span>
                                                     <div className="grid grid-cols-1 gap-1">
-                                                        <span className="text-sm text-muted-foreground">{comment.comment}</span>
+                                                        <p className="text-sm text-muted-foreground" dangerouslySetInnerHTML={{ __html: comment.comment }} />
                                                         {comment.files &&
                                                             comment.files.map((commentFile: any, index: number) => {
                                                                 const url = API_PATH + commentFile.url;
@@ -662,13 +725,21 @@ const DialogTasks: React.FC<DialogTasksProps> = ({ open, setOpen, task, created_
                 </div>
                 <div className="flex gap-4 flex-col bg-gray-100 p-4 border-t">
                     <div className="rounded-md border w-full p-2 flex flex-col bg-white">
-                        <textarea
-                            rows={3}
-                            placeholder="Agregar un comentario"
+
+                        <MentionsInput
+                            placeholder="Escribe un comentario y menciona a alguien con @"
                             value={labelComment}
                             onChange={(e) => setLabelComment(e.target.value)}
-                            className="p-2 resize-none text-sm outline-0 text-gray-500 w-full"
-                        ></textarea>
+                            style={mentionInputStyle}
+                        >
+                            <Mention
+                                trigger="@"
+                                data={users}
+                                markup="<span class='formated-text'>@__display__</span>"
+                                displayTransform={(_id, display) => `@${display}`}
+                            />
+                        </MentionsInput>
+
 
                         <div className="mt-2 flex flex-wrap gap-2 items-center">
                             {selectedFiles.map((file, index) => {
@@ -702,7 +773,7 @@ const DialogTasks: React.FC<DialogTasksProps> = ({ open, setOpen, task, created_
 
                         <div className="flex items-center justify-between mt-2">
                             <TooltipWrapper content="subir archivo">
-                                <label className="text-gray-400 hover:bg-gray-100 p-1 transition-all duration-300 rounded-md text-sm cursor-pointer hover:underline">
+                                <label className="cursor-pointer">
                                     <Plus className="text-orange-500" />
                                     <input
                                         type="file"
@@ -712,13 +783,16 @@ const DialogTasks: React.FC<DialogTasksProps> = ({ open, setOpen, task, created_
                                     />
                                 </label>
                             </TooltipWrapper>
+
                             <Button
                                 disabled={isAllowedComment}
                                 className="w-fit float-right bg-orange-500 hover:bg-orange-400"
                                 onClick={handleComment}
                             >
-                                {loadingSubmitComment && <Loader2 className="animate-spin text-white m-auto"></Loader2>}
-                                <Send />Comentar
+                                {loadingSubmitComment && (
+                                    <Loader2 className="animate-spin text-white m-auto" />
+                                )}
+                                <Send /> Comentar
                             </Button>
                         </div>
                     </div>

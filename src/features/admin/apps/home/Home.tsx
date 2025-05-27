@@ -9,6 +9,7 @@ import { API, API_PATH } from '../../../../shared/js/api';
 import { Avatar, AvatarFallback, AvatarImage } from '../../../../shared/components/ui/avatar';
 import useStoreLogin from '../../../../shared/state/useStoreLogin';
 import { getStorage, saveStorage } from '../../../../shared/js/functions';
+import { TooltipWrapper } from '../../../../components/TooltipWrapper';
 
 interface Project {
     id: string;
@@ -55,8 +56,8 @@ const Home = () => {
         <div className='pt-10'>
             <div className='flex flex-col gap-2 items-center'>
                 <span className="text-md font-light text-center">{dateFormated().toLocaleUpperCase()}</span>
-                <span className="text-3xl text-center">Hola, {name}</span>
-                <span className="text-3xl text-blue-500 text-center">Ahora estas en el proyecto ({getNameProject()})</span>
+                <span className="text-2xl text-center">Hola, {name}</span>
+                <span className="text-2xl text-blue-500 text-center">Ahora estas en el proyecto ({getNameProject()})</span>
                 <div className='flex gap-3 md:gap-12 text-gray-400 text-sm bg-gray-100 py-2 px-4 rounded-full'>
                     <div className='flex gap-2 items-center'><CheckCheck></CheckCheck><span className='text-2xl'>{counTask && counTask.length}</span>Tareas pendientes</div>
                     <div className='flex gap-2 items-center'><UserPenIcon></UserPenIcon><span className='text-2xl'>{users && users.length}</span>Colaboradores</div>
@@ -71,15 +72,16 @@ const Home = () => {
                     {project ? project.map((project: Project) => {
                         const isActive = project.id === projectId;
                         return (
-                            <div
-                                key={project.id}
-                                onClick={() => handleChangeActiveProject(project.id)}
-                                className={`border-b mt-2 cursor-pointer p-2 duration-300 ease-linear hover:bg-gray-50 
+                            <TooltipWrapper key={project.id} content='Cambiar de proyecto'>
+                                <div
+                                    onClick={() => handleChangeActiveProject(project.id)}
+                                    className={`border-b mt-2 cursor-pointer p-2 duration-300 ease-linear hover:bg-gray-50 
                     ${isActive ? ' text-blue-500' : ''}`}
-                            >
-                                <span className='font-medium flex gap-2'>{isActive ? <FolderOpen></FolderOpen> : ""}{project.name}</span>
-                                <p className='text-sm text-gray-500'>{project.description}</p>
-                            </div>
+                                >
+                                    <span className='font-medium flex gap-2'>{isActive ? <FolderOpen></FolderOpen> : ""}{project.name}</span>
+                                    <p className='text-sm text-gray-500'>{project.description}</p>
+                                </div>
+                            </TooltipWrapper>
                         );
                     }) : <NotProjects />}
                 </div>

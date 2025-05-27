@@ -150,3 +150,8 @@ button{
 background: #e7733d !important;
 color: white;
 }
+
+.formated-text {
+  color: #0055ff !important;
+  font-weight: bold !important;
+}
