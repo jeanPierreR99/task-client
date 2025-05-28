@@ -17,7 +17,7 @@ const ViewProject = () => {
     const fetchProject = async () => {
         setLoading(true);
         try {
-            const response = await API.getProjectOne(id!);
+            const response = await API.getProjectOne(id!, 0, 0);
             console.log(response);
             if (response?.success && response.data) {
                 setProject(response.data);

@@ -28,7 +28,7 @@ export function DateRangePicker({ date, setDate }: Props) {
                         id="date"
                         variant={"outline"}
                         className={cn(
-                            "w-fit justify-start text-left font-normal shadow-lg",
+                            "w-fit md:max-w-full max-w-[300px] overflow-hidden justify-start text-left font-normal shadow-lg",
                             !date && "text-muted-foreground"
                         )}
                     >

@@ -19,6 +19,7 @@ import { ToasMessage } from '../../../../../components/ToasMessage';
 import useStoreLogin from '../../../../../shared/state/useStoreLogin';
 import useStoreNotification from '../../../../../shared/state/useStoreNotification';
 import ChangeNameCategory from './ChangeNameCategory';
+import { TaskPaginationControls } from './TaskPaginationControls';
 
 const TabContentList = () => {
     const [newLabel, setNewLabel] = useState('');
@@ -114,7 +115,10 @@ const TabContentList = () => {
                     <TagIcon></TagIcon> Agregar
                 </Button>
             </div>
-            <div className="relative max-w-sm mb-4">
+
+            <TaskPaginationControls
+            />
+            <div className="relative max-w-sm">
                 <Search className="absolute left-3 top-2.5 text-gray-400" size={18} />
                 <Input
                     placeholder="Buscar tarea"

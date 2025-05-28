@@ -155,7 +155,7 @@ const DashBoard = ({ userId }: any) => {
             </div>
             <div className='flex flex-col gap-4'>
                 <DateRangePicker date={dateRange} setDate={setDateRange} />
-                {dataRange && <ChartBartGradient data={dataRange} />}
+                {dataRange && <ChartBartGradient data={dataRange} dateRange={dateRange} userId={userId} />}
             </div>
             <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mt-4'>
                 {dataCompleted && <ChartBarComplete data={dataCompleted} />}

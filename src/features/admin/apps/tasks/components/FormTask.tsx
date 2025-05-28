@@ -234,12 +234,12 @@ const TaskForm: React.FC<TaskFormProps> = ({ categoryId, setOpen, date }) => {
                         <FormItem>
                             <FormLabel className="text-gray-700">Nombre</FormLabel>
                             <FormControl>
-                                <Input
-                                    {...field}
-                                    placeholder="Ej. control semanal"
+
+                                <Textarea   {...field} placeholder="Ej. control semanal"
                                     className="uppercase"
                                     onChange={(e) => field.onChange(e.target.value.toUpperCase())}
                                 />
+
                             </FormControl>
                             <FormMessage />
                         </FormItem>

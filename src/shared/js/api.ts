@@ -266,8 +266,8 @@ export const API = {
         return response.data
     },
 
-    getProjectOne: async (id: string) => {
-        const response = await api.get(`/projects/${id}`)
+    getProjectOne: async (id: string, limit: number, page: number) => {
+        const response = await api.get(`/projects/${id}?limit=${limit}&page=${page}`)
         return response.data
     },
     updateUserProjects: async (userId: string, data: any) => {

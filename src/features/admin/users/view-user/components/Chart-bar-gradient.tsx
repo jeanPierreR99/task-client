@@ -5,7 +5,9 @@ import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTool
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../../../../../shared/components/ui/card"
 import React from "react"
 import { IdataComplete } from "./DashBoard"
-import { Check } from "lucide-react"
+import { Check, DownloadCloud } from "lucide-react"
+import { TooltipWrapper } from "../../../../../components/TooltipWrapper"
+import { API_BASE } from "../../../../../shared/js/api"
 
 const chartConfig = {
     ticket: {
@@ -20,6 +22,8 @@ const chartConfig = {
 
 interface PropChart {
     data: IdataComplete
+    dateRange: any,
+    userId: string
 }
 
 const ChartTooltipContent = ({ active, payload, label }: any) => {
@@ -40,13 +44,17 @@ const ChartTooltipContent = ({ active, payload, label }: any) => {
 }
 
 
-const ChartBartGradient: React.FC<PropChart> = ({ data }) => {
+const ChartBartGradient: React.FC<PropChart> = ({ data, dateRange, userId }) => {
+
     return (
         <Card className="border-none shadow-lg">
             <CardHeader>
                 <CardTitle>Mostrando datos dentro del rango de fechas</CardTitle>
-                <CardDescription>
+                <CardDescription className="flex justify-between">
                     Tareas y tickets completados y atendidos
+                    <TooltipWrapper content="Descargar Reporte">
+                        <a href={`${API_BASE}/report/user/${userId}?start=${dateRange?.from ? dateRange.from.toISOString() : ''}&end=${dateRange?.to ? dateRange.to.toISOString() : ''}`}><DownloadCloud /></a>
+                    </TooltipWrapper>
                 </CardDescription>
             </CardHeader>
             <CardContent >

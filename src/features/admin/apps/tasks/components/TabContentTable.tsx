@@ -13,6 +13,9 @@ import { API } from '../../../../../shared/js/api';
 import { ToasMessage } from '../../../../../components/ToasMessage';
 import TaskItem from './TaskItem';
 import { GetDay } from '../../../../../lib/date';
+import { TaskPaginationControls } from './TaskPaginationControls';
+import { Search } from 'lucide-react';
+import { Input } from '../../../../../shared/components/ui/input';
 
 const TabContentTable: React.FC = () => {
     const [open, setOpen] = useState(false);
@@ -23,6 +26,7 @@ const TabContentTable: React.FC = () => {
     const { categories, setCategories } = useStoreTask();
     const [created_by, setCreated_by] = useState("")
     const [createdId, setCreatedId] = useState("");
+    const [searchTerm, setSearchTerm] = useState("");
 
     const toggleTask = (labelIndex: number, taskIndex: number) => {
         setCategories(prev =>
@@ -65,18 +69,15 @@ const TabContentTable: React.FC = () => {
 
         try {
             const response = await API.updateTaskByCategory(movedTask.id, newLabels[destinationLabelIndex].id);
-            console.log(response)
-
-            if (!response.success && !response.data) return
+            if (!response.success && !response.data) return;
 
         } catch (error) {
             console.error('Error al actualizar la tarea:', error);
             ToasMessage({
-                title: "Ocurrio un errror",
+                title: "Ocurrió un error",
                 description: "Error al mover la tarea a otra categoría: " + error,
                 type: "error",
             });
-
         }
     };
 
@@ -89,57 +90,83 @@ const TabContentTable: React.FC = () => {
 
     return (
         <div>
-            <DragDropContext onDragEnd={handleDragEnd}>
-                <div className="md:w-[calc(100vw-320px)] bg-gray-100 p-4 rounded-md min-h-[60vh] mx-auto overflow-hidden overflow-x-auto flex gap-4">
-                    {categories
-                        .sort((a, b) => (b.index ? 1 : 0) - (a.index ? 1 : 0))
-                        .map((label, labelIndex) => (
-                            <Droppable key={labelIndex} droppableId={String(labelIndex)}>
-                                {(provided) => (
-                                    <div
-                                        ref={provided.innerRef}
-                                        {...provided.droppableProps}
-                                        className="flex-none w-80 border-r pr-2"
-                                    >
-                                        <div className='flex items-center gap-2'>
-                                            <h3 className={`font-semibold ${label.index == true ? "text-blue-600" : ""}`}>{label.title}</h3>
-                                            <TooltipWrapper content="Nueva tarea">
-                                                <Button
-                                                    className="text-gray-500 hover:bg-white"
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    onClick={() => {
-                                                        setIndexCategory(label.id);
-                                                        setCategoryName(label.title);
-                                                        setOpenDrawer(true);
-                                                    }}
-                                                >
-                                                    +
-                                                </Button>
-                                            </TooltipWrapper>
-                                        </div>
-                                        <ul className="space-y-2 mt-2">
-                                            {label.tasks.length > 0 ? (
-                                                label.tasks.map((task, taskIndex) => (
-                                                    <TaskItem
-                                                        key={task.id}
-                                                        task={task}
-                                                        taskIndex={taskIndex}
-                                                        labelIndex={labelIndex}
-                                                        toggleTask={toggleTask}
-                                                        handleOpen={handleOpen}
-                                                    />
+            <div className='my-2'>
+                <TaskPaginationControls />
+            </div>
 
-                                                ))
-                                            ) : (
-                                                <li className="text-gray-500 italic">Sin tareas</li>
-                                            )}
-                                        </ul>
-                                        {provided.placeholder}
-                                    </div>
-                                )}
-                            </Droppable>
-                        ))}
+
+            <DragDropContext onDragEnd={handleDragEnd}>
+
+                <div className="md:w-[calc(100vw-320px)] bg-gray-100 p-4 rounded-md min-h-[60vh] mx-auto overflow-hidden overflow-x-auto">
+                    <div className='pb-4 border-b'>
+                        <div className="relative max-w-sm">
+                            <Search className="absolute left-3 top-2.5 text-gray-400" size={18} />
+                            <Input
+                                placeholder="Buscar tarea"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="pl-10 pr-4 bg-gray-50"
+                            />
+                        </div>
+                    </div>
+                    <div className='flex gap-4'>
+                        {categories
+                            .sort((a, b) => (b.index ? 1 : 0) - (a.index ? 1 : 0))
+                            .map((label, labelIndex) => (
+                                <Droppable key={labelIndex} droppableId={String(labelIndex)}>
+                                    {(provided) => (
+                                        <div
+                                            ref={provided.innerRef}
+                                            {...provided.droppableProps}
+                                            className="flex-none w-80 border-r pr-2"
+                                        >
+                                            <div className='flex items-center gap-2'>
+                                                <h3 className={`font-semibold ${label.index == true ? "text-blue-600" : ""}`}>{label.title}</h3>
+                                                <TooltipWrapper content="Nueva tarea">
+                                                    <Button
+                                                        className="text-gray-500 hover:bg-white"
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        onClick={() => {
+                                                            setIndexCategory(label.id);
+                                                            setCategoryName(label.title);
+                                                            setOpenDrawer(true);
+                                                        }}
+                                                    >
+                                                        +
+                                                    </Button>
+                                                </TooltipWrapper>
+                                            </div>
+                                            <ul className="space-y-2 mt-2">
+                                                {label.tasks
+                                                    .filter((task) =>
+                                                        task.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                                        task.nameTicket?.toLowerCase().includes(searchTerm.toLowerCase())
+                                                    )
+                                                    .map((task, taskIndex) => (
+                                                        <TaskItem
+                                                            key={task.id}
+                                                            task={task}
+                                                            taskIndex={taskIndex}
+                                                            labelIndex={labelIndex}
+                                                            toggleTask={toggleTask}
+                                                            handleOpen={handleOpen}
+                                                        />
+                                                    ))
+                                                }
+
+                                                {label.tasks.filter(task =>
+                                                    task.name.toLowerCase().includes(searchTerm.toLowerCase())
+                                                ).length === 0 && (
+                                                        <li className="text-gray-500 italic">Sin tareas</li>
+                                                    )}
+                                            </ul>
+                                            {provided.placeholder}
+                                        </div>
+                                    )}
+                                </Droppable>
+                            ))}
+                    </div>
                 </div>
             </DragDropContext>
 

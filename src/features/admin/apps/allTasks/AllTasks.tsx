@@ -102,7 +102,7 @@ const AllTasks = () => {
             <br /><br />
 
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
-                <div className="relative w-sm">
+                <div className="relative max-w-sm">
                     <Search className="absolute left-3 top-2.5 text-gray-400" size={18} />
                     <Input
                         placeholder="Buscar por nombre, creador o responsable"

@@ -8,6 +8,7 @@ import SheetTask from './SheetTask';
 import useStoreTask, { Task as T } from '../store/useStoreTask';
 import { API } from '../../../../../shared/js/api';
 import { ToasMessage } from '../../../../../components/ToasMessage';
+import { TaskPaginationControls } from './TaskPaginationControls';
 
 const convertToUTC = (dateString: string) => {
     return new Date(dateString).toISOString();
@@ -23,7 +24,7 @@ const TabContentCalendar = () => {
     const [created_by, setCreated_by] = useState("")
     const [categoryName, setCategoryName] = useState("");
     const [createdId, setCreatedId] = useState<any>("");
-    
+
     const events = categories.flatMap((label) =>
         label.tasks.map((task) => ({
             task: {
@@ -58,7 +59,7 @@ const TabContentCalendar = () => {
             const movedEventDate = info.event.startStr;
             const newDateCulmined: any = { dateCulmined: convertToUTC(movedEventDate) };
 
-            const response = await API.updateTaskDate(event.extendedProps.task.id, 
+            const response = await API.updateTaskDate(event.extendedProps.task.id,
                 newDateCulmined);
             if (!response?.data || !response?.success) {
                 ToasMessage({
@@ -105,6 +106,9 @@ const TabContentCalendar = () => {
 
     return (
         <div>
+            <div className='my-2'>
+                <TaskPaginationControls />
+            </div>
             <FullCalendar
                 plugins={[dayGridPlugin, interactionPlugin]}
                 initialView="dayGridMonth"

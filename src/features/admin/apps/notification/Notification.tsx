@@ -120,7 +120,8 @@ const Notification = () => {
                                 )}
                             </p>
                         </div>
-                        <p className="pl-12 text-sm text-gray-500">{activity.comment?.comment}</p>
+                        <p className="text-sm text-muted-foreground" dangerouslySetInnerHTML={{ __html: activity.comment?.comment }} />
+
                         <div className="w-full pl-12 flex flex-col gap-2">
                             {activity.files?.length > 0 && activity.files.map((file) => {
                                 const url = API_PATH + file.url;

@@ -46,7 +46,13 @@ type TaskStore = {
     removeCategory: (categoryId: string) => void
     findTasksByName: (searchTerm: string) => Task[],
     moveTaskToCategory: (taskId: string, targetCategoryId: string) => any,
-    removeTaskFromCategory: (categoryId: string, taskId: string) => void
+    removeTaskFromCategory: (categoryId: string, taskId: string) => void,
+    currentPage: number;
+    totalPages: number;
+    limitData: number;
+    setPage: (page: number) => void;
+    setTotalPages: (total: number) => void;
+    setLimitData: (limitData: number) => void;
 
 }
 
@@ -145,6 +151,12 @@ const useStoreTask = create<TaskStore>((set, get) => ({
                 return cat;
             }),
         })),
+    currentPage: 1,
+    totalPages: 1,
+    limitData: 8,
+    setPage: (page) => set(() => ({ currentPage: page })),
+    setTotalPages: (total) => set(() => ({ totalPages: total })),
+    setLimitData: (limit) => set(() => ({ limitData: limit })),
 
 }))
 

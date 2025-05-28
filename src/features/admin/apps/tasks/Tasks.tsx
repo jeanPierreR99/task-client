@@ -14,7 +14,9 @@ const Tasks = () => {
     const { id: projectIdParam } = useParams<{ id: string }>();
 
     const { id } = useStoreLogin();
-    const { setCategories } = useStoreTask();
+    // const { setCategories } = useStoreTask();
+
+    const { currentPage, setCategories, setTotalPages, limitData } = useStoreTask();
 
     const projectId = getStorage();
 
@@ -25,9 +27,10 @@ const Tasks = () => {
         error: ownError,
         isLoading: ownLoading
     } = useApiFetch(
-        ["projectsOne", projectIdValue],
-        () => API.getProjectOne(projectIdValue)
+        ["projectsOne", projectIdValue, limitData, currentPage],
+        () => API.getProjectOne(projectIdValue, limitData, currentPage)
     );
+
 
 
     const {
@@ -38,12 +41,13 @@ const Tasks = () => {
         ["file_user_f", id],
         () => API.getFilesByUserId(id)
     );
-
     useEffect(() => {
         if (ownCategories?.data) {
             setCategories(ownCategories.data.categories);
+            setTotalPages(ownCategories.data.totalPages);
         }
     }, [ownCategories]);
+
 
 
     useEffect(() => {

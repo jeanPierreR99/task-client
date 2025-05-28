@@ -60,7 +60,7 @@ const Login = () => {
     return (
         <div className="grid h-[100dvh] bg-gray-50 grid-cols-1 md:grid-cols-2">
             <div className="hidden md:flex items-center justify-center bg-white">
-                <img src="https://ablog.managemart.com/images/o_1dnpgpc711vd4r5d5e781f10vs8.png" alt="Login Illustration" className="object-contain w-full h-full animate-fade-in" />
+                <img src="background-login.svg" alt="Login Illustration" className="object-contain w-10/12 h-full animate-fade-in" />
             </div>
 
             <div className="flex items-center justify-center p-8 sm:p-4 bg-white md:bg-transparent">
