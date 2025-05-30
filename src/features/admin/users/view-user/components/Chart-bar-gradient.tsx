@@ -53,7 +53,7 @@ const ChartBartGradient: React.FC<PropChart> = ({ data, dateRange, userId }) => 
                 <CardDescription className="flex justify-between">
                     Tareas y tickets completados y atendidos
                     <TooltipWrapper content="Descargar Reporte">
-                        <a href={`${API_BASE}/report/user/${userId}?start=${dateRange?.from ? dateRange.from.toISOString() : ''}&end=${dateRange?.to ? dateRange.to.toISOString() : ''}`}><DownloadCloud /></a>
+                        <a href={`${API_BASE}/report/user-pdf/${userId}?start=${dateRange?.from ? dateRange.from.toISOString() : ''}&end=${dateRange?.to ? dateRange.to.toISOString() : ''}`} target="__blank"><DownloadCloud /></a>
                     </TooltipWrapper>
                 </CardDescription>
             </CardHeader>
