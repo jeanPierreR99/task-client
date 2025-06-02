@@ -20,6 +20,8 @@ import useStoreLogin from '../../../../../shared/state/useStoreLogin';
 import useStoreNotification from '../../../../../shared/state/useStoreNotification';
 import ChangeNameCategory from './ChangeNameCategory';
 import { TaskPaginationControls } from './TaskPaginationControls';
+import DownloadProject from './DownloadProject';
+import { useParams } from 'react-router-dom';
 
 const TabContentList = () => {
     const [newLabel, setNewLabel] = useState('');
@@ -31,9 +33,10 @@ const TabContentList = () => {
     const [created_by, setCreated_by] = useState("")
     const { categories, findTasksByName } = useStoreTask();
     const [createdId, setCreatedId] = useState("");
-    const { projectId } = useStoreLogin()
+    const { projectId, role } = useStoreLogin()
     const { message } = useStoreNotification();
     const [searchTerm, setSearchTerm] = useState('');
+    const { id } = useParams<{ id: string | undefined }>();
 
     const addLabel = async () => {
         try {
@@ -232,7 +235,7 @@ const TabContentList = () => {
                         </AccordionItem>
                     ))}
             </Accordion>
-            <div className='float-right'>
+            <div className='flex justify-end gap-2'>
                 <TooltipWrapper content='Nueva tarea'>
                     <Button onClick={() => {
                         const catFilter = categories.find(cat => cat.index);
@@ -246,6 +249,11 @@ const TabContentList = () => {
                     </Button>
                 </TooltipWrapper>
             </div>
+            {
+                role === "Administrador" && <div className='float-right'>
+                    <DownloadProject id={id} />
+                </div>
+            }
             {
                 selectedTask && (
                     <DialogTasks open={open} created_by={created_by} setOpen={setOpen} task={selectedTask} createdId={createdId} />

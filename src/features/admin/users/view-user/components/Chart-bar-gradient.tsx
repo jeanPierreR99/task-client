@@ -8,6 +8,7 @@ import { IdataComplete } from "./DashBoard"
 import { Check, DownloadCloud } from "lucide-react"
 import { TooltipWrapper } from "../../../../../components/TooltipWrapper"
 import { API_BASE } from "../../../../../shared/js/api"
+import { Button } from "../../../../../shared/components/ui/button"
 
 const chartConfig = {
     ticket: {
@@ -53,7 +54,16 @@ const ChartBartGradient: React.FC<PropChart> = ({ data, dateRange, userId }) => 
                 <CardDescription className="flex justify-between">
                     Tareas y tickets completados y atendidos
                     <TooltipWrapper content="Descargar Reporte">
-                        <a href={`${API_BASE}/report/user-pdf/${userId}?start=${dateRange?.from ? dateRange.from.toISOString() : ''}&end=${dateRange?.to ? dateRange.to.toISOString() : ''}`} target="__blank"><DownloadCloud /></a>
+                        <Button variant="outline"
+                            onClick={() => {
+                                if (dateRange.from && dateRange.to) {
+                                    const url = `${API_BASE}/report/user-pdf/${userId}?start=${dateRange?.from ? dateRange.from.toISOString() : ''}&end=${dateRange?.to ? dateRange.to.toISOString() : ''}`;
+                                    window.open(url, "_blank");
+                                }
+                            }}
+                        >
+                            <DownloadCloud />
+                        </Button>
                     </TooltipWrapper>
                 </CardDescription>
             </CardHeader>
