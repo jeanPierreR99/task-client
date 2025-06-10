@@ -25,6 +25,7 @@ import { Input } from "../../../../../shared/components/ui/input"
 import ChangeName from "./ChangeName"
 import ChangeDate from "./ChangeDate"
 import { MentionsInput, Mention } from "react-mentions";
+import ChangeDescription from "./ChangeDescription"
 
 interface Responsible {
     id: string
@@ -578,7 +579,7 @@ const DialogTasks: React.FC<DialogTasksProps> = ({ open, setOpen, task, created_
                             <div className="flex gap-2 items-center"><span className="text-sm">Responsable:</span> <span className="text-sm">{task.responsible?.name || "N/A"}</span><ChangeResponsible task={task} /></div>
                             <div className="flex gap-2 items-center"><span className="text-sm">Oficina:</span> <span className="text-sm">{task.office?.siglas || "N/ A"}</span></div>
                             <div className="flex gap-2 items-center"><span className="text-sm">Fecha de entrega:</span> <span className="text-sm text-orange-500">{`${dateFormatedTwo(task.dateCulmined)}`}</span><ChangeDate task={task} /></div>
-                            <div className="flex flex-col gap-2 "><span className="text-sm">Descripcion</span>
+                            <div className="flex flex-col gap-2 "><span className="text-sm">Descripcion: <ChangeDescription task={task} /></span>
                                 <textarea disabled readOnly rows={3} className="border resize-none rounded-md outline-0 p-2 text-gray-400 text-sm">{task.description}</textarea>
                             </div>
                         </div>

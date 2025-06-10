@@ -251,8 +251,8 @@ export const API = {
         const response = await api.post(`/offices`, data)
         return response.data
     },
-    getOffices: async () => {
-        const response = await api.get(`/offices`)
+    getOffices: async (name?: string) => {
+        const response = await api.get(`/offices?name=${name ? name : ""}`)
         return response.data
     },
 
